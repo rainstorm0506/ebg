@@ -1,0 +1,68 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">供应模块 - 供应信息</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">Supply.getSuppy</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td rowspan="6">请求参数</td>
+			<td>type</td>
+			<td>tinyint(1)</td>
+			<td>供需类型(供应=1,需求=2)</td>
+		</tr>
+		<tr>
+			<td>brand_id</td>
+			<td>int(10)</td>
+			<td>品牌ID</td>
+		</tr>
+		<tr>
+			<td>class_id</td>
+			<td>int(10)</td>
+			<td>分类ID</td>
+		</tr>
+			<tr>
+			<td>price</td>
+			<td>tinyint(1)</td>
+			<td>价格排序(正叙=1,倒叙=2)</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+			<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>页码</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="6"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": [
+        {
+            "id": "1",			#商品ID
+            "main_pic": "",		#商品主图
+            "title": "惠普IBMi7笔记本",	#商品标题
+            "price": "5000.00",		#商品价格
+            "num": "100",		#数量
+            "describes": "好产品"	#商品描述
+        }
+    ]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

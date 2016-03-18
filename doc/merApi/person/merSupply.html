@@ -1,0 +1,72 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心模块 - 我的店铺-》供应/需求详情</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">personal.merSupply</td>
+		</tr>
+                <tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">李启源</td>
+		</tr>
+                <tr>
+			<td rowspan="4">请求参数</td>
+		</tr>
+                
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>merchant_id</td>
+			<td>int</td>
+			<td>当点击“首页=》最新需求”需要传</td>
+		</tr>		
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>当前店铺供/需列表类型(1:代表供应详情列表；2:代表需求详情列表)</td>
+		</tr>
+		<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>分页的页码</td>
+		</tr>  
+		                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": [
+            {
+                "id": "72",
+                "merchant_id": "105",   #供应商家ID编号
+                "type": "1",            #供/需列表类型(1:代表供应详情列表；2:代表需求详情列表)
+                "title": "好产品",      #产品名
+                "class_id": "12",       #分类ID
+                "brand_id": "12",       #品牌id
+                "size_id": "0",         #尺寸ID
+                "color_id": "12",       #颜色ID
+                "num": "12",            #数量
+                "main_pic": "",         #商品图片
+                "pic_group": "[\"\"]",  #产品组图
+                "describes": "好好好",  #产品描述
+                "time": "1455710255",   #发布时间
+                "price": "1200"         #产品售价
+                "phone": "18782911321"  #发布供/需商家的 联系电话
+            }
+            ...
+        ]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

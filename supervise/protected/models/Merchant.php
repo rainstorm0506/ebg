@@ -1,0 +1,240 @@
+<?php
+/**
+ * This is the model class for table "user_merchant".
+ *
+ * @property $uid               UID
+ * @property $mer_name          姓名
+ * @property $mer_card          身份证号
+ * @property $mer_card_front    身份证正面
+ * @property $mer_card_back     身份证背面
+ *
+ * @author 夏勇高
+ */
+class Merchant extends SModels
+{
+	/**
+	 * 根据 关键词 搜索 商家店铺
+	 * @param		string		$keyword		搜索关键词
+	 * @param		int			$rows			查询条数
+	 * 
+	 * @author		涂先锋
+	 */
+	public function searchKeyword($keyword , $rows = 10)
+	{
+		$keyword = $this->quoteLikeValue($keyword);
+		
+		return $this->queryAll("
+			SELECT uid,mer_no,mer_name,store_name , is_self
+			FROM user_merchant
+			WHERE mer_no LIKE {$keyword} OR mer_name LIKE {$keyword} OR store_name LIKE {$keyword}
+			LIMIT 0,{$rows}
+		");
+	}
+	
+	/**
+	 * 根据关键字查询属性
+	 *
+	 * @param $keyword  string      查询关键字
+	 * @param $offset   int         偏移量
+	 * @param $row      int         每页记录数
+	 * @param $total    int         总记录数
+	 *
+	 * @return array|static[]
+	 */
+	public function getList($keyword, $offset = 0, $row=20) {
+
+		$SQL = 'SELECT * FROM `user` u INNER JOIN user_merchant m ON u.id=m.uid WHERE u.user_type=3';
+		if ($keyword)
+		{
+			$keyword = $this->quoteLikeValue($keyword);
+			$SQL .= " AND (u.phone LIKE {$keyword} OR u.nickname LIKE {$keyword} OR m.mer_name LIKE {$keyword})";
+		}
+		$SQL .= " ORDER BY u.reg_time DESC LIMIT {$offset},{$row}";
+		return $this->queryAll($SQL);
+	}
+
+	/**
+	 * 得到统计记录数
+	 *
+	 * @param   $keyword    string      搜索关键字
+	 * @return  统计记录数
+	 */
+	public function getCount($keyword) {
+		$SQL = 'SELECT COUNT(*) FROM `user` u INNER JOIN user_merchant m ON u.id=m.uid WHERE u.user_type=3';
+		if ($keyword)
+		{
+			$keyword = $this->quoteLikeValue($keyword);
+			$SQL .= " AND (u.phone LIKE {$keyword} OR u.nickname LIKE {$keyword} OR m.mer_name LIKE {$keyword})";
+		}
+		return (int)$this -> queryScalar($SQL);
+	}
+
+	/**
+	 * 编辑商家信息
+	 * @param	array	$post		post
+	 * @param	int		$id			ID
+	 */
+	public function modify(array $post, $id)
+	{
+		$scope_=array();
+		$sc = $post['scope'];
+		foreach ($sc as $key => $value) {
+			if($value){
+				$scope_[]=$value;
+			}
+		}
+		
+		$face = isset($post['store_avatar']) ? $this->getPhotos($post['store_avatar'] , 'merchant') : '';
+		$arr = array();
+		$arr['face'] = $face;
+		
+		if (trim($post['password']) != '')
+			$arr['password']		= GlobalUser::hashPassword($post['password']);
+		
+		$field = array();
+		$field['mer_name']			= $post['mer_name'];
+		$field['store_name']		= $post['store_name'];
+		$field['gather_id']			= $post['store_num'];
+		$field['gather_value']		= json_encode(array( $post['computer'],$post['storey'],$post['store_num']));
+		$field['store_avatar']		= $face;
+		$field['mer_card']			= $post['mer_card'];
+		$field['mer_card_front']	= $this->getPhotos(empty($post['mer_card_front'])?'':$post['mer_card_front'] , 'merchant');
+		$field['mer_card_back'] 	= $this->getPhotos(empty($post['mer_card_back'])?'':$post['mer_card_back'] , 'merchant');
+		$field['mer_settle_day']	= $post['mer_settle_day'];
+		$field['mer_ensure_money']	= $post['mer_ensure_money'];
+		$field['mer_ensure_is_pay']	= $post['mer_ensure_is_pay'];
+		$field['mer_take_point']	= $post['mer_take_point'];
+		$field['store_join_qq']		= isset($post['store_join_qq'])?$post['store_join_qq']:"";
+		$field['store_grade']		= $post['store_grade'];
+		$field['is_self']			= (int)$post['is_self'];
+		$field['bus_start_year']	= isset($post['bus_start_year'])?$post['bus_start_year']:0;
+		
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			$this->update('user' , $arr , "id={$id}");
+			$this->update('user_merchant', $field, "uid={$id}");
+			
+			$this->delete('user_mer_scope_business' , "mer_uid={$id}");
+			foreach ($scope_ as $scope)
+				$this->insert('user_mer_scope_business' , array('mer_uid' => $id ,'sb_id' => $scope));
+			
+			$transaction->commit();
+			return true;
+		}catch(Exception $e){
+			$transaction->rollback();
+		}
+		return false;
+	}
+
+	/**
+	 * 获得商家的信息
+	 * @param		int			$id			商家ID
+	 */
+	public function getInfo($id)
+	{
+        if ($rows = $this->queryRow("SELECT * FROM user_merchant WHERE uid={$id}"))
+        {
+            $rows['gather_value'] = $this->jsonDnCode($rows['gather_value']);
+        }
+		return $rows;
+	}
+
+	/**
+	 * 添加商家会员信息
+	 * @param $post array   商家信息
+	 */
+	public function create($post)
+	{
+		
+		$scope_=array();
+		$sc = $post['scope'];
+		foreach ($sc as $key => $value) {
+			if($value){
+				$scope_[]=$value;
+			}
+		}
+	
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			$phone = trim($post['phone']);
+			$face = $this->getPhotos($post['store_avatar'], 'merchant');
+			$this->insert('user', array(
+				'source'		=> 1,
+				'user_type'		=> 3,
+				'phone'			=> $phone,
+				'face'			=> $face,
+				'password'		=> GlobalUser::hashPassword($post['password']),
+				'user_code'		=> $phone,
+				'reg_time'		=> time(),
+				'status_id'		=> 713,
+				'last_time'		=> 0
+			));
+			$uid = $this->getInsertId();
+			
+			$this -> insert('user_merchant', array(
+				'uid'				=> $uid,
+				'mer_name'			=> $post['mer_name'],
+				'store_name'		=> $post['store_name'],
+				'gather_id'			=> $post['store_num'],
+				'gather_value'		=> json_encode(array($post['computer'] , $post['storey'] , $post['store_num'])),
+				'store_avatar'		=> $face,
+				'mer_card'			=> $post['mer_card'],
+				'mer_card_front'	=> $this->getPhotos($post['mer_card_front'], 'merchant'),
+				'mer_card_back'		=> $this->getPhotos($post['mer_card_back'], 'merchant'),
+				'mer_settle_day'	=> $post['mer_settle_day'],
+				'mer_ensure_money'	=> $post['mer_ensure_money'],
+				'mer_ensure_is_pay'	=> $post['mer_ensure_is_pay'],
+				'mer_take_point'	=> $post['mer_take_point'],
+				'store_join_qq'		=> $post['store_join_qq'],
+				'is_self'			=> $post['is_self'],
+				'store_grade'		=> (int)$post['store_grade'],
+				'bus_start_year'	=> isset($post['bus_start_year'])?$post['bus_start_year']:0
+			));
+			
+			foreach ($scope_ as $scope) {
+				$this->insert("user_mer_scope_business", array("mer_uid"=>$uid, "sb_id"=>$scope));
+			}
+			
+			$transaction->commit();
+			return $uid;
+		}catch(Exception $e){
+			$transaction->rollback();
+		}
+		return false;
+	}
+
+	/**
+	 * 删除商家会员信息
+	 */
+	public function clear($id)
+	{
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			$this->delete('user' , "id={$id}");
+			$this->delete('user_mer_scope_business' , "mer_uid={$id}");
+			$this->delete('user_merchant', "uid={$id}");
+			//删除商家的时候删除商家的商品
+			$this->delete('goods' , "merchant_id={$id}");
+			
+			$transaction->commit();
+			return true;
+		}catch(Exception $e){
+			$transaction->rollback();
+		}
+		return false;
+	}
+
+	/**
+	 * 检查身份证号是否已经存在
+	 */
+	public function checkIDCard($card, $id) {
+		if (!$card)
+			return false;
+
+		$SQL = $id ? "AND uid!={$id}" : '';
+		return (boolean)$this -> queryRow("SELECT uid FROM user_merchant WHERE `mer_card`={$this->quoteValue($card)} {$SQL}");
+	}
+}

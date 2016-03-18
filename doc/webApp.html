@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>E办公2.0 WebApp - 接口文档</title>
+<script type="text/javascript" src="./jquery.min.js"></script>
+<style type="text/css">
+body{font-family:Verdana, Geneva, sans-serif}
+a{cursor:pointer;color:#00F}
+.header{border-bottom:1px solid #CCC}
+.l{width:20%;float:left;border-right:1px solid #CCC}
+.r{width:79%;float:right}
+.l dd{padding:6px 0;line-height:18px;display:block;margin:0 0 0 12px}
+.l dl{border:1px solid #CCC;padding:10px;margin:20px 1.5em 0 0}
+.l dt{cursor:pointer}
+.l dt a{float:right}
+.l dl dd{display:none}
+pre{border:1px dotted #CCC;padding:10px}
+table pre{padding:5px 10px;margin:10px}
+.title{border-bottom:8px solid #CCC;font-size:26px;padding:15px 0;margin:0 0 10px 0}
+.red{color:#F00}
+.blue{color:#00F}
+.container{padding:0 0 0 1em}
+</style>
+</head>
+
+<body>
+	<a id="top"></a>
+	<div class="header"><h3>E办公2.0 WebApp - 接口文档</h3></div>
+	<div class="l">
+		<div class="container"></div>
+	</div>
+	<div class="r"></div>
+</body>
+</html>
+<script type="text/javascript">
+$(function($){
+	$.getJSON('WebAppConfig.js' , function(json){
+		var code = '';
+		for (i in json)
+		{
+			if (i == 0)
+			{
+				for (one in json[i])
+					code += '<p><a href="'+one+'">'+json[i][one]+'</a></p>';
+			}else{
+				code += '<dl>';
+				for (mm in json[i])
+				{
+					if (mm == 0)
+						code += '<dt>'+json[i][mm]+'<a>显示</a></dt>';
+					else
+						code += '<dd><a href="'+mm+'">'+json[i][mm]+'</a></dd>';
+				}
+				code += '</dl>';
+			}
+		}
+		$('.container').html(code);
+		$('.l>.container>p>a').click();
+	});
+
+	$('.container')
+	.on('click' , 'dt' , function()
+	{
+		if ($(this).children('a').text() == '隐藏')
+		{
+			$(this).nextAll('dd').hide();
+			$(this).children('a').text('显示');
+		}else{
+			$(this).nextAll('dd').show();
+			$(this).children('a').text('隐藏');
+		}
+	})
+	.on('click' , 'a[href]' , function()
+	{
+		$('.l a.red').removeClass('red');
+		$(this).addClass('red');
+
+		var elsedl = $(this).closest('dl').siblings('dl');
+		elsedl.find('dt>a').text('显示');
+		elsedl.children('dd').hide();
+		
+		var page = 'webApp/' + $(this).attr('href').replace(/\./g , '/') + '.html';
+		$('div.r').load(page + '?'+Math.random() , function(response, status, xhr){
+			$(window).scrollTop($('#top').offset().top);
+
+			if (status == 'error')
+				$('div.r').html('找不到页面 : ' + page);
+		});
+		return false;
+	});
+});
+</script>

@@ -1,0 +1,66 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">商家信息 - 登录</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">merchant.login</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">涂先锋</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>phone</td>
+			<td>bigint(11)</td>
+			<td>手机号码</td>
+		</tr>
+		<tr>
+			<td>password</td>
+			<td>string(/^[a-zA-Z]\w{5,17}$/)</td>
+			<td>密码，以字母开头，长度在6~18之间，只能包含字符、数字和下划线</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "S_APISID": "itkbr15up79rg4knel3f089hm1",	# 会话ID , 登录后改变 , 请更新
+		
+        "id": "86",					# 用户ID
+        "source": "2",					# 注册来源 , 1=pc , 2=app , 3=web_app
+        "user_type": "3",				# 会员类型 , 1=个人 , 2=企业 , 3=商家
+        "phone": "17098332266",				# 注册手机号码
+        "user_code": "4507",				# 用户的推荐码
+        "re_code": "",					# 推荐用户的推荐码
+        "re_uid": "0",					# 推荐用户的ID
+        "reg_time": "1453117214",			# 注册时间
+        "last_time": "0",				# 最后登录时间
+        "status_id": "713",				# 用户状态
+        "nickname": "",					# 昵称
+        "realname": "",					# 真实姓名
+        "face": "",					# 头像
+        "fraction": "0",				# 积分
+        "exp": "0",					# 经验(成长值)
+        "money": "0.00",				# 钱
+        "merchant_id": "0",				# 商家子账号的商家ID , 0=主账号
+        "remark": null					# 备注
+        "qcode": 'http://xxxx'				# 商家推荐的二维码图片
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

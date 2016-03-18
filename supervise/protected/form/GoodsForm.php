@@ -1,0 +1,322 @@
+<?php
+class GoodsForm extends SForm
+{
+	public $title , $vice_title , $goods_num , $merchant , $merchant_id , $brand_id , $class_one_id , $class_two_id , $class_three_id;
+	public $retail_price , $base_price , $stock , $attrInStock , $weight , $content , $cover , $imgsSet , $jd_id , $tag_id;
+	public
+		$amount = array() ,
+		$userLayer = array() ,
+		$attrs = array() ,
+		$attrVal = array() ,
+		$img = array() ,
+		$imgGroup = array() ,
+		$args = array();
+	
+	public function attributeLabels()
+	{
+		return array(
+			'title'				=> '商品名称',
+			'vice_title'		=> '商品副标题',
+			'goods_num'			=> '商品货号',
+			'merchant_id'		=> '所属商家',
+			'brand_id'			=> '品牌',
+			'class_three_id'	=> '商品分类',
+			'cover'				=> '商品主图',
+			'retail_price'		=> '零售价',
+			'base_price'		=> '基础价',
+			'weight'			=> '重量',
+			'content'			=> '商品详情',
+			'stock'				=> '库存',
+		);
+	}
+	
+	//基本验证
+	public function rules()
+	{
+		$rules = array(
+			array('title , tag_id , merchant_id , cover , content' , 'required' , 'message'=>'<b>{attribute}</b> 是必填或必选项'),
+			array('title' , 'length' , 'min'=>1 , 'max'=>38),
+			array('stock , attrInStock', 'numerical' , 'integerOnly'=>true),
+			array('merchant_id , brand_id , class_one_id , class_two_id , class_three_id', 'numerical' , 'integerOnly'=>true , 'min'=>1),
+			array('retail_price , base_price , weight', 'numerical'),
+			array('title', 'checkTitle'),
+			array('class_three_id', 'checkClass'),
+			array('brand_id', 'checkBrand'),
+			array('goods_num' , 'length' , 'max'=>15),
+			array('goods_num' , 'checkGoodsNum'),
+			array('args' , 'checkArgs'),
+			array('amount , userLayer , attrs , attrVal , img , imgGroup , vice_title , imgsSet , merchant , jd_id' , 'checkNull'),
+		);
+
+		if ($this->attrs)
+		{
+			$rules[] = array('attrs' , 'checkAttrs');
+		}else{
+			$rules[] = array('retail_price , base_price , weight', 'numerical');
+			$rules[] = array('retail_price , base_price , weight' , 'checkDouble');
+			$rules[] = array('base_price' , 'checkPrice');
+			$rules[] = array('stock' , 'checkStock');
+		}
+
+		return $rules;
+	}
+	
+	//检查分类
+	public function checkClass()
+	{
+		if ($this->class_one_id>0 && $this->class_two_id>0 && $this->class_three_id>0)
+		{
+			if (!GlobalGoodsClass::verifyClassChain($this->class_one_id , $this->class_two_id , $this->class_three_id))
+				$this->addError('class_three_id' , '请选择正确的 <b>商品分类</b>.');
+		}else{
+			$this->addError('class_three_id' , '请选择 <b>商品分类</b>.');
+		}
+	}
+
+	//检查品牌
+	public function checkBrand()
+	{
+		if (!GlobalBrand::isBrandID($this->brand_id))
+			$this->addError('brand_id' , '请选择正确的 <b>商品品牌</b>.');
+	}
+
+	//检查商品编号
+	public function checkGoodsNum()
+	{
+		if ($this->goods_num)
+		{
+			$model = ClassLoad::Only('Goods');/* @var $model Goods */
+			if ($model->checkGoodsNum($this->goods_num))
+				$this->addError('goods_num' , '你填写的 [商品货号] 已存在.');
+		}
+	}
+
+	//检查浮点数是否小于0
+	public function checkDouble($tag)
+	{
+		if ($this->{$tag} <= 0)
+			$this->addError($tag , '<b>'.$this->getAttributeLabel($tag).'</b> 必须大于0');
+	}
+
+	//检查价格设定
+	public function checkPrice()
+	{
+		if ($this->base_price > $this->retail_price)
+			$this->addError('retail_price' , '<b>基础价</b>不能大于<b>零售价</b>');
+	}
+
+	//检查库存
+	public function checkStock()
+	{
+		if (!$this->attrInStock && $this->stock <= 0)
+			$this->addError('stock' , '请设定正确的 <b>'.$this->getAttributeLabel('stock').'</b>');
+	}
+
+	//检查属性组设定
+	public function checkAttrs()
+	{
+		switch (count($this->attrs))
+		{
+			case 1		: $this->_checkAttrs_1(); break;
+			case 2		: $this->_checkAttrs_2(); break;
+			case 3		: $this->_checkAttrs_3(); break;
+			default		: $this->addError('attrs' , '商品属性异常!');
+		}
+		
+		#图片组
+		if (isset($this->attrs[$this->imgsSet]))
+		{
+			if (!empty($this->imgGroup))
+			{
+				$attrs = $this->attrs[$this->imgsSet];
+				foreach ($this->imgGroup as $k => $v)
+				{
+					if (empty($attrs[$k]))
+						$this->addError('attrs' , '<b>图片组</b> 异常');
+				}
+			}
+		}else{
+			if (!empty($this->imgGroup))
+				$this->addError('attrs' , '<b>图片组</b> 异常');
+		}
+	}
+	
+	private function _checkAttrs_1()
+	{
+		$retailPrice = (double)$this->retail_price;
+		foreach (current($this->attrs) as $ak => $av)
+		{
+			#价格
+			if (empty($this->attrVal['price'][$ak]))
+			{
+				$this->addError('attrs' , '请填写 <b>商品属性的基础价</b>');
+			}else{
+				$price = (double)$this->attrVal['price'][$ak];
+				if ($price <= 0)
+					$this->addError('attrs' , '<b>商品属性的基础价</b> 必须大于0');
+				elseif ($price > $retailPrice)
+					$this->addError('attrs' , '<b>商品属性的基础价</b> 不能大于<b>零售价</b>');
+			}
+			
+			#库存
+			if (empty($this->attrVal['stock'][$ak]))
+			{
+				if (empty($this->attrVal['inStock'][$ak]))
+				{
+					$this->addError('attrs' , '请设定 <b>商品属性的库存</b>');
+				}else{
+					$_tp = (int)$this->attrVal['inStock'][$ak];
+					if (!($_tp === -999 || $_tp > 0))
+						$this->addError('attrs' , '<b>商品属性的库存</b> 在无限库存的情况设定错误');
+				}
+			}else{
+				if ((int)$this->attrVal['stock'][$ak] < 1)
+					$this->addError('attrs' , '<b>商品属性的库存</b> 在非无限库存的情况下必须大于0');
+			}
+			
+			#重量
+			if (empty($this->attrVal['weight'][$ak]))
+				$this->addError('attrs' , '请填写 <b>商品属性的重量</b>');
+			elseif ((double)$this->attrVal['weight'][$ak] <= 0)
+				$this->addError('attrs' , '<b>商品属性的重量</b> 必须大于0');
+		}
+	}
+	
+	private function _checkAttrs_2()
+	{
+		$retailPrice = (double)$this->retail_price;
+		
+		#list($alist , $blist) = $this->attrs;
+		#此处不能使用list , list仅能用于数字索引的数组并假定数字索引从 0 开始。
+		$alist = current($this->attrs);
+		next($this->attrs);
+		$blist = current($this->attrs);
+		
+		foreach ($alist as $ak => $av)
+		{
+			foreach ($blist as $bk => $bv)
+			{
+				#价格
+				if (empty($this->attrVal['price'][$ak][$bk]))
+				{
+					$this->addError('attrs' , '请填写 <b>商品属性的基础价</b>');
+				}else{
+					$price = (double)$this->attrVal['price'][$ak][$bk];
+					if ($price <= 0)
+						$this->addError('attrs' , '<b>商品属性的基础价</b> 必须大于0');
+					elseif ($price > $retailPrice)
+						$this->addError('attrs' , '<b>商品属性的基础价</b> 不能大于<b>零售价</b>');
+				}
+				
+				#库存
+				if (empty($this->attrVal['stock'][$ak][$bk]))
+				{
+					if (empty($this->attrVal['inStock'][$ak][$bk]))
+					{
+						$this->addError('attrs' , '请设定 <b>商品属性的库存</b>');
+					}else{
+						$_tp = (int)$this->attrVal['inStock'][$ak][$bk];
+						if (!($_tp === -999 || $_tp > 0))
+							$this->addError('attrs' , '<b>商品属性的库存</b> 在无限库存的情况设定错误');
+					}
+				}else{
+					if ((int)$this->attrVal['stock'][$ak][$bk] < 1)
+						$this->addError('attrs' , '<b>商品属性的库存</b> 在非无限库存的情况下必须大于0');
+				}
+				
+				#重量
+				if (empty($this->attrVal['weight'][$ak][$bk]))
+					$this->addError('attrs' , '请填写 <b>商品属性的重量</b>');
+				elseif ((double)$this->attrVal['weight'][$ak][$bk] <= 0)
+					$this->addError('attrs' , '<b>商品属性的重量</b> 必须大于0');
+			}
+		}
+	}
+	
+	private function _checkAttrs_3()
+	{
+		$retailPrice = (double)$this->retail_price;
+		
+		#list($alist , $blist , $clist) = $this->attrs;
+		#此处不能使用list , list仅能用于数字索引的数组并假定数字索引从 0 开始。 
+		$alist = current($this->attrs);
+		next($this->attrs);
+		$blist = current($this->attrs);
+		next($this->attrs);
+		$clist = current($this->attrs);
+		
+		foreach ($alist as $ak => $av)
+		{
+			foreach ($blist as $bk => $bv)
+			{
+				foreach ($clist as $ck => $cv)
+				{
+					#价格
+					if (empty($this->attrVal['price'][$ak][$bk][$ck]))
+					{
+						$this->addError('attrs' , '请填写 <b>商品属性的基础价</b>');
+					}else{
+						$price = (double)$this->attrVal['price'][$ak][$bk][$ck];
+						if ($price <= 0)
+							$this->addError('attrs' , '<b>商品属性的基础价</b> 必须大于0');
+						elseif ($price > $retailPrice)
+							$this->addError('attrs' , '<b>商品属性的基础价</b> 不能大于<b>零售价</b>');
+					}
+					
+					#库存
+					if (empty($this->attrVal['stock'][$ak][$bk][$ck]))
+					{
+						if (empty($this->attrVal['inStock'][$ak][$bk][$ck]))
+						{
+							$this->addError('attrs' , '请设定 <b>商品属性的库存</b>');
+						}else{
+							$_tp = (int)$this->attrVal['inStock'][$ak][$bk][$ck];
+							if (!($_tp === -999 || $_tp > 0))
+								$this->addError('attrs' , '<b>商品属性的库存</b> 在无限库存的情况设定错误');
+						}
+					}else{
+						if ((int)$this->attrVal['stock'][$ak][$bk][$ck] < 1)
+							$this->addError('attrs' , '<b>商品属性的库存</b> 在非无限库存的情况下必须大于0');
+					}
+					
+					#重量
+					if (empty($this->attrVal['weight'][$ak][$bk][$ck]))
+						$this->addError('attrs' , '请填写 <b>商品属性的重量</b>');
+					elseif ((double)$this->attrVal['weight'][$ak][$bk][$ck] <= 0)
+						$this->addError('attrs' , '<b>商品属性的重量</b> 必须大于0');
+				}
+			}
+		}
+	}
+	
+	//检查参数组
+	public function checkArgs()
+	{
+		if ($this->args)
+		{
+			$title		= !empty($this->args['title']) && is_array($this->args['title']) ? $this->args['title'] : array();
+			$name		= !empty($this->args['name']) && is_array($this->args['name']) ? $this->args['name'] : array();
+			$value		= !empty($this->args['value']) && is_array($this->args['value']) ? $this->args['value'] : array();
+
+			foreach ($value as $vk => $vv)
+			{
+				if (!(isset($title[$vk]) && is_string($title[$vk]) && trim($title[$vk]) != ''))
+					$this->addError('args' , '请填写 <b>参数组名称</b>');
+
+				foreach ($vv as $wk => $wv)
+				{
+					if (!(isset($name[$vk][$wk]) && is_string($name[$vk][$wk]) && trim($name[$vk][$wk]) != ''))
+						$this->addError('args' , '请填写 <b>参数名</b>');
+				}
+			}
+		}
+	}
+	
+	//检查商品名称
+	public function checkTitle()
+	{
+		$model = ClassLoad::Only('Goods');/* @var $model Goods */
+		if ($model->checkTitle($this->title , (int)$this->getQuery('id')))
+			$this->addError('title' , '你填写的 [商品名称] 已存在.');
+	}
+}

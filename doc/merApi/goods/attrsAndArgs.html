@@ -1,0 +1,62 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">全新商品模块 - 商品分类对应的属性组</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">goods.attrsAndArgs</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">涂先锋</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>cid</td>
+			<td>int</td>
+			<td>第三级分类ID</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+	"code": 0,
+	"message": "",
+	"data": {
+		"attrs": [										# 属性组
+			{
+				"unite_code": "002661448776d5755e7a0d9c89c4fdf4",			# code
+				"title": "颜值",							# 组名称
+				"child": [									# 组下的属性值
+					{
+						"unite_code": "830478a15c9aad3defdd91393c094567",		# code
+						"title": "low"							# 值
+					}
+				]
+			}
+		],
+		"brand": [
+			{
+				"id": 16,					#品牌id
+				"title": "sdf / 对方观点"			#品牌名称
+			},
+			{
+				"id": 12,
+				"title": "dell / 戴尔"
+			}
+		]
+	}
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

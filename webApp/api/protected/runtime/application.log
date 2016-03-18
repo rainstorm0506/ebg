@@ -1,0 +1,30 @@
+2016/03/07 20:07:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "home/index"。' in E:\htdocs\ebangon.com\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 E:\htdocs\ebangon.com\Yii\web\CWebApplication.php(141): CWebApplication->runController('home/index')
+#1 E:\htdocs\ebangon.com\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 E:\htdocs\ebangon.com\webApp\api\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/api/
+---
+2016/03/10 09:34:21 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'ebangon.yii_web_user_session' doesn't exist. The SQL statement executed was: DELETE FROM `yii_web_user_session` WHERE expire<:expire.
+2016/03/10 14:08:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "userToCompany" 动作.' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php:483
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(270): CController->missingAction('userToCompany')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('userToCompany')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('usercenter/user...')
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#4 F:\phpEnve\Apache\htdocs\ebg\webApp\api\index.php(12): CApplication->run()
+#5 {main}
+REQUEST_URI=/webApp/api/usercenter.userToCompany
+---
+2016/03/10 15:40:01 [error] [exception.CHttpException.404] exception 'CHttpException' with message '系统无法找到请求的 "dict_on_id" 动作.' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php:483
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(270): CController->missingAction('dict_on_id')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('dict_on_id')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('usercenter/dict...')
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#4 F:\phpEnve\Apache\htdocs\ebg\webApp\api\index.php(12): CApplication->run()
+#5 {main}
+REQUEST_URI=/webApp/api/usercenter.dict_on_id
+---
+2016/03/10 15:42:32 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'com_address' cannot be null. The SQL statement executed was: INSERT INTO `user_company` (`com_name`, `dict_on_id`, `dict_two_id`, `dict_three_id`, `com_address`, `com_num`, `com_property`, `com_license`, `com_tax`, `com_org`, `com_license_timeout`) VALUES (:com_name, :dict_on_id, :dict_two_id, :dict_three_id, :com_address, :com_num, :com_property, :com_license, :com_tax, :com_org, :com_license_timeout).

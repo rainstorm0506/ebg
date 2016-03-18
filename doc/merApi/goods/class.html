@@ -1,0 +1,78 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">全新商品模块 - 商品的三级分类 & 数量组的默认值</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">goods.class</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">涂先锋</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>ct</td>
+			<td>int</td>
+			<td>分类数据格式 , ct=[1 , 2] , 默认值1</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "category": [					# 分类数据
+            {
+                "id": 32,					# 1级分类ID
+                "title": "办公设备",				# 1级名称
+                "views": true,					# 1级是否显示
+                "child": [						# 2级数据
+                    {
+                        "id": 33,					# 2级分类ID
+                        "title": "商业手机",				# 2级名称
+                        "views": true,					# 2级是否显示
+                        "child": [						# 3级数据
+                            {
+                                "id": 35,					# 3级分类ID
+                                "title": "智能手机",				# 3级名称
+                                "views": true					# 3级是否显示
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "amount": [					# 数量组的默认值
+            {
+                "start": 1,				# 开始数量
+                "end": 5,				# 结束数量
+                "value": 100				# 数量默认值
+            },
+            {
+                "start": 6,
+                "end": 15,
+                "value": 100
+            },
+            {
+                "start": 16,
+                "end": 35,
+                "value": 100
+            }
+        ]
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,683 @@
+2016/03/17 14:38:19 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(43): GlobalStatus::getStatusName('610', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 14:38:19 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(43): GlobalStatus::getStatusName('610', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 15:29:37 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(43): GlobalStatus::getStatusName('610', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 15:29:37 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(43): GlobalStatus::getStatusName('610', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 15:41:00 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(43): GlobalStatus::getStatusName('610', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 15:41:00 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(43): GlobalStatus::getStatusName('610', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 17:02:33 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 17:02:33 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 17:02:33 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 17:02:33 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 17:02:34 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 17:02:34 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 17:02:36 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 17:02:36 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 18:08:22 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 18:08:22 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 18:08:22 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 18:08:22 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 18:08:23 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/17 18:08:23 [error] [exception.Exception] exception 'Exception' with message 'memCache boot failure!' in F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php:59
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\CacheBase.php(41): CacheBase::getMemcacheCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(39): CacheBase::setCache('memCache')
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\GlobalStatus.php(125): GlobalStatus::getMainList()
+#3 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\views\company\list.php(39): GlobalStatus::getStatusName('613', 1)
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(126): require('F:\phpEnve\Apac...')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CBaseController.php(95): CBaseController->renderInternal('F:\phpEnve\Apac...', Array, true)
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(869): CBaseController->renderFile('F:\phpEnve\Apac...', Array, true)
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(782): CController->renderPartial('list', Array, true)
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\CompanyController.php(129): CController->render('list', Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): CompanyController->actionList()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#17 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#18 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#19 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#20 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(16): CApplication->run()
+#21 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/18 09:31:19 [error] [exception.CException] exception 'CException' with message 'CMemCache requires PHP memcache extension to be loaded.' in F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php:116
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php(89): CMemCache->getMemCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CMemCache->init()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CCacheHttpSession.php(51): CModule->getComponent('memCache')
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CCacheHttpSession->init()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(201): CModule->getComponent('session')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\auth\CWebUser.php(199): CWebApplication->getSession()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CWebUser->init()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(209): CModule->getComponent('user')
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(42): CWebApplication->getUser()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(24): SController->getUid()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('branch/list')
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#17 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#18 {main}
+REQUEST_URI=/supervise/branch.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/18 09:31:26 [error] [exception.CException] exception 'CException' with message 'CMemCache requires PHP memcache extension to be loaded.' in F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php:116
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php(89): CMemCache->getMemCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CMemCache->init()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CCacheHttpSession.php(51): CModule->getComponent('memCache')
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CCacheHttpSession->init()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(201): CModule->getComponent('session')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\auth\CWebUser.php(199): CWebApplication->getSession()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CWebUser->init()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(209): CModule->getComponent('user')
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(42): CWebApplication->getUser()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(24): SController->getUid()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#17 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#18 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/18 09:31:28 [error] [exception.CException] exception 'CException' with message 'CMemCache requires PHP memcache extension to be loaded.' in F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php:116
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php(89): CMemCache->getMemCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CMemCache->init()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CCacheHttpSession.php(51): CModule->getComponent('memCache')
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CCacheHttpSession->init()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(201): CModule->getComponent('session')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\auth\CWebUser.php(199): CWebApplication->getSession()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CWebUser->init()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(209): CModule->getComponent('user')
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(42): CWebApplication->getUser()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(24): SController->getUid()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#17 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#18 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/18 09:31:28 [error] [exception.CException] exception 'CException' with message 'CMemCache requires PHP memcache extension to be loaded.' in F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php:116
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php(89): CMemCache->getMemCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CMemCache->init()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CCacheHttpSession.php(51): CModule->getComponent('memCache')
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CCacheHttpSession->init()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(201): CModule->getComponent('session')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\auth\CWebUser.php(199): CWebApplication->getSession()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CWebUser->init()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(209): CModule->getComponent('user')
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(42): CWebApplication->getUser()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(24): SController->getUid()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#17 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#18 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/18 09:32:47 [error] [exception.CException] exception 'CException' with message 'CMemCache requires PHP memcache extension to be loaded.' in F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php:116
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php(89): CMemCache->getMemCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CMemCache->init()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CCacheHttpSession.php(51): CModule->getComponent('memCache')
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CCacheHttpSession->init()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(201): CModule->getComponent('session')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\auth\CWebUser.php(199): CWebApplication->getSession()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CWebUser->init()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(209): CModule->getComponent('user')
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(42): CWebApplication->getUser()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(24): SController->getUid()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('list')
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('company/list')
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#17 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#18 {main}
+REQUEST_URI=/supervise/company.list
+HTTP_REFERER=http://www.ebg.com/supervise/site.home
+---
+2016/03/18 09:32:49 [error] [exception.CException] exception 'CException' with message 'CMemCache requires PHP memcache extension to be loaded.' in F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php:116
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\caching\CMemCache.php(89): CMemCache->getMemCache()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CMemCache->init()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CCacheHttpSession.php(51): CModule->getComponent('memCache')
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CCacheHttpSession->init()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(201): CModule->getComponent('session')
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\auth\CWebUser.php(199): CWebApplication->getSession()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModule.php(394): CWebUser->init()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(209): CModule->getComponent('user')
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(42): CWebApplication->getUser()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(24): SController->getUid()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('home')
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('site/home')
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#17 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#18 {main}
+REQUEST_URI=/supervise/site.home
+---

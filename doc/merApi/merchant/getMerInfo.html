@@ -1,0 +1,58 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">商家信息 - 获得商家信息(含店铺信息)</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">merchant.getMerInfo</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+	
+    "code": 0,
+    "message": "",
+    "data": {
+        "uid": "86",											#商家ID	
+        "mer_no": "",											#商家编号
+        "mer_name": "春蚕",										#商家姓名
+        "mer_card": "510524199001045471",								#商家省份证
+        "mer_card_front": "/personInfo/2016/01-17/42/29734924119395154401453019947.5847.jpg",		#身份证正面
+        "mer_card_back": "/personInfo/2016/01-17/42/29734924119395154401453019947.5847.jpg",		#身份证背面
+        "mer_settle_day": "7",										#商家结账期
+        "mer_ensure_money": "10000.00",									#商家保证金
+        "mer_ensure_is_pay": "1",									#商家保证金是否支付到平台（默认为0）
+        "mer_take_point": "5.00",									#商家扣点 , 允许负数
+        "store_name": "测试的的观点非官方大哥梵蒂冈的",							#店铺名称
+        "store_environment": "",									#店铺环境（系列图）
+        "store_describe": "",										#店铺描述
+        "store_address": "",										#店铺地址
+        "store_avatar": "/personInfo/2016/01-17/42/29734924119395154401453019947.5847.jpg",		#店铺头像
+        "store_tel": "",										#店铺电话
+        "scope": "[5,6,7,8]",										#商家营业范围（JSON）
+        "is_self": "1",											#是否自营 , 1=自营
+        "gather_id": "0",										#电脑城ID
+        "store_join_qq": "234365",									#通信QQ
+        "store_grade": "0"										#商家评分 , 1-5分
+        "status_id": "713"                                                                              #当前商家认证状态(710:正常；711:已禁用;712:已删除;713:待审核;714:审核未通过)
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

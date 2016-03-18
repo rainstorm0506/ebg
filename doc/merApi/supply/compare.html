@@ -1,0 +1,65 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">供应模块 - 我的发布列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">supply.compare</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td rowspan="4">请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+			<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>页码</td>
+		</tr>
+		<tr>
+			<td>id</td>
+			<td>int</td>
+			<td>商品ID</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": [
+        {
+            "id": "78",			#供应商品ID
+            "merchant_id": "105",	#商家ID
+            "type": "1",		#类型(供应=1;需求=2)
+            "title": "好产品",		#商品名称
+            "class_id": "12",		#分类ID
+            "brand_id": "12",		#品牌ID
+            "size_id": "0",		#尺寸ID
+            "color_id": "12",		#颜色ID
+            "num": "12",		#需求数量
+            "main_pic": "",		#商品主图
+            "pic_group": "[]",		#商品图片组
+            "describes": "好好好",	#商品描述
+            "time": "1455710888",	#发布时间
+            "price": "1200",		#商品价格
+            "gid": "78",		#分词ID
+            "word_crc32": "919096516"	#分词数字
+        }
+    ]
+}
+</pre></td>
+		</tr>
+	</table>
+	
+	
+</div>

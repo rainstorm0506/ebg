@@ -1,0 +1,402 @@
+<?php
+/**
+ * 商家会员控制器
+ *
+ * @author 夏勇高
+ */
+class MerchantController extends SController
+{
+	const PAGESIZE = 10;
+	public function actionVerify()
+	{
+		$this->checkUserPurview("m.m");
+		$uid = $this->getQuery("id");
+		$mModel = ClassLoad::Only("Merchant"); /* @var $mModel Merchant */
+		$uModel = ClassLoad::Only("User"); /* @var $uModel User */
+		
+		if(isset($_POST['VerifyForm']))
+		{
+			$state = $_POST['VerifyForm']['state'];
+			$state == 'Y' ? $state = 710 : $state = 714;
+			$remark = $_POST['VerifyForm']['remark'];
+			
+			$uModel->reviewUser($uid , $state , $remark);
+			$this->redirect(array (
+				'merchant/list' 
+			));
+		}
+		
+		$this->render("verify" , array (
+			"info" => $uModel->getInfo($uid), 
+			"merchant" => $mModel->getInfo($uid) 
+		));
+	}
+	
+	public function actionView()
+	{
+		$this->checkUserPurview("m.l");
+		$uid = $this->getQuery("id");
+		$uModel = ClassLoad::Only("User");
+		$mModel = ClassLoad::Only("Merchant");
+		$Recommform = ClassLoad::Only('RecommForm');
+		$type = $this->getQuery("type");
+		$condition = unserialize($this->getQuery("condition"));
+		$this->render("view" , array (
+			"Recommform"=>$Recommform,
+			"info" => $uModel->getInfo($uid), 
+			"merchant" => $mModel->getInfo($uid), 
+			"follows" => $uModel->getFollows($uid), 
+			"comments" => $uModel->getComments($uid), 
+			"orders" => $uModel->getOrders($uid), 
+			"histories" => $uModel->getHistories($uid), 
+			"growLogs" => $uModel->getGrowLogs($uid), 
+			"addresses" => $uModel->getUserAddresses($uid),
+			"type" =>$type,
+			"condition" => $condition,
+		));
+	}
+	
+	/**
+	 * 根据 关键词 搜索 商家店铺
+	 *
+	 * @author 涂先锋
+	 */
+	public function actionSearchKeyword()
+	{
+		if(!$keyword = (string)$this->getQuery('keyword'))
+			$this->jsonOutput(1 , '请输入搜索关键词');
+		
+		$model = ClassLoad::Only('Merchant'); /* @var $model Merchant */
+		$this->jsonOutput(0 , $model->searchKeyword($keyword , 11));
+	}
+	
+	//查询商家会员列表
+	public function actionList()
+	{
+		$this->checkUserPurview("m.l");
+		
+		$keyword = (string)$this->getQuery('keyword');
+		
+		$model = ClassLoad::Only('Merchant'); /* @var $model Merchant */
+		$pageNow = Yii::app()->request->getParam('pagenum' , 0);
+		$count = $model->getCount($keyword);
+		$page = new CPagination();
+		$page->pageVar = 'pagenum';
+		$page->pageSize = 20;
+		$page->setItemCount($count);
+		$offset = $pageNow > 1 ? ($pageNow - 1) * $page->pageSize : 0;
+		
+		$this->render('list' , array (
+			'keyword' => $keyword, 
+			'page' => $page, 
+			'list' => $model->getList($keyword , $offset , $page->pageSize) 
+		));
+	}
+	
+	//添加商家会员信息
+	public function actionCreate()
+	{
+		$this->checkUserPurview('m.c');
+		
+		$form = ClassLoad::Only('MerchantForm'); /* @var $form MerchantForm */
+		$form->user_type = 3;
+		$this->exitAjaxPost($form);
+		
+		if(isset($_POST['MerchantForm']))
+		{
+			$form->attributes = $_POST['MerchantForm'];
+			
+			$arr = array ();
+			$sc = $_POST['MerchantForm']['scope'];
+			foreach($sc as $key => $value)
+			{
+				if($value)
+					$arr[] = $value;
+			}
+			
+			if($form->validate())
+			{
+				$model = ClassLoad::Only('Merchant'); /* @var $model Merchant */
+				$model->create($_POST['MerchantForm']);
+				GlobalUser::flush();
+				$this->redirect(array('merchant/list'));
+			}
+		}
+		$this->render('append' , array (
+			'scopes'		=> ClassLoad::Only('Scope')->getAll(),
+			'computer'		=> ClassLoad::Only('Gather')->getComputer(),
+			'store'			=> GlobalGather::getGatherTree(true),
+			'form'			=> $form,
+			'action'		=> 'create',
+		));
+	}
+	
+	//修改商家会员信息
+	public function actionModify()
+	{
+		$this->checkUserPurview('m.m');
+		
+		$form = ClassLoad::Only('MerchantForm');
+		$form->user_type = 3;
+		$this->exitAjaxPost($form);
+		
+		if(!$id = (int)$this->getQuery('id' , 0))
+			$this->error('错误的ID');
+		
+		$model = ClassLoad::Only('Merchant'); /* @var $model Merchant */
+		$uModel = ClassLoad::Only('User');
+		
+		$userSession = Yii::app()->getUser()->getName();
+		if(!($info = $model->getInfo($id)))
+			$this->message('非法操作');
+		
+		$user = $uModel->getInfo($id);
+		
+		$form->attributes = isset($_POST['MerchantForm']) ? $_POST['MerchantForm'] : array ();
+		if(isset($_POST['MerchantForm']) && $form->validate())
+		{
+			$model->modify($_POST['MerchantForm'] , $id);
+			GlobalUser::flush();
+			$this->redirect(array('merchant/list'));
+		}
+		
+		$storey = $store = array ();
+		if(!empty($info['gather_value']))
+		{
+			$Gather = ClassLoad::Only('Gather'); /* @var $Gather Gather */
+			if(!empty($info['gather_value'][0])){
+				$storey = $Gather->getstorey($info['gather_value'][0]);
+			}
+			if(!empty($info['gather_value'][1])){
+				$store = $Gather->getstore($info['gather_value'][0] , $info['gather_value'][1]);
+			}
+		}
+		
+		$this->render("append" , array (
+			'form'			=> $form, 
+			'user'			=> $user, 
+			'computer'		=> ClassLoad::Only('Gather')->getComputer(), 
+			'storey'		=> $storey, 
+			'mer_store'		=> $store, 
+			'store'			=> GlobalGather::getGatherTree(true), 
+			'scopes'		=> ClassLoad::Only('Scope')->getAll(), 
+			'sco'			=> ClassLoad::Only("Scope")->getMerchantScope($id), 
+			'info'			=> $info,
+			'action'		=> 'modify',
+		));
+	}
+	
+	//删除商家会员信息
+	public function actionDelete()
+	{
+		$this->checkUserPurview('m.d');
+		
+		if(!$id = (int)Yii::app()->getRequest()->getQuery('id' , 0))
+			$this->error('错误的ID');
+		
+		$model = ClassLoad::Only('Merchant');/* @var $model Merchant */
+		$model->clear($id);
+		GlobalUser::flush();
+		$this->redirect(array (
+			'merchant/list' 
+		));
+	}
+	
+	public function actionRecommPage()
+	{
+		$this->checkUserPurview("u.l");
+		$uModel = ClassLoad::Only("User");
+		$pageNow = Yii::app()->request->getPost('pageNum',0);
+		$uid = Yii::app()->request->getPost('id');
+		$data = urldecode(Yii::app()->request->getPost('data'));
+		//$data = urldecode('start_time=2016-03-01+00%3A00%3A00&end_time=2016-03-11+00%3A00%3A00&RecommForm%5Bkey%5D=phone&keyword=152');
+		$condition = array();
+		if(!empty($data)){
+			$array = explode('&',$data);
+			foreach ($array as $val){
+				$brray = explode('=', $val);
+				if(!empty($brray[1])){
+					if($brray[0] == 'RecommForm[key]'){
+						$crr[0] = $brray[1];
+					}else if ($brray[0] == 'keyword'){
+						$crr[1] = $brray[1];
+					}else if($brray[0] == 'RecommForm[status]'){
+						$crr[2] = $brray[1];
+					}else{
+						$condition[$brray[0]] = $brray[1];
+					}
+				}
+			}
+			if(!empty($crr[0]) && !empty($crr[1])){
+				$condition[$crr[0]] = $crr[1];
+			}
+			if(!empty($crr[2])){
+				$condition['status'] = $crr[2];
+			}
+		}
+		if(!empty($condition['start_time']) && !empty($condition['end_time'])){
+			if(strtotime($condition['start_time']) > strtotime($condition['start_time'])){
+				$message = array('code'=>'error','message'=>'开始时间必须大于结束时间');
+			}
+		}
+		if(!empty($condition['start_time'])){
+			if(strtotime($condition['start_time']) > time()){
+				$message = array('code'=>'error','message'=>'开始时间不能大于现在时间');
+			}
+		}
+		if(!empty($condition['end_time'])){
+			if(strtotime($condition['end_time']) > time()){
+				$message = array('code'=>'error','message'=>'结束时间不能大于现在时间');
+			}
+		}
+			
+		if(!empty($message) && count($message) > 0){
+			echo json_encode($message);die;
+		}
+		$pageSize = self::PAGESIZE;
+		$offset = $pageNow > 1 ? ($pageNow - 1) * $pageSize : 0;
+		$count = $uModel->getOrderRecCount($uid,$condition);
+		$totalPage = ceil($count/self::PAGESIZE);
+		$recommended = $uModel->getOrderRecommended($uid,$condition,$offset,$pageSize);
+		foreach ($recommended as $key=>$val){
+			$recommended[$key]['reg_time'] = date('Y-m-d h:i:s',$val['create_time']);
+		}
+		$array = array('total'=>$count,'page'=>$pageNow,'totalPage'=>$totalPage,'list'=>$recommended);
+		echo json_encode($array);
+	}
+	
+	/**
+	 * 2016-3-10
+	 * yp  推荐奖金的列表页    16:20
+	 */
+	public function actionRecommListPage()
+	{
+		$this->checkUserPurview("u.l");
+		$uModel = ClassLoad::Only("User");
+		$pageNow = Yii::app()->request->getPost('pageNum',0);
+		$uid = Yii::app()->request->getPost('id');
+		$data = urldecode(Yii::app()->request->getPost('data'));
+		//$data = urldecode('start_time=2016-03-01+00%3A00%3A00&end_time=2016-03-11+00%3A00%3A00&RecommForm%5Bkey%5D=phone&keyword=152');
+		$condition = array();
+		if(!empty($data)){
+			$array = explode('&',$data);
+		foreach ($array as $val){
+				$brray = explode('=', $val);
+				if(!empty($brray[1])){
+					if($brray[0] == 'RecommForm[key]'){
+						$crr[0] = $brray[1];
+					}else if ($brray[0] == 'keyword'){
+						$crr[1] = $brray[1];
+					}else{
+						$condition[$brray[0]] = $brray[1];
+					}					
+				}
+			}
+			if(!empty($crr[0]) && !empty($crr[1])){
+				$condition[$crr[0]] = $crr[1];
+			}
+		}
+		if(!empty($condition['start_time']) && !empty($condition['end_time'])){
+			if(strtotime($condition['start_time']) > strtotime($condition['start_time'])){
+				$message = array('code'=>'error','message'=>'开始时间必须大于结束时间');
+			}
+		}
+		if(!empty($condition['start_time'])){
+			if(strtotime($condition['start_time']) > time()){
+				$message = array('code'=>'error','message'=>'开始时间不能大于现在时间');
+			}
+		}
+		if(!empty($condition['end_time'])){
+			if(strtotime($condition['end_time']) > time()){
+				$message = array('code'=>'error','message'=>'结束时间不能大于现在时间');
+			}
+		}
+			
+		if(!empty($message) && count($message) > 0){
+			echo json_encode($message);die;
+		}
+		$pageSize = self::PAGESIZE;
+		$offset = $pageNow > 0 ? ($pageNow - 1) * $pageSize : 0;
+		$count = $uModel->getRecCount($uid,$condition);
+		$totalPage = ceil($count/self::PAGESIZE);
+		$recommended = $uModel->getRecommendedList($uid,$condition,$offset,$pageSize);
+		foreach ($recommended as $key=>$val){
+			$recommended[$key]['reg_time'] = date('Y-m-d h:i:s',$val['reg_time']);
+			$recommended[$key]['exp'] = GlobalUser::getUserLayerName($val['exp'] , 1);
+		}
+		$array = array('total'=>$count,'page'=>$pageNow,'totalPage'=>$totalPage,'list'=>$recommended);
+		echo json_encode($array);
+	}
+	
+	/**
+	 * 2016-3-10
+	 *
+	 * yp  个人推荐的详情页
+	 *
+	 */
+	
+	public function  actionDetail(){
+		$this->checkUserPurview("u.l");
+		$uModel = ClassLoad::Only("User");
+		$cModel = ClassLoad::Only("Merchant");
+		$pageNow = Yii::app()->request->getPost('pageNum',0);
+		$uid = Yii::app()->request->getQuery('re_uid');
+		$id = Yii::app()->request->getQuery('id');
+		$Recommform = ClassLoad::Only('RecommForm');
+		$uid = Yii::app()->request->getQuery('re_uid');
+		$id = Yii::app()->request->getQuery('id');
+		$Recommform = ClassLoad::Only('RecommForm');
+		$data = urldecode(Yii::app()->request->getQuery('data'));
+		$page = urldecode(Yii::app()->request->getQuery('page'));
+		$start_time = Yii::app()->request->getQuery('start');
+		$end_time = Yii::app()->request->getQuery('end');
+		$key = Yii::app()->request->getQuery('key');
+		$keyword = Yii::app()->request->getQuery('keyword');
+		$condition = array();
+		if(!empty($data)){
+			$array = explode('&',$data);
+			foreach ($array as $val){
+				$brray = explode('=', $val);
+				if(!empty($brray[1])){
+					if($brray[0] == 'RecommForm[key]'){
+						$crr[0] = $brray[1];
+					}else if ($brray[0] == 'keyword'){
+						$crr[1] = $brray[1];
+					}else{
+						$condition[$brray[0]] = $brray[1];
+					}
+						
+				}
+			}
+			if(!empty($crr[0])){
+				$condition[$crr[0]] = $crr[1];
+			}
+		}
+		if(!empty($page)){
+			$condition['page'] = $page;
+		}
+		if(!empty($start_time)){
+			$condition['start_time'] = $start_time;
+		}
+		if(!empty($end_time)){
+			$condition['end_time'] = $end_time;
+		}
+		if(!empty($key)){
+			$condition['key'] = $key;
+		}
+		if(!empty($keyword)){
+			$condition['keyword'] = $keyword;
+		}
+		
+		
+		$condition = serialize($condition);
+		$this->render('details',
+				array(
+						'Recommform'=>$Recommform,
+						'id'=>$id,
+						"info" => $uModel->getInfo($uid),
+						"condition"=>$condition,
+				)
+		);
+	}
+}

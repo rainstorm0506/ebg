@@ -1,0 +1,50 @@
+/* ============================================== selectbox  ============================================== */
+.sbox30,.sbox36,.sbox40{width:150px;
+	font-size:14px;font-family:Microsoft YaHei;color:#333;border:1px solid #b4b4b4;
+	padding-left:5px;
+}
+.sbox30{height:30px;padding:5px 5px\0;}
+.sbox36{height:36px;padding:8px 5px\0;width:183px}
+.sbox36-1{width:250px}
+.sbox36-2{width:135px;}
+.sbox40{height:40px;padding:10px 5px\0;}
+.sbox30,.sbox36,.sbox40{height:auto\9;}
+/* =============== ie8 hack =============== */
+@media \0 screen {
+	.sbox30{padding-top:5px;padding-bottom:4px;}
+	.sbox36{padding-top:8px;padding-bottom:7px;}
+	.sbox40{padding-top:10px;padding-bottom:9px;}
+}
+/* ============================================== textbox ============================================== */
+.tbox24,.tbox28,.tbox34,.tbox38{width:334px;border:1px solid #b4b4b4;font:14px/18px Microsoft YaHei;padding:0 5px;color:#666;}
+.tbox24{width:100px;height:24px;line-height:24px \9;}
+.tbox28{width:40px;height:28px;line-height:28px \9;}
+.tbox28-1{width:515px}
+.tbox28-2{width:130px}
+.tbox28-3{width:254px}
+.tbox34{height:34px;line-height:34px \9;width:170px;}
+.tbox34-1{width:394px}
+.tbox34-2{width:460px}
+.tbox34-3{width:70px}
+.tbox34-4{width:280px}
+.tbox34-5{width:720px}
+.tbox34-6{width:120px}
+.tbox38{height:38px;line-height:38px \9;}
+.tbox38-1{width:280px}
+.tbox38-2{width:148px}
+.tbox38-3{width:202px}
+.tbox38-4{width:530px}
+/* ========================================================== Safari hack ========================================================== */
+/* ============================================== selectbox ============================================== */
+.sbox30{[;margin-top:4px;}
+.sbox36{margin-top:7px;}
+.sbox40{margin-top:9px;}
+/* ============================================== textbox  ============================================== */
+.tbox24,.tbox28,.tbox34,.tbox38{line-height:0;}
+/* ===============IE6、IE7 hack =============== */
+.tbox24{*line-height:24px;}
+.tbox28{*line-height:28px;}
+.tbox34{*line-height:34px;}
+.tbox38{*line-height:38px;}
+
+input::-webkit-input-placeholder{line-height:18px;}

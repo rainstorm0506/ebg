@@ -1,0 +1,66 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心--提交评价</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="5">usercenter.setComments</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="5">李启源</td>
+		</tr>
+                <tr>
+			<td rowspan="6">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>order_sn</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>订单编号</td>
+		</tr> 
+		<tr>
+			<td>goods_id</td>
+			<td>int</td>
+			<td>必</td>
+			<td>商品ID编号</td>
+		</tr> 
+		<tr>
+			<td>content</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>评价内容</td>
+		</tr> 
+		<tr>
+			<td>goods_score</td>
+			<td>int</td>
+			<td>必</td>
+			<td>评分等级</td>
+		</tr> 
+		<tr>
+			<td>src</td>
+			<td>array</td>
+			<td>非必</td>
+			<td>晒图</td>
+		</tr>                 
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="5"><pre>
+{
+    "code": 0,
+    "x-token": "68a0fbb5bb8c4bf2699f6d28fbb434f1",  #每一次请求的随机码(32位)
+    "message": [],
+    "data": []
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,49 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main>
+		<section class="commit-wrap">
+			<section class="commit-goods">
+				<figure><img ng-src="{{imgPath}}/temp/20.png"></figure>
+				<article>
+					<h3>商品评价</h3>
+					<dl>
+						<dd class="current"></dd>
+						<dd></dd>
+						<dd></dd>
+						<dd></dd>
+						<dd></dd>
+					</dl>
+				</article>
+			</section>
+			<div class="commit-area">
+				<textarea placeholder="请写下对商品的感受，对他人帮助很大哦！"></textarea>
+			</div>
+			<div class="commit-pic">
+				<figure><a ui-sref="commitPic"><img ng-src="{{imgPath}}/temp/21.png"></a></figure>
+				<figure><a ui-sref="commitPic"><img ng-src="{{imgPath}}/temp/21.png"></a></figure>
+				<div><i></i><label class="ng-label"><input type="checkbox" ng-model="isUpload"></label></div>
+			</div>
+		</section>
+		<div class="h40px"></div>
+	</main>
+	<footer class="commit-bottom">
+		<div class="checbox-wrap">
+			<label>
+				<b><i ng-show="check===true"></i></b><span>我已阅读并同意</span>
+				<input type="checkbox"  ng-checked="check" ng-init="check = true" ng-model="check">
+			</label>
+		</div>
+		<input class="btn-1-2" type="button" value="评价" ng-disabled="!check">
+	</footer>
+	<!-- 上传弹窗 -->
+	<section class="shadow-wrap" ng-class="{current:isUpload === true}">
+		<div class="upload-wrap">
+			<header><span>亲你可以上传5张图片</span><a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isUpload"></label></a></header>
+			<nav>
+				<a class="btn-1" href="javascript:;">拍照</a>
+				<a class="btn-1" href="javascript:;">相册</a>
+				<a class="btn-1-3" href="javascript:;">取消<label class="ng-label"><input type="checkbox" ng-model="isUpload"></label></a>
+			</nav>
+		</div>
+	</section>

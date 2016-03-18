@@ -1,0 +1,56 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	
+	<!---------- main ---------->
+	<main>
+		<!---- 图片 ---->
+		<section class="goods-detail-pic">
+			<img ng-src="{{data.cover}}">
+		</section>
+		<!---- 商品信息 ---->
+		<section class="box-wrap-info">
+			<h3 class="tit-second" ng-bind="data.title"></h3>
+			<ul class="integral-list">
+				<li class="txt-1"><h6>积分</h6><p><em ng-bind="data.points"></em> 积分 <span>（仅企业用户）</span></p></li>
+				<li class="nav">
+					<h6>尺寸</h6>
+					<nav select-only>
+						<a href="javascript:;" class="current">13寸</a>
+						<a href="javascript:;">15寸</a>
+						<a href="javascript:;">19寸</a>
+						<a href="javascript:;">21寸</a>
+						<a href="javascript:;">23寸</a>
+					</nav>
+				</li>
+				<li class="nav">
+					<h6>颜色</h6>
+					<nav select-only>
+						<a href="javascript:;" class="current">玫瑰金</a>
+						<a href="javascript:;">土豪金</a>
+						<a href="javascript:;">白色</a>
+						<a href="javascript:;">蓝色</a>
+					</nav>
+				</li>
+				<li>
+					<h6>数量</h6><p><x ng-bind="data.stock">1</x>件</p>
+				</li>
+			</ul>
+		</section>
+		<div class="drag-txt drag-txt-1">
+			<i></i>
+			<p>下拉，查看商品详情</p>
+			<i></i>
+		</div>
+		<!---- 商品详情 ---->
+		<div class="editor-wrap">
+			<header>商品详情</header>
+			<article ng-bind-html="data.content"></article>
+		</article>
+	</main>
+	<a class="go-top" href="javascript:;"><span>回到<br>顶部</span><i></i></a>
+	<nav class="bot-nav bot-nav-1"> 
+		<a class="black-btn" href="#"><i class="ico-7"></i>分享</a>
+		<a class="black-btn" href="#"><i class="ico-8"></i>收藏商品</a>
+		<a class="buy-btn-2" href="#">立即兑换</a>
+	</nav>
+	<promt></promt>

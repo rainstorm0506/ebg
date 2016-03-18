@@ -1,0 +1,13 @@
+	<!---------- 基本信息 ---------->
+	<ul class="account-info-list">
+		<li class="head"><h6>头像</h6><figure><img ng-src="{{baseInfo.face}}"></figure></li>
+		<li><h6>用户名</h6><aside class="name" ng-bind="baseInfo.nickname">dongding</aside></li>
+		<li><h6>真实姓名</h6><aside ng-bind="baseInfo.realname">泰和</aside></li>
+		<li><h6>性别</h6><aside ng-if="baseInfo.sex==0">女</aside><aside ng-if="baseInfo.sex==1">男</aside></li>
+		<li><h6>生日</h6><aside ng-bind="baseInfo.birthday"></aside></li>
+		<li><h6>居住地址</h6><aside><x ng-bind="baseInfo.dict_one_name"></x> <x ng-bind="baseInfo.dict_two_name"></x> <x ng-bind="baseInfo.dict_three_name"></x></aside></li>
+		<li class="many"><h6>详细信息</h6><aside ng-bind="baseInfo.address">东鼎泰和科技有限公司</aside></li>
+	</ul>
+	<a class="btn-1 sm-mlr" href="#">保存</a>
+	<div class="h20px"></div>
+	<promt></promt>

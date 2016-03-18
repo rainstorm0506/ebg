@@ -1,0 +1,118 @@
+	<!---------- 企业用户信息填写 ---------->
+	<p class="txt-2">注册成功，填写以下信息成为企业用户，享受更多优惠</p>
+	<fieldset class="form-list">
+		<legend>企业用户信息填写</legend>
+		<form name="aForm" novalidate>
+			<ul>
+				<li><h6>公司名称</h6><input type="text" class="tbox" placeholder="请输入公司名称"></li>
+				<li class="select-site">
+					<h6>公司地址</h6>
+					<span class="prov">
+						<em ng-init="provinceV='请选择省'" ng-bind="provinceV" ng-class="{current:provinceV!=='请选择省'}"></em>
+						<s class="tr-b"><i></i><b></b></s><label class="ng-label"><input type="checkbox" ng-model="isProv"></label>
+					</span>
+					<span id="cityBtn" ng-click="selectCity()">
+						<em ng-init="cityV='请选择市'" ng-bind="cityV" ng-class="{current:cityV!=='请选择市'}"></em>
+						<s class="tr-b"><i></i><b></b></s>
+					</span>
+				</li>
+				<li><h6>详细地址</h6><input type="text" class="tbox" placeholder="街道门牌地址"></li>
+				<li class="select-sm"><h6>公司人数</h6><p ng-bind="personV"></p><s class="tr-b"><i></i><b></b></s><label class="ng-label"><input type="checkbox" ng-model="isPerson"></label></li>
+				<li class="select-sm"><h6>公司类型</h6><p ng-bind="typeV"></p><s class="tr-b"><i></i><b></b></s><label class="ng-label"><input type="checkbox" ng-model="isType"></label></li>
+				<li class="select-sm"><h6>营业执照到期时间</h6><p ng-bind="timeV"></p><i class="ico-time"></i><label class="ng-label"><input type="checkbox" ng-model="isTime"></label></li>
+			</ul>
+			<div class="checbox-wrap">
+				<label>
+					<b><i ng-show="check===true"></i></b><span>我已阅读并同意</span>
+					<input type="checkbox" ng-checked="check" ng-init="check = true" ng-model="check">
+				</label>
+				<span><a href="#">《e办公企业用户协议》</a></span>
+			</div>
+			<div class="wrap-btn"><a class="btn-1" ui-sref="register.comanyUpload">下一步</a></div>
+		</form>
+	</fieldset>
+
+	<!-- 弹窗 -->
+	<!---- 请选择省 ---->
+	<section class="shadow-wrap" ng-class="{current:isProv === true}">
+		<div>
+			<header>请选择省<a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isProv"></label></a></header>
+			<div class="select-wrap select-wrap-scroll" swipe-select select-address="provinceV" ng-swipe-up ng-swipe-down target-city="cityWrap">
+				<ul>
+					<li ng-repeat="data in provinces" ng-bind="data.name"></li>
+				</ul>
+				<dl><dd></dd><dd></dd><dd></dd></dl>
+			</div>
+			<a class="btn-1-1" id="provinceV" href="javascript:;">确认</a>
+		</div>
+	</section>
+	<!---- 请选择市 ---->
+	<section class="shadow-wrap" ng-class="{current:isCity === true}">
+		<div>
+			<header>请选择市{{y}}<a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isCity"></label></a></header>
+			<city></city>
+			<!--
+			<div class="select-wrap select-wrap-scroll" swipe-select select-address="cityV" ng-swipe-up ng-swipe-down>
+				<ul>
+					<li ng-repeat="data in city" ng-bind="city.name"></li>
+				</ul>
+				<dl><dd></dd><dd></dd><dd></dd></dl>
+			</div>
+			-->
+			<a class="btn-1-1" id="cityV" href="javascript:;">确认</a>
+		</div>
+	</section>
+	<!---- 公司人数 ---->
+	<section class="shadow-wrap" ng-class="{current:isPerson === true}">
+		<div>
+			<header>公司人数<a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isPerson"></label></a></header>
+			<div class="select-wrap">
+				<ul select-only>
+					<li><h6>0-20人</h6><i></i></li>
+					<li><h6>20-50人</h6><i></i></li>
+					<li><h6>50-100人</h6><i></i></li>
+					<li><h6>100-500人</h6><i></i></li>
+					<li><h6>500人以上</h6><i></i></li>
+				</ul>
+			</div>
+			<a class="btn-1-1" comfirm-to="personV" href="javascript:;">确认</a>
+		</div>
+	</section>
+	<!---- 公司类型 ---->
+	<section class="shadow-wrap" ng-class="{current:isType === true}">
+		<div>
+			<header>公司类型<a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isType"></label></a></header>
+			<div class="select-wrap">
+				<ul select-only>
+					<li><h6>国有独资公司</h6><i></i></li>
+					<li><h6>有限责任公司</h6><i></i></li>
+					<li><h6>股份公司</h6><i></i></li>
+					<li><h6>其他</h6><i></i></li>
+				</ul>
+			</div>
+			<a class="btn-1-1" comfirm-to="typeV" href="javascript:;">确认</a>
+		</div>
+	</section>
+	<!---- 营业执照到期时间 ---->
+	<section class="shadow-wrap" ng-class="{current:isTime === true}">
+		<div>
+			<header>营业执照到期时间<a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isTime"></label></a></header>
+			<div class="select-wrap select-wrap-scroll select-wrap-time" select-time="timeV">
+				<ol>
+					<li swipe-select ng-swipe-up ng-swipe-down id="year">
+						<ul><li ng-repeat="i in year"><span ng-bind="i"></span>年</li></ul>
+						<dl><dd></dd><dd></dd><dd></dd></dl>
+					</li>
+					<li swipe-select ng-swipe-up ng-swipe-down id="month">
+						<ul><li ng-repeat="i in month"><span ng-bind="i"></span>月</li></ul>
+						<dl><dd></dd><dd></dd><dd></dd></dl>
+					</li>
+					<li swipe-select ng-swipe-up ng-swipe-down id="day">
+						<ul><li ng-repeat="i in day"><span ng-bind="i"></span>日</li></ul>
+						<dl><dd></dd><dd></dd><dd></dd></dl>
+					</li>
+				</ol>
+			</div>
+			<a class="btn-1-1" id="timeV" href="javascript:;">确认</a>
+		</div>
+	</section>

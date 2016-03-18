@@ -1,0 +1,120 @@
+﻿// ======================================================================== library.less
+@import "h:/less/library.less";
+// ======================================================================== extend.less
+@import "public/extend.less";
+// ======================================================================== public.less
+@import "public.css";
+.omit{.omit}
+// ======================================================================== public part
+@import "private/home-nav.less";
+@import "private/checbox-wrap.less";
+@import "private/btn-send.less";
+@import "private/form-list.less";
+// ======================================================================== 企业集采
+.header-jicai{
+	h1{.m_rl(0,38/@k);}
+	.editor:extend(.tc){.fs(26/@a);.c_fff;.w(88/@c);}
+}
+// ----------------------------------
+.jicai-list:extend(.bc_fff){.mt(1);
+	li:extend(.f22px){.p(20/@a 5%);.bor_ddd;.mt(-1);}
+	header:extend(.flexbox all){.mb(15/@a);.lh(40/@a);
+		h6:extend(.flex-1){.fs(28/@a);}
+	}
+	footer:extend(.flexbox){
+		div:extend(.flex-1){}
+	}
+	time,footer{.c_999}
+	.on{
+		p{.c(#6fa931);}
+	}
+}
+.jicai-list-editor{
+	li:extend(.rel){.pl(88/@a);}
+	i{.ww(22/@a);.bor(#ddd,2/@a);.p_abs_lt(32/@a,50%);.mt(26/@a*@x);
+		b:extend(.brn_bsc,.rel_m){.db;.bi_wh(18/@a,14/@a,ico-check);.m_t(14/@a*@x);.dn;}
+	}
+	.current{
+		b{.db;}
+	}
+}
+// ----------------------------------
+.jicai-nav:extend(.flexbox,.bc_fff,.tc){.fs(@28px);.hh(60/@d);.mt(20/@d);.ptb(10/@d);.tbor_ddd;.bbor_ddd;
+	a:extend(.flex-1){
+		&:first-child{.rbor_ddd;}
+		*{.dk;.vt}
+	}
+	i:extend(.rel){.mr(5%);}
+	span{.h;}
+}
+.ico-9{.bi_wh(30/@d,36/@d,ico-9);.t(12/@d);}
+.ico-10{.bi_wh(35/@d,37/@d,ico-10);.t(12/@d);}
+// ======================================================================== 发布集采
+.form-list:extend(.bc_fff){
+	.txt-1{.tr;.fs(@20px);.mt(15/@n);.c_999;
+		i{.c_f00;}
+	}
+}
+.checbox-wrap-wrap:extend(.flexbox){.bbor_ddd;.ptb(20*@px);}
+.btn-upload{.f22px;.hh(60/@a);.bc(#efefef);.bor_ddd;.db;.m(20/@a 3% 0);}
+// ----------------------------------
+.control-upload{.mt(@30px);
+	dd:extend(.flexbox all){.f22px;.lh(36/@a);.mb(10/@a);
+		>i{.ww(24/@a);.m_tr(7/@a,1%);}
+	}
+	span:extend(.flex-1){}
+	a,em{.nowrap;}
+	a{.c(#1a66b3);.mr(2%);
+		&:last-child{.mr}
+	}
+	.mc{.c(@mc);.mr(1%);}
+	em{.ml(5/@a);
+		i{.c_999;}
+	}
+}
+.ico-yes{.bi(ico-yes);}
+.ico-no{.bi(ico-no);}
+// ---------------------------------- 弹窗
+.publish-wrap{
+	h3:extend(.tc){.hh(48/@a);.p_tb(50/@a,40/@a);
+		*{.dk}
+		i:extend(.brn_bsc){.bi_ww(48/@a,ico-success);.mr(2%);}
+		span{.fs(36/@a);.vt;}
+	}
+	>section{.lh(150%);.plr(10%);
+		div{.c_999;.mt(20/@a);}
+	}
+}
+// ======================================================================== 集采详情
+.jicai-detail-list:extend(.bc_fff){
+	li:extend(.flexbox all){.fs(@22px);.bbor_ddd;.lh(62/@a);.plr(3%);
+		&:first-child{
+			h6{.c_000;.fs(28/@a);}
+		}
+	}
+	li:not(:first-child){.p(15/@a 3%);}
+	h6:extend(.flex-1){.fs(26/@a);}
+	a:extend(.tc){.w(120/@a);.hh(60/@a);.bor_ddd;.ml(1.5%);}
+	span{.m_rl(1%,2%);}
+	time{.c_999;}
+}
+// ======================================================================== 报价详情
+.offer-list{
+	li:extend(.bc_fff){.f22px;.mb(20/@a);}
+	header:extend(.flexbox all){.hh(70/@a);.plr(3%);
+		>*{.nowrap}
+		h3:extend(.omit,.flex-1){}
+		time{.fs(20/@a);.w(204/@n);.ml(1%);.tr;.c_666;}
+		i:extend(.brn_bsc,.rel){.bi_ww(24/@a,ico-11);.dk;.vm;.mr(2%);.t(-2/@a);}
+	}
+	li>div:extend(.flexbox){.tbor_ddd;.bbor_ddd;.p(20/@a 3%);
+		h3{.h(70/@a);.oh;}
+		div{.c_999;}	
+	}
+	figure{.ww(100/@a);.bor_ddd;.mr(3%);}
+	section:extend(.flex-1){}
+	aside{.fs(26/@a);.c(@mc);.ml(3%);.ar;.lh;}
+	footer{.tr;.p(20/@a 3%);
+		a:extend(.tc){.w(130/@a);.hh(50/@a);.bor(@mc);.c(@mc);.dk;.border-radius(3/@a);}
+	}
+}

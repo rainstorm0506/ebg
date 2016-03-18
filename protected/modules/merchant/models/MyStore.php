@@ -1,0 +1,108 @@
+<?php
+
+/**
+ * 店铺管理模型类
+ * @author jeson.Q 
+ * 
+ * @table content
+ */
+class MyStore extends SModels
+{
+	/**
+	 * 查询 当前用户下所有未评论商品-列表
+	 *
+	 * @param string $keyword
+	 * @param int $offset
+	 * @param int $limit
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getStoreInfo($uid)
+	{
+		$storeInfo = array();
+		$uid = (int)$uid;
+		$userInfo = $this->getUser();
+		// 判断是否为用户
+		if ($uid)
+		{
+			// 组装sql 语句
+			$sql = "SELECT mer_name, store_name, store_avatar, store_tel, store_describe, store_address, store_environment, mer_card FROM user_merchant WHERE uid = {$uid}";
+			$storeInfo = $this->queryRow($sql);
+			$storeInfo['phone'] = $userInfo['phone'];
+		}
+		return $storeInfo;
+	}
+
+	/**
+	 * 修改商家店铺数据
+	 *
+	 * @param int $uid
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function setStoreInfo(array $post , $uid)
+	{
+		$field = array();
+		if ($post && $uid)
+		{
+			// 组装数据
+			$field['store_name'] = trim($post['store_name']);
+			$field['store_avatar'] = isset($post['image_url']) ? $this->getPhotos(trim($post['image_url']) , 'mystore' , $uid) : '';
+				
+			$field['store_tel'] = trim($post['store_tel']);
+			$field['store_describe'] = trim($post['store_describe']);
+			$field['store_address'] = trim($post['store_address']);
+			//店铺环境图片集合
+			if(isset($post['img'])){
+				foreach ($post['img'] as $val){
+					$imgJson[] = !empty($val) ? $this->getPhotos(trim($val) , 'comment' , $uid) : '';
+				}
+				$imgStrJson = json_encode($imgJson);
+			}
+			$field['store_environment'] = isset($imgStrJson) ? $imgStrJson : '';
+			$flag = $this->update('user_merchant' , $field , " uid = {$uid}");
+			
+			return $flag;	
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	 * 查询 是否存在该电话 信息
+	 * @param		int		$phone		电话号码
+	 * @return		array
+	 */
+	public function getUserPhone($phone)
+	{
+		$userData = array();
+		if($phone){
+			$userData = $this -> queryRow("SELECT id FROM user WHERE phone = {$phone} AND user_type = 3 ");
+		}
+		return empty($userData['id']) ? true : false;
+	}
+
+	/**
+	 * 修改 单个会员手机号码
+	 * @param		array		$post		post
+	 * @param		int			$id			会员ID
+	 */
+	public function setUserPhone(array $post, $id = 0) {
+		//组装字段数据
+		$userDetailData = array();
+		$flag = 0;
+		if ($id) {
+			$isTrue = $this->getUserPhone($post['phone']);
+			if($isTrue){
+				$userData['phone'] = $post['phone'];
+				$userData['user_code'] = $post['phone'];
+				$flag = $this -> update('user', $userData, 'id=' . $id);
+				$this -> update('user', array('re_code'=>$post['phone']), 're_uid=' . $id);
+				return $flag;
+			}
+			return false;
+		} else {
+			return false;
+		}
+	}
+}

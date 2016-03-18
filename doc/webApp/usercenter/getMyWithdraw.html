@@ -1,0 +1,54 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心 /订单 </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">usercenter.getMyWithdraw</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>必</td>
+			<td>分页参数</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "68d584d8c59b7820a3757f1030c02ac5",
+    "message": [],
+    "data": [
+        {
+            "id": "46",
+            "aid": "22",                    #提现记录ID编号
+            "amount": "100.00",             #提现金额
+            "with_time": "1456475428",      #提现时间
+            "snum": "4145-6475-4285",       #提现流水号
+            "cur_state": "1",               #当前提现状态(1待提现，2已提现，3审核失败)
+            "cur_state_time": "1456475428", #当前提现状态时间
+            "uid": "98"                     #当前用户的ID
+        }
+        ......
+    ]
+}       
+</pre></td>
+		</tr>
+	</table>
+</div>

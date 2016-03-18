@@ -1,0 +1,121 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- 购物车为空 ---------->
+	<main class="shopping-null" ng-if="shoppingAmount <= 0">
+		<i></i>
+		<p>您的购物车还是空的哦！</p>
+		<a href="#">去购买</a>
+	</main>
+	<!---------- 购物车不为空 ---------->
+	<main ng-if="shoppingAmount > 0">
+		<ul class="shopping-list">
+			<li>
+				<header>
+					<i class="radio"><b></b></i>
+					<h3><s></s>东华电脑城</h3>
+					<a>完成</a>
+				</header>
+				<section>
+					<div>
+						<section>
+							<i class="radio"><b></b></i>
+							<figure><img ng-src="{{imgPath}}/temp/09.png"></figure>
+							<article>
+								<div class="calculate">
+									<a href="javascript:;" class="disabled">-</a>
+									<input type="text" value="2">
+									<a href="javascript:;">+</a>
+								</div>
+								<p><span>尺寸：25寸</span><span>颜色：银色</span></p>
+							</article>
+						</section>
+					</div>
+					<a href="#">删除</a>
+				</section>
+			</li>
+			<li>
+				<header>
+					<i class="radio"><b></b></i>
+					<h3><s></s>东华电脑城</h3>
+				</header>
+				<section>
+					<div>
+						<section>
+							<i class="radio"><b></b></i>
+							<figure><img ng-src="{{imgPath}}/temp/09.png"></figure>
+							<article>
+								<div class="calculate">
+									<a href="javascript:;" class="disabled">-</a>
+									<input type="text" value="2">
+									<a href="javascript:;">+</a>
+								</div>
+								<p><span>尺寸：25寸</span><span>颜色：银色</span></p>
+							</article>
+						</section>
+					</div>
+				</section>
+			</li>
+			<li class="current">
+				<header>
+					<i class="radio current"><b></b></i>
+					<h3><s></s>东华电脑城</h3>
+					<a href="#">编辑</a>
+				</header>
+				<section>
+					<div>
+						<section>
+							<i class="radio"><b></b></i>
+							<figure><img ng-src="{{imgPath}}/temp/09.png"></figure>
+							<article>
+								<h6>苹果系列 iMac MacBook Pro ipad3 IPhone5</h6>
+								<p><span>尺寸：25寸</span><span>颜色：银色</span></p>
+								<footer><p>￥5899</p><span>x1</span></footer>
+							</article>
+						</section>
+					</div>
+				</section>
+			</li>
+			<li>
+				<header>
+					<i class="radio current"><b></b></i>
+					<h3><s></s>东华电脑城</h3>
+					<a href="#">编辑</a>
+				</header>
+				<section>
+					<div>
+						<section>
+							<i class="radio"><b></b></i>
+							<figure><img ng-src="{{imgPath}}/temp/09.png"></figure>
+							<article>
+								<h6>苹果系列 iMac MacBook Pro ipad3 IPhone5</h6>
+								<p><span>尺寸：25寸</span><span>颜色：银色</span></p>
+								<footer><p>￥5899</p><span>x1</span></footer>
+							</article>
+						</section>
+					</div>
+				</section>
+				<section>
+					<div>
+						<section>
+							<i class="radio"><b></b></i>
+							<figure><img ng-src="{{imgPath}}/temp/09.png"></figure>
+							<article>
+								<h6>苹果系列 iMac MacBook Pro ipad3 IPhone5</h6>
+								<p><span>尺寸：25寸</span><span>颜色：银色</span></p>
+								<footer><p>￥5899</p><span>x1</span></footer>
+							</article>
+						</section>
+					</div>
+				</section>
+			</li>
+		</ul>
+		<div class="h40px"></div>
+	</main>
+	<!---------- 结算 ---------->
+	<section class="total-wrap">
+		<i class="radio"><b></b></i><span>全选</span>
+		<p><span>合计：</span><em>￥5899</em></p>
+		<a class="b-1" href="#">结算</a>
+	</section>
+	<!---------- nav ---------->
+	<public-nav></public-nav>

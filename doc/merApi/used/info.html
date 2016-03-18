@@ -1,0 +1,83 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">二手商品模块 - 二手商品的详情</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">used.info</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">谭甜</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>id</td>
+			<td>int</td>
+			<td>商品id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+	{
+		"code": 0,
+		"message": "",
+		"data": {
+			"id": "1",											#二手商品id
+			"merchant_id": "30",								#商家id
+			"mer_name" : "E商城直营店",							#店铺名称
+			"is_self": "0",										#是否自营
+			"class_one_id": "1",								#一级分类id
+			"class_one_name": "胜多负少",						#一级分类名称
+			"class_two_id": "2",								#二级分类id
+			"class_two_name": "是多少",							#二级分类名称
+			"class_three_id": "4",								#三级分类id
+			"class_three_name": "嘎啊",							#三级分类名称
+			"goods_num": "CP6459960720162",						#二手商品货号
+			"brand_id": "14",									#二手商品品牌
+			"brand_name" : "戴尔"								#品牌名称
+			"shelf_id": "1001",									#二手商品上架状态（1001=上架，1002=下架）
+			"status_id": "1013",								#二手商品审核状态（1011=“待审核”，1013=“通过审核”，1014=“审核失败”）
+			"use_time": "90",									#商品成色id
+			"use_time_name" : "9成新"							#成色名称
+			"buy_price": "500.00",								#原买价
+			"sale_price": "450.00",								#现售价
+			"detail": "83",										#销量
+			"stock": "83",										#库存
+			"weight": "12.00",									#重量
+			"dict_one_id": "1",									#一级地区id
+			"dict_one_name" : "北京"
+			"dict_two_id": "2",									#二级地区id
+			"dict_two_name" : "晓不得区"
+			"dict_three_id": "3",								#三级地区id
+			"dict_three_name" : "晓不得街道"
+			"title": "华硕HD 7850显卡 8.5成新 ",					#商品名称
+			"lightspot": "abc拼图",								#亮点
+			"cover": "/used_goods/2016/02-19/30/80816.8633.png",#商品主图
+			"content": "<p>咚咚咚<br/></p>",						#商品内容
+			"img": [											#图片组
+				{
+					"src": "/used_goods/2016/02-19/30/172539203620838068061455860816.8633.png"
+				}，
+				{
+					"src": "/used_goods/2016/02-19/30/172539203620838068061455464654.4566.png"
+				}
+			],
+			"store_grade": "2",							#用户评分
+			"store_tel": "18583985993"					#商家电话
+		}
+	}
+</pre></td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,127 @@
+<style type="text/css">
+	.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+	table{width:100%;border-collapse:collapse}
+	td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">积分商城模块 - 列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">credits.list</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">谭甜</td>
+		</tr>
+		<tr>
+			<td rowspan="6">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>发起时间</td>
+		</tr>
+		<tr>
+			<td>o</td>
+			<td>string</td>
+			<td>选填</td>
+			<td>商品排序字段（points(积分)，detail（销量），putaway（上架时间））</td>
+		</tr>
+		<tr>
+			<td>by</td>
+			<td>string</td>
+			<td>选填</td>
+			<td>商品排序方式(asc(升序)，desc(降序))</td>
+		</tr>
+		<tr>
+			<td>pageNow</td>
+			<td>int</td>
+			<td>必</td>
+			<td>页码（默认为第一页开始）</td>
+		</tr>
+		<tr>
+			<td>pageSize</td>
+			<td>int</td>
+			<td>选填</td>
+			<td>每页显示的条数（默认为每页6条）</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "2319594324004b25f29ac0e74f9cf57a",	# 随机码 , 在下一次请求中传递回来
+    "message": [],
+	"data": [
+		{
+			"id": "9",										#商品id
+			"title": "得力(deli)9810笔筒文具套装礼盒 粉色/蓝色 颜色随机",				#商品名称
+			"cover": "/points/2016/02-25/0/40879358308715628801456384962.5773.jpg",			#商品主图
+			"points": "1999",									#兑换积分
+			"person": "1",										#个人会员可兑换
+			"merchant": "1",									#商家会员可兑换
+			"company": "1",										#企业会员可兑换
+			"sales": "1"										#已兑换人数
+		},
+		{
+			"id": "8",
+			"title": "Hanmi 手机蓝牙自拍杆 selfie stick 拍照神器",
+			"cover": "/points/2016/02-25/0/216418860920074713861456384285.702.jpg",
+			"points": "699",
+			"person": "1",
+			"merchant": "1",
+			"company": "1",
+			"sales": "5"
+		},
+		{
+			"id": "7",
+			"title": "MOROCK/莫瑞 通用型床头手机懒人支架 适用智能手机",
+			"cover": "/points/2016/02-25/0/405768333714545951151456382317.5755.jpg",
+			"points": "999",
+			"person": "1",
+			"merchant": "1",
+			"company": "1",
+			"sales": "1"
+		},
+		{
+			"id": "6",
+			"title": "卡通 hello kitty U盘",
+			"cover": "/points/2016/02-25/0/20728405658824106441456380791.3112.jpg",
+			"points": "3999",
+			"person": "1",
+			"merchant": "1",
+			"company": "1",
+			"sales": "2"
+		},
+		{
+			"id": "5",
+			"title": "铅笔",
+			"cover": "/points/2016/02-25/0/33186998837114163231456380620.1305.png",
+			"points": "5",
+			"person": "1",
+			"merchant": "1",
+			"company": "1",
+			"sales": "0"
+		},
+		{
+			"id": "4",
+			"title": "企业会员",
+			"cover": "/points/2016/02-25/0/161002491115514581961456366555.4702.png",
+			"points": "15",
+			"person": "0",
+			"merchant": "0",
+			"company": "1",
+			"sales": "1"
+		}
+	]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

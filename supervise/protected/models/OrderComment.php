@@ -1,0 +1,193 @@
+<?php
+
+/**
+ * 评论管理模型类
+ * @author jeson.Q 
+ * 
+ * @table content
+ */
+class OrderComment extends SModels
+{
+	/**
+	 * 编辑 评论信息
+	 *
+	 * @param array $post
+	 * @param int $id
+	 */
+	public function modify(array $post , $id)
+	{
+		$id = (int)$id;
+		$datastr = '';
+		if ($id)
+		{
+			// 批量 安全过滤特殊字符和 脚步xss
+			foreach ($post as $key => $val)
+			{
+				$datastr = $this->safe_replace($val);
+				$post[$key] = $this->remove_xss($datastr);
+			}
+			// 组装数据
+			$field = array();
+			$field['reply_content'] = trim($post['reply_content']);
+			$field['reply_time'] = time();
+			
+			return $this->update('order_comment' , $field , "id={$id}");
+		}
+		return false;
+	}
+	
+	/**
+	 * 获得 单个评论信息
+	 *
+	 * @param int $id
+	 */
+	public function getActiveInfo($id)
+	{
+		$id = (int)$id;
+		$commentOneInfo = array();
+		if ($id)
+		{
+			$sql = " SELECT o.*, u.nickname, og.goods_cover, og.goods_vers_num, m.store_name,os.order_money,os.pay_type FROM order_comment o 
+				LEFT JOIN user u ON o.user_id = u.id
+				LEFT JOIN order_goods og ON o.goods_id = og.goods_id
+				LEFT JOIN user_merchant m ON o.merchant_id = m.uid
+				LEFT JOIN orders os ON o.order_sn = os.order_sn
+				WHERE o.id={$id} ";
+			$commentOneInfo = $this->queryRow($sql);
+			if($commentOneInfo['goods_vers_num']){
+				$goodVersText = $this->getGoodsData($commentOneInfo['goods_id'], $commentOneInfo['goods_vers_num']);
+				$goodInfos = unserialize($goodVersText);
+				$commentOneInfo['is_self'] = empty($goodInfos['goods']['is_self']) ? '' : $goodInfos['goods']['is_self'];
+			}
+			
+			return $commentOneInfo;
+		}else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * 查询 评论列表
+	 *
+	 * @param string $keyword
+	 * @param int $offset
+	 * @param int $limit
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getList($keyword = '' , $offset = 0 , $limit = 20)
+	{
+		$goodVersText = $commentInfo = $goodInfos = array();
+		$where = '';
+
+		// 判断是否关键字收索
+		if ($keyword)
+		{
+			$where = " WHERE  o.id = ".(int)$keyword." OR o.order_sn = '".$keyword."' OR o.content like '%" .$keyword ."%' ";
+		}
+		// 组装sql 语句
+		$sql = "SELECT o.*, u.nickname, (SELECT goods_vers_num FROM order_goods WHERE order_sn = o.order_sn AND goods_id = o.goods_id) as vers, m.store_name FROM order_comment o 
+				LEFT JOIN user u ON o.user_id = u.id
+				LEFT JOIN user_merchant m ON o.merchant_id = m.uid
+				{$where} ORDER BY public_time DESC limit {$offset},{$limit}";
+		$commentInfo = $this->queryAll($sql);
+		if($commentInfo){
+			foreach ($commentInfo as $key => $val){
+				$versNum = !empty($val['vers']) ? (int)$val['vers'] : 0;
+				$goodVersText = $this->getGoodsData($val['goods_id'], $versNum);
+				$goodInfos = unserialize($goodVersText);
+				$commentInfo[$key]['title'] = isset($goodInfos['goods']['title']) ? $goodInfos['goods']['title'] : '';
+				$commentInfo[$key]['is_self'] = isset($goodInfos['goods']['is_self']) ? $goodInfos['goods']['is_self'] : '';
+			}
+		}
+		return $commentInfo;
+	}
+
+	/**
+	 *
+	 * 查询商品详细信息
+	 *
+	 * @param string $keyword
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getGoodsData($goodsId, $versNum)
+	{
+		$goodsData = array();
+		// 判断是否关键字收索
+		if ($versNum)
+		{
+			// 组装sql 语句
+			$sql = "SELECT vers_text FROM goods_versions WHERE goods_id = {$goodsId} AND vers_num = {$versNum}";
+			$goodsData = $this->queryRow($sql);
+		}
+		return isset($goodsData['vers_text']) ? $goodsData['vers_text'] : '';
+	}
+	
+	/**
+	 *
+	 * 统计评论总数
+	 *
+	 * @param string $keyword
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getTotalNumber($keyword = '')
+	{
+		$where = $sql = '';
+		// 判断是否关键字收索
+		if ($keyword)
+		{
+			$where = " WHERE  o.id = ".(int)$keyword." OR o.content like '%" .$keyword ."%' ";
+		}
+		// 组装sql 语句
+		$sql = "SELECT o.*,u.nickname,g.title,m.mer_name FROM order_comment o 
+				LEFT JOIN user u ON o.user_id = u.id
+				LEFT JOIN goods g ON o.goods_id = g.id
+				LEFT JOIN user_merchant m ON o.merchant_id = m.uid
+				{$where} ";
+		
+		return (int)$this->queryScalar($sql);
+	}
+	
+	/**
+	 * 根据id修改数据状态
+	 *
+	 * @param
+	 * $cid
+	 * @return boolean|static[]
+	 */
+	public function updateCommentShow($cid , $status = 1)
+	{
+		$itemArr = array(
+			'is_show' => $status =='2' ? 0 : 1 
+		);
+		if ($cid)
+		{
+			$cid = intval($cid);
+			//开始事务操作
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$where = $status =='2' ? "discuss=discuss-1" : "discuss=discuss+1";
+				$flag = $this->update('order_comment' , $itemArr , 'id=' .$cid);
+				
+				if (($gid = (int)$this->queryScalar("select goods_id from order_comment where id={$cid}")) > 0)
+				{
+					$this->backLog = array('table'=>'goods' , 'response_id'=>$gid);
+					$this->execute("UPDATE goods SET {$where} WHERE id={$gid}");
+				}
+				
+				$transaction->commit();
+				return $flag;
+			}catch(Exception $e){
+				$transaction->rollBack();
+				return false;
+			}
+		}else
+		{
+			return false;
+		}
+	}
+}

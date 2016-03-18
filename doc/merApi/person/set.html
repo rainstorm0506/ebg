@@ -1,0 +1,102 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心模块 - 黄页设置</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">personal.set</td>
+		</tr>
+                <tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">李启源</td>
+		</tr>
+                <tr>
+			<td rowspan="16">请求参数</td>
+		</tr>
+                
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>               
+		<tr>
+			<td>title</td>
+			<td>varchar</td>
+			<td>公司名称</td>
+		</tr>
+		<tr>
+			<td>scope</td>
+			<td>array</td>
+			<td>主营范围</td>
+		</tr>  
+		<tr>
+			<td>gather</td>
+			<td>int</td>
+			<td>电脑城id</td>
+		</tr>
+		<tr>
+			<td>address</td>
+			<td>varchar</td>
+			<td>公司地址</td>
+		</tr> 
+		<tr>
+			<td>content</td>
+			<td>varchar</td>
+			<td>黄页详情描述</td>
+		</tr> 
+		<tr>
+			<td>phone</td>
+			<td>int</td>
+			<td>商户手机号码</td>
+		</tr>                 
+		<tr>
+			<td>landline</td>
+			<td>varchar</td>
+                        <td>商户座机号码</td>
+		</tr>   
+		<tr>
+			<td>qq</td>
+			<td>varchar</td>
+                        <td>QQ号</td>
+		</tr> 
+		<tr>
+			<td>weixin</td>
+			<td>varchar</td>
+                        <td>微信号</td>
+		</tr>   
+		<tr>
+			<td>is_phone</td>
+			<td>int</td>
+                        <td>(0:不显示;1:显示)手机是否显示</td>
+		</tr> 
+		<tr>
+			<td>is_landline</td>
+			<td>int</td>
+                        <td>(0:不显示;1:显示)座机号是否显示</td>
+		</tr> 
+		<tr>
+			<td>is_qq</td>
+			<td>int</td>
+                        <td>(0:不显示;1:显示)qq号是否显示</td>
+		</tr> 
+		<tr>
+			<td>is_weixin</td>
+			<td>int</td>
+                        <td>(0:不显示;1:显示)微信号是否显示</td>
+		</tr>                 
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": null
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

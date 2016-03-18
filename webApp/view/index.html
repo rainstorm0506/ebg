@@ -1,0 +1,125 @@
+	<!---------- 搜索指令 ---------->
+	<header-search></header-search>
+	<!---------- main ---------->
+	<main>
+		<!---- banner ---->
+		<section class="banner" swipe-banner ng-swipe-left ng-swipe-right>
+			<ul>
+				<li style="background-image:url({{imgPath}}banner/banner-2.png);">
+				<li style="background-image:url({{imgPath}}banner/banner-1.png);">
+				<!--
+				<li><img ng-src="images/banner/banner-2.png"></li>
+				<li><img ng-src="images/banner/banner-1.png"></li>
+				-->
+			</ul>
+			<nav>
+				<a href="javascript:;"></a>
+				<a href="javascript:;"></a>
+			</nav>
+		</section>
+		<!---- nav ---->
+		<nav class="nav">
+			<a data-ui-sref="goods.all"><i class="ico-nav-1"></i><span>全部商品</span></a>
+			<a data-ui-sref="secondHand.all"><i class="ico-nav-2"></i><span>二手市场</span></a>
+			<a data-ui-sref="integral.all"><i class="ico-nav-3"></i><span>积分商城</span></a>
+			<a href="#"><i class="ico-nav-4"></i><span>e配送</span></a>
+			<a href="#"><i class="ico-nav-5"></i><span>e维修</span></a>
+		</nav>
+		<!---- 限时抢购 ---->
+		<section class="samebox">
+			<header><i class="ico-1"></i><h3>限时抢购</h3><nav><a ui-sref="goods.all">更多</a></nav></header>
+			<ul class="pic-list">
+				<li>
+					<figure><a  ui-sref="goods.all"><img ng-src="{{imgPath}}banner/banner-1.png"></a><time><b>1</b><b>2</b><i>:</i><b>5</b><b>6</b><i>:</i><b>3</b><b>4</b></time></figure>
+					<h6><a  ui-sref="goods.all">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+				<li>
+					<figure><a  ui-sref="goods.all"><img ng-src="{{imgPath}}banner/banner-1.png"></a><time><b>1</b><b>2</b><i>:</i><b>5</b><b>6</b><i>:</i><b>3</b><b>4</b></time></figure>
+					<h6><a  ui-sref="goods.all">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+			</ul>
+		</section>
+		<!---- 限时抢购 ---->
+		<section class="samebox-a">
+			<header><h3>今日推荐</h3><nav><a ui-sref="goods.all">更多</a></nav></header>
+			<ul class="pic-list">
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+			</ul>
+		</section>
+		<!---- 办公设备 ---->
+		<section class="samebox-f-1">
+			<header><i class="ico-f-1"></i><h3>办公设备</h3><nav><a ui-sref="goods.all">更多</a></nav></header>
+			<figure><a href="#"><img ng-src="{{imgPath}}/temp/04.png"></a></figure>
+			<ul class="pic-list">
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+			</ul>
+		</section>
+		<!---- 办公文具 ---->
+		<section class="samebox-f-1">
+			<header><i class="ico-f-2"></i><h3>办公文具</h3><nav><a ui-sref="goods.all">更多</a></nav></header>
+			<figure><a href="#"><img ng-src="{{imgPath}}/temp/05.png"></a></figure>
+			<ul class="pic-list">
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+			</ul>
+		</section>
+		<!---- 办公家具 ---->
+		<section class="samebox-f-1">
+			<header><i class="ico-f-3"></i><h3>办公家具</h3><nav><a ui-sref="goods.all">更多</a></nav></header>
+			<figure><a href="#"><img ng-src="{{imgPath}}/temp/06.png"></a></figure>
+			<ul class="pic-list">
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+			</ul>
+		</section>
+		<!---- 办公耗材 ---->
+		<section class="samebox-f-1">
+			<header><i class="ico-f-4"></i><h3>办公耗材</h3><nav><a ui-sref="goods.all">更多</a></nav></header>
+			<figure><a href="#"><img ng-src="{{imgPath}}/temp/07.png"></a></figure>
+			<ul class="pic-list">
+				<li>
+					<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/01.png"></a></figure>
+					<h6><a ui-sref="detail">组装的办公文具盒</a></h6>
+					<strong>￥349</strong>
+				</li>
+			</ul>
+		</section>
+	</main>
+	<!---------- nav ---------->
+	<public-nav></public-nav>

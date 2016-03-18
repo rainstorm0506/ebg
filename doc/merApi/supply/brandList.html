@@ -1,0 +1,46 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">供应模块 - 品牌列表(无分页)</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">supply.brandList</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": [
+        {
+            "id": "14",								#品牌ID
+            "zh_name": "苹果",							#品牌中文名
+            "en_name": "apple",							#品牌英名
+            "is_using": "1",							#开启(开启=1;关闭=2)
+            "rank": "13",		
+            "time": "1451908734",						#时间
+            "goods_num": "0",							#品牌数量
+            "logo": "/brand/2016/01-12/291501142415901020651452577089.5876.png"	#品牌LOGO
+        }
+
+    ]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

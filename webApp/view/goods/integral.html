@@ -1,0 +1,14 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---- sort ---->
+	<nav class="sort-nav">
+		<a ui-sref="integral.all" ui-sref-active="current"><span>综合排序</span><i class="t-t"></i></a>
+		<a ui-sref="integral.integral" class="flex-1" ui-sref-active="current"><span>积分</span><i class="t-t" ng-class="{asc:integralAsc}"></i><b ng-click="byIntegral()"></b></a>
+		<a ui-sref="integral.amount" ui-sref-active="current"><span>兑换量</span><i class="t-t" ng-class="{asc:amountAsc}"></i><b ng-click="byAmount()"></b></a>
+		<a ui-sref="integral.time" ui-sref-active="current"><span>上价时间</span><i class="t-t" ng-class="{asc:timeAsc}"></i><b ng-click="byTime()"></b></a>
+	</nav>
+	<!---------- main ---------->
+	<main data-ui-view="viewMain" class="animated fadeIn"></main>
+	<promt></promt>
+</body>
+</html>

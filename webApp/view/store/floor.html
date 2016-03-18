@@ -1,0 +1,68 @@
+﻿	<!---------- header ---------->
+	<header-public></header-public>
+	<section class="floor-nav">
+		<div class="nav-list current" selectOption>
+			<h6><span id="comanyName">东华电脑城</span><i class="t-b"></i><label class="ng-label"><input type="checkbox" ng-model="isName"></label></h6>
+			<dl select-option="comanyName" ng-show="isName === true">
+				<dd>数码广场</dd>
+				<dd>A世界</dd>
+			</dl>
+		</div>
+		<nav>
+			<div>
+				<a href="javascript:;" class="current">电子</a>
+				<a href="javascript:;">文具</a>
+				<a href="javascript:;">手机</a>
+				<a href="javascript:;">安防</a>
+			</div>
+		</nav>
+		<div class="nav-list nav-list-1 current">
+			<h6><span id="floor">1F</span><i class="t-b"></i><label class="ng-label"><input type="checkbox" ng-model="isFloor"></label></h6>
+			<dl select-option="floor" ng-show="isFloor === true">
+				<dd>2F</dd>
+				<dd>3F</dd>
+			</dl>
+		</div>
+	</section>
+	<!---------- main ---------->
+	<main class="floor-main">
+		<div class="svg-wrap">
+			<object id="floorOne" data="{{imgPath}}/floor/dong-floor-1.svg" height="100%" type="image/svg+xml" data="data:image/svg+xml;base64,[data]">
+				<img ng-src="{{imgPath}}/floor/dong-floor-1.png" alt="PNG image of standAlone.svg">
+			</object>
+			<!--
+			<object id="floorTwo" data="{{imgPath}}/floor/dong-floor-2.svg" width="100%" height="100%" type="image/svg+xml" data="data:image/svg+xml;base64,[data]">
+				<img ng-src="{{imgPath}}/floor/dong-floor-2.png" alt="PNG image of standAlone.svg">
+			</object>
+			-->
+		</div>
+	</main>
+	<div>
+		<section class="floor-info">
+			<figure><img ng-src="{{imgPath}}/temp/17.png"></figure>
+			<dl>
+				<dt>成都市武候区双星电脑旗舰店</dt>
+				<dd><span>店铺地址：</span><span>东华电脑城D1-23</span></dd>
+				<dd><span>经营年份：</span><span>5年</span></dd>
+				<dd><span>保证金：</span><span>10000</span></dd>
+				<dd><span>推荐指数：</span>
+					<span class="star-wrap">
+						<i class="current"></i>
+						<i class="current"></i>
+						<i class="current"></i>
+						<i></i>
+						<i></i>
+					</span>
+				</dd>
+			</dl>
+		</section>
+		<nav class="floor-bot-nav">
+			<a class="b-1 flex-1" href="#">联系商家</a>
+			<a class="b-2 flex-1" href="#">进入店铺</a>
+		</nav>
+	</div>
+	<nav class="floor-bot-nav">
+		<a class="b-3" href="#"><i class="ico-12"></i><span>联系商家</span></a>
+		<a class="b-3" href="#"><i class="ico-13"></i><span>收藏店铺</span></a>
+		<a class="b-2" href="#">进入店铺</a>
+	</nav>

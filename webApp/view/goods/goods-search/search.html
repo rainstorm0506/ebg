@@ -1,0 +1,44 @@
+	<!---- 筛选 ---->
+	<section class="s-wrap-a">
+		<!---- 品牌 ---->
+		<h3 class="s-tit-1">品牌：</h3>
+		<nav class="sc-nav" select-only>
+			<a href="javascript:;" class="current"><i></i><span>不限</span></a>
+			<a href="javascript:;" ng-repeat="p in data.brandList"><i></i><span ng-bind="p"></span></a>
+		</nav>
+		<a class="s-more" href="javascript:;">查看更多</a>
+		<div class="line"></div>
+		<!---- 类型 ---->
+		<h3 class="s-tit-1">类型：</h3>
+		<nav class="sc-nav" select-only>
+			<a href="javascript:;" class="current"><i></i><span>不限</span></a>
+			<a href="javascript:;" ng-repeat="p in data.classList"><i></i><span ng-bind="p"></span></a>
+		</nav>
+		<div class="line"></div>
+		<!---- 价格 ---->
+		<h3 class="s-tit-1">价格：</h3>
+		<nav class="sc-nav" select-only>
+			<a href="javascript:;" class="current"><i></i><span>不限</span></a>
+			<a href="javascript:;" ng-repeat="p in data.price"><i></i><span><x ng-bind="p.price_start"></x>—<x ng-bind="p.price_end"></x></span></a>
+			<div><input type="number"><i>—</i><input type="number"></div>
+		</nav>
+		<div class="line"></div>
+		<!---- 价格 ---->
+		<h3 class="s-tit-1">尺寸：</h3>
+		<nav class="sc-nav" select-only>
+			<a href="javascript:;" class="current"><i></i><span>不限</span></a>
+			<a href="javascript:;"><i></i><span>13寸</span></a>
+			<a href="javascript:;"><i></i><span>15寸</span></a>
+			<a href="javascript:;"><i></i><span>21寸</span></a>
+		</nav>
+	</section>
+	<section class="s-wrap-b">
+		<div class="line"></div>
+		<div class="checbox-wrap">
+			<label>
+				<b><i ng-show="check===true"></i></b><span>只显示e办公自营商品</span>
+				<input type="checkbox" ng-checked="check" ng-init="check = true" ng-model="check">
+			</label>
+		</div>
+		<a class="btn-3" search-reset href="javascript:;">重置</a>
+	</section>

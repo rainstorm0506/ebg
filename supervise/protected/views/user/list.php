@@ -1,0 +1,78 @@
+<?php $this -> renderPartial('navigation'); ?>
+<?php
+	Yii::app()->clientScript->registerCoreScript('layer');
+?>
+<div class="public-wraper" style="margin-top:20px">
+	<table class="public-table">
+		<thead>
+			<tr>
+				<th>会员等级</th>
+				<th>会员昵称</th>
+				<th>手机号码</th>
+				<th>会员来源</th>
+				<th>会员推荐码</th>
+				<th>注册日期</th>
+				<th>最后登录时间</th>
+				<th>状态</th>
+				<th width="250">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($list as $val): ?>
+			<tr>
+				<td><?php echo GlobalUser::getUserLayerName($val['exp'] , 1); ?></td>
+				<td><?php echo $val['nickname']; ?></td>
+				<td><?php echo $val['phone'] ?></td>
+				<td><?php echo $val['source']!=0?GlobalUser::getSource((int)$val['source']):"-"; ?></td>
+				<td><?php echo $val['user_code']; ?></td>
+				<td><?php echo date('Y-m-d H:i:s', $val['reg_time']) ?></td>
+				<td><?php echo $val['last_time']<=0?"未登录":date('Y-m-d H:i:s', $val['last_time']) ?></td>
+				<td><?php echo $val['status_id']==511?
+					'<font color="red">'.GlobalStatus::getStatusName($val['status_id'],1).'</font>':
+					($val['status_id']==510?'<font color="green">'.GlobalStatus::getStatusName($val['status_id'],1).'</font>':GlobalStatus::getStatusName($val['status_id'],1))
+					?></td>
+				<td class="control-group">
+				<?php
+					echo CHtml::link('<i class="btn-del"></i><span>删除</span>', $this -> createUrl('user/delete', array('id' => $val['id'])));
+					if($val['status_id']==510){
+						echo CHtml::link('<i class="btn-add"></i><span><font color="red">禁用</font></span>', $this -> createUrl('user/off', array('id' => $val['id'])));
+						Views::css('/page/default');
+					} else {
+						echo CHtml::link('<i class="btn-add"></i><span><font color="green">启用</font></span>', $this -> createUrl('user/on', array('id' => $val['id'])));
+						Views::css('/page/default');
+					}
+					echo CHtml::link('<i class="btn-mod"></i><span>编辑</span>', $this -> createUrl('user/modify', array('id' => $val['id'])));
+					echo CHtml::link('<i class="btn-1"></i><span>查看</span>', $this -> createUrl('user/view', array('id' => $val['id'])));
+				?>
+				</td>
+			</tr>
+			<?php endforeach; if (!$list): ?>
+			<tr><td colspan="9" class="else">当前没有会员数据</td></tr>
+			<?php endif; ?>
+		</tbody>
+	</table>
+</div>
+<div class="page">
+<?php $pageConfig=Yii::app()->params['pages'];
+	$this->widget('SuperviseListPager', CMap::mergeArray($pageConfig['CLinkPager'], array('pages'=>$page)));
+	$this->widget('CListPager', CMap::mergeArray($pageConfig['CListPager'], array('pages'=>$page)));
+?>
+</div>
+<script>
+	$(document).ready(function()
+	{
+		$('.btn-del').parent('a').click(function(){
+			var href=$(this).attr('href');
+			layer.confirm
+			(
+				'你确认删除该个人会员吗？',
+				function()
+				{
+					window.location.href = href;
+					return true;
+				}
+			);
+			return false;
+		})
+	})
+</script>

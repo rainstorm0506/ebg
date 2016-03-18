@@ -1,0 +1,91 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">订单管理模块 - 订单列表(有分页)</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">order.orderList</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">邱龙军</td>
+		</tr>
+		<tr>
+			<td rowspan="4">请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td> APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>status</td>
+			<td>int</td>
+			<td>（选填）订单状态筛选值：例如（101-未付款，103-待发货，......）</td>
+		</tr>
+		<tr>
+			<td>pageNow</td>
+			<td>int</td>
+			<td>（选填）查询当前页 订单开始位置</td>
+		</tr>
+		<tr>
+			<td>pageSise</td>
+			<td>int</td>
+			<td>（选填）查询当前页 订单个数</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "orderList": [
+            {
+                "order_sn": "U4459-1594-3733",				#订单号
+				"order_status_id": "107",					#订单状态ID
+				"create_time": "4294967295",				#订单创建时间	
+				"order_money": "28.02",					#订单金额
+				"is_pay": "0",						#是否支付
+				"merchant_title": "买家已收货",				#订单状态名称
+				"is_evaluate": "0",						#用户是否已经评价
+				"goods": [
+					{
+						"id": "14",												#商品ID号
+						"goods_cover": "/personInfo/2016/01-17/42/29734924119395154401453019947.5847.jpg",			#商品缩略图片
+						"goods_attrs": "{
+							\"866974adef063f390117a08b4bc90f24\":[\"ace18534e39507a11d466a193c7a57ba\",
+							\"\\u989c\\u8272\",
+							\"\\u9ec4\\u8272\"]
+						}",  												#商品下订单时商品属性值：规格、尺寸、颜色等等
+						"num": "1",												#数量
+						"unit_price": "0.01",										#商品单价
+						"title": "sdfs1测试sdfs1测试xvxvxcvcv试测串试测试测试测试大",					#商品名称
+						"uid": "42", 											#购买用户ID 
+						"store_name": "凌度行车记录仪成都店",  								#店铺名称
+						"store_address": "更好发挥"  									#店铺地址
+					}
+				]
+            },
+            {
+                "order_sn": "U4459-1594-3733",				#订单号
+				"order_status_id": "107",					#订单状态ID
+				......(格式同上)
+            }
+        ],
+        "orderTotal": {
+			"totalNums": 2			#查询到的订单总数
+			"totalMoney" : 3000.00		#查询到的订单总金额
+        }
+    }
+}
+</pre></td>
+		</tr>
+		<tr>
+			<td style="color:red">备注：</td>
+			<td colspan="3" style="color:red;text-decoration:underline">* 订单列表是按订单创建时间--倒叙--进行排序返回的，最新的订单反正最前！！</td>
+		</tr>
+	</table>
+</div>

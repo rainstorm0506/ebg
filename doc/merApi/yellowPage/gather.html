@@ -1,0 +1,132 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">黄页模块 - 电脑城</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">yellowPage.gather</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">谭甜</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>获取不同的电脑城数据（1=一层电脑城数据，2=三层电脑城数据）</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+				<span style="color:#ff0000; font-weight: bold;">一层格式(type=1)</span>
+{
+	"code": 0,
+	"message": "",
+	"data": [
+		{
+			"id": 25,			#电脑城id
+			"title": "东华电脑城"		#电脑城名称
+			 "dict": {			#电脑城所在地区
+				"dict_one_id": "1",
+				"dict_one_name": "北京",
+				"dict_two_id": "5",
+				"dict_two_name": "朝阳区",
+				"dict_three_id": "6",
+				"dict_three_name": "三环到四环之间"
+			}
+		},
+		{
+			"id": 30,
+			"title": "无法访问"
+			"dict": {
+				"dict_one_id": "5379",
+				"dict_one_name": "河南",
+				"dict_two_id": "5588",
+				"dict_two_name": "周口市",
+				"dict_three_id": "5611",
+				"dict_three_name": "商水县"
+			}
+		}
+	]
+}
+
+
+
+				<span style="color:#ff0000; font-weight: bold;">三层格式(type=2)</span>
+{
+	"code": 0,
+	"message": "",
+	"data": [
+		{
+			"id": 25,				#电脑城id
+			"title": "东华电脑城",			#电脑城名称
+			"dict": {				#电脑城所在地区
+				"dict_one_id": "1",
+				"dict_one_name": "北京",
+				"dict_two_id": "5",
+				"dict_two_name": "朝阳区",
+				"dict_three_id": "6",
+				"dict_three_name": "三环到四环之间"
+			}
+			"child": [
+				{
+					"id": 26,				#楼层id
+					"title": 1,				#楼层名称
+					"child": [
+						{
+							 "id": 28,			#店铺id
+							"title": "C11"			#店铺名称
+						},
+						{
+							"id": 29,
+							"title": "M02"
+						},
+						{
+							"id": 34,
+							"title": "a03"
+						},
+						{
+							"id": 35,
+							"title": "a04"
+						}
+					]
+				},
+				{
+					"id": 27,
+					"title": 2,
+					"child": [
+						{
+							"id": 28,
+							"title": "C11"
+						},
+						{
+							"id": 29,
+							"title": "M02"
+						},
+						{
+							"id": 34,
+							"title": "a03"
+						},
+						{
+							"id": 35,
+							"title": "a04"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

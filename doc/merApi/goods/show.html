@@ -1,0 +1,180 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">全新商品模块 - 商品详情</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">goods.show</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">涂先锋</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+            <td>gid</td>
+            <td>int</td>
+            <td>商品ID</td>
+		</tr>
+		<tr>
+			<td>type</td>
+            <td>int</td>
+            <td>获得数据后的用途 , 1=复制操作 , 2=其他操作(编辑 , 显示等)</td>
+		</tr>
+        <tr>
+            <td>apt</td>
+            <td>int</td>
+            <td>APP抛数据的时间</td>
+        </tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "id": "15",                     # 商品ID
+        "is_self": "1",                 # 自营商品 , 1=自营
+        "merchant_id": "86",            # 商家ID
+        "class_one_id": "19",           # 第一级分类ID
+        "class_two_id": "20",           # 第二级分类ID
+        "class_three_id": "31",         # 第三级分类ID
+        "brand_id": "14",               # 品牌ID
+        "shelf_id": "411",              # 上下架状态 (410=上架 , 411=下架)
+        "status_id": "400",             # 商品状态 (400=待审核 , 401=通过审核 , 402=审核未通过)
+        "delete_id": "0",               # 删除状态 (419=商家删除)
+        "shelf_time": "0",              # 上架时间 (时间戳)
+        "goods_num": "",                # 商品编号
+        "retail_price": "435434.00",    # 零售价
+
+        "base_price": "0.00",           # 基础售价
+        "stock": "0",                   # 库存 , -999表示无限库存
+        "weight": "0.00",               # 重量
+
+        "min_price": "345.00",          # 存在属性时 , 最小价
+        "max_price": "455.00",          # 存在属性时 , 最大价
+
+        "title": "",                    # 产品标题
+        "vice_title": "",               # 产品副标题
+        "cover": "xxx.9556.jpg",        # 商品封面图
+        "content": "",                  # 商品详情
+        "create_time": "1457014434",    # 创建商品时间
+        "last_time": "1457016868",      # 最后一次修改时间 , 不包括审核上下架时间
+
+        "amount_ratio": {               # 数量及价格
+            "s": ["1","6","16"],        # 开始数量
+            "e": ["5","15","35"],       # 结束数量
+            "p": ["100","95","70"]      # 数量范围百分比
+        },
+
+        "user_layer_ratio": [
+            {"key": 8 , "value": "100"},		# key 会员等级ID , value = 百分比
+            {"key": 12 , "value": "100"},
+            {"key": 15 , "value": "100"}
+        ],
+
+        "attrs": {
+            "attrs": [
+                {
+                    "id": "866974adef063f390117a08b4bc90f24",
+                    "child": [
+                        {
+                            "id": "77a8f4fb074c9587b6f1b5e78d9719af",
+                            "value": "红色"
+                        }
+                    ]
+                },
+                {
+                    "id": "f6d0934fd1b400c9cb47b973dead2557",
+                    "child": [
+                        {
+                            "id": "191f31c35ea7dffe69f7af4e18c4e81b",
+                            "value": "5寸"
+                        }
+                    ]
+                },
+                {
+                    "id": "66d88fc18687af391c661475b8397924",
+                    "child": [
+                        {
+                            "id": "c347642f621ce18cb52a4ba335b4c7ef",
+                            "value": "32G"
+                        }
+                    ]
+                }
+            ],
+            "attrVal": {
+                "price": [
+                    {
+                        "id": "77a8f4fb074c9587b6f1b5e78d9719af",
+                        "child": [
+                            {
+                                "id": "191f31c35ea7dffe69f7af4e18c4e81b",
+                                "child": [
+                                    {
+                                        "id": "c347642f621ce18cb52a4ba335b4c7ef",
+                                        "value": "1.00"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "stock": [
+                    {
+                        "id": "77a8f4fb074c9587b6f1b5e78d9719af",
+                        "child": [
+                            {
+                                "id": "191f31c35ea7dffe69f7af4e18c4e81b",
+                                "child": [
+                                    {
+                                        "id": "c347642f621ce18cb52a4ba335b4c7ef",
+                                        "value": "845"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "weight": [
+                    {
+                        "id": "77a8f4fb074c9587b6f1b5e78d9719af",
+                        "child": [
+                            {
+                                "id": "191f31c35ea7dffe69f7af4e18c4e81b",
+                                "child": [
+                                    {
+                                        "id": "c347642f621ce18cb52a4ba335b4c7ef",
+                                        "value": "1.00"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+
+        "praise": "0",                                          # 赞
+        "sales": "0",                                           # 销量
+        "discuss": "0",                                         # 评论数
+        "collect": "0",                                         # 收藏数
+        "join_goods": [],                                       # 商品关联的商品 (暂时没有实现)
+        "pic": [                                                # 商品图片组
+            "/goods/2016/03-03/86/77299759518138969831457003844.9556.jpg"
+        ],
+        "class_one_name": "办公文具",                           # 第一级分类名称
+        "class_two_name": "电脑",                               # 第二级分类名称
+        "class_three_name": "阿百川",                           # 第三级分类名称
+        "brand_zh_name": "",                                    # 品牌中文名称
+        "brand_en_name": ""                                     # 品牌英文名称
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

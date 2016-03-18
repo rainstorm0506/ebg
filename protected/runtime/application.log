@@ -1,0 +1,212 @@
+2016/03/07 19:53:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/supply.info"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/supply.info')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/supply.info
+---
+2016/03/07 19:54:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/merchant.login"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/merchant.lo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/merchant.login
+---
+2016/03/07 19:55:34 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/supply.info"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/supply.info')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/supply.info
+---
+2016/03/08 16:39:31 [error] [exception.CHttpException.404] exception 'CHttpException' with message '错误的商品ID' in F:\phpEnve\Apache\htdocs\ebg\protected\components\WebController.php:155
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\protected\controllers\GoodsController.php(14): WebController->error('???????????????...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): GoodsController->actionIndex()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 F:\phpEnve\Apache\htdocs\ebg\protected\components\WebController.php(69): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): WebController->filterCheckLogin(Object(CFilterChain))
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('index')
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('goods/index')
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#12 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#13 {main}
+REQUEST_URI=/goods/index
+---
+2016/03/09 13:11:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/merchant.login"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/merchant.lo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/merchant.login
+---
+2016/03/09 13:11:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/merchant.login"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/merchant.lo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/merchant.login
+---
+2016/03/09 13:11:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/merchant.login"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/merchant.lo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/merchant.login
+---
+2016/03/09 13:11:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/merchant.login"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/merchant.lo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/merchant.login
+---
+2016/03/09 13:11:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/merchant.login"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/merchant.lo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/merchant.login
+---
+2016/03/09 13:11:40 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "api/merchant.login"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('api/merchant.lo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/api/merchant.login
+---
+2016/03/10 09:31:52 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApi/usercenter.userInfo"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApi/usercent...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApi/usercenter.userInfo
+---
+2016/03/10 09:32:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApi/usercenter.userInfo"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApi/usercent...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApi/usercenter.userInfo
+---
+2016/03/10 09:32:42 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApi/Usercenter/userInfo"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApi/Usercent...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApi/Usercenter/userInfo
+---
+2016/03/10 09:32:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApi/Usercenter/userInfo"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApi/Usercent...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApi/Usercenter/userInfo
+---
+2016/03/10 09:32:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApi/Usercenter/UserInfo"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApi/Usercent...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApi/Usercenter/UserInfo
+---
+2016/03/10 09:33:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApp/Usercenter/UserInfo"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApp/Usercent...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/Usercenter/UserInfo
+---
+2016/03/10 09:35:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApp/usercenter.userInfo"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApp/usercent...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/usercenter.userInfo
+---
+2016/03/10 13:17:46 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "doc/webApp/userinfo.html"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('doc/webApp/user...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/doc/webApp/userinfo.html
+---
+2016/03/10 13:37:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApp/user.html"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApp/user.htm...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/user.html
+---
+2016/03/10 13:38:51 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApp/person.html"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApp/person.h...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/person.html
+HTTP_REFERER=http://www.ebg.com/webApp/
+---
+2016/03/10 13:42:55 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApp/public/js/angular/angular-animate.min.js.map"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApp/public/j...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/public/js/angular/angular-animate.min.js.map
+---
+2016/03/10 13:42:55 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApp/public/js/angular/angular.min.js.map"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApp/public/j...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/public/js/angular/angular.min.js.map
+---
+2016/03/10 13:43:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApp/public/js/angular/angular-animate.min.js.map"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApp/public/j...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/public/js/angular/angular-animate.min.js.map
+---
+2016/03/10 13:43:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "webApp/public/js/angular/angular.min.js.map"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('webApp/public/j...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/webApp/public/js/angular/angular.min.js.map
+---
+2016/03/11 09:07:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "favicon/ico"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('favicon/ico')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\index.php(15): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+HTTP_REFERER=http://www.ebg.com/doc/
+---

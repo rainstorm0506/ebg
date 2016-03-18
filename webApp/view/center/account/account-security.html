@@ -1,0 +1,20 @@
+	<!---------- 账号与安全 ---------->
+	<ul class="account-info-list">
+		<li>
+			<h6>基本信息</h6>
+			<s class="tr-r"><i></i><b></b></s>
+			<a class="a-click" ui-sref="account.baseInfo"></a>
+		</li>
+		<li>
+			<h6>手机号</h6>
+			<aside ng-bind="baseInfo.phone"></aside>
+			<s class="tr-r"><i></i><b></b></s>
+			<a class="a-click" ui-sref="account.modTel"></a>
+		</li>
+		<li>
+			<h6>修改登陆密码</h6>
+			<s class="tr-r"><i></i><b></b></s>
+			<a class="a-click" ui-sref="account.modPwd"></a>
+		</li>
+	</ul>
+	<div class="h40px"></div>

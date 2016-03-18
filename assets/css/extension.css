@@ -1,0 +1,39 @@
+a{cursor:pointer}
+.navigation ul{text-align:right; margin:20px 10px 10px 0}
+.navigation li{border:1px solid #ccc;display:inline-block;padding:1em;margin:0 0 0 10px}
+.navigation li a{color:#09F}
+.navigation li a.this{color:#F00}
+.navigation span{float:left;margin:0 0 0 10px}
+.navigation .search-keyword{color:#000;height:30px;line-height:30px;width:210px;padding:0 10px;vertical-align:top;border:1px solid #CCC;}
+.navigation .search-keyword.this{color:#777}
+.navigation .search-button,.searchs-button{height:30px;line-height:30px;border:1px solid #CCC;border-radius:3px;display:inline-block;padding:0 12px;letter-spacing:3px}
+.navigation .search-button:hover{background-color:#666;border:1px solid #000;color:#FFF}
+.navigation .searchs-button:hover{background-color:#666;border:1px solid #000;color:#FFF}
+.hint{display:block;clear:both;height:25px;line-height:25px;padding:0 0 0 100px}
+
+._tl{text-align:left}
+.imeDied{ime-mode:disabled}
+.form-wraper li{line-height:26px}
+.form-wraper li span.errorMessage{width:auto;margin:0 0 0 5px}
+.clear{display:block;clear:both;height:0;float:none}
+.mes a{margin:0 0 0 10px}
+.control-group label{display:inline}
+.search-form{float:right}
+.option{float:left}
+
+.categoryHeader>div{display: inline;background-color:#ccc;border: 1px solid #ccc;padding: 5px;width: 200px}
+
+.btn-2{margin:0 15px 0 0}
+.crbox18-group label{position:relative;top:0;margin:0 20px 0 5px}
+.form-list-34 h6{width:100px}
+.form-list-34 h1.title{padding:0 0 0 100px;display:block}
+#GoodsClassForm_is_show{display:block;padding:10px 0 0 0}
+.ico-no{background-image:url("../images/del.png");width:16px;height:16px}
+.set-yes{margin:0 0 0 4px;color:#888}
+.set-not{margin:0 0 0 4px;color:#F00}
+.tab-set em{margin:0 10px;color:#048ff0}
+.tab-set a{color:#048ff0}
+.gcShow span{font-size:14px}
+.gcShow i{margin:0 25px;font-style:normal;color:#F00;font-weight:900;font-size:20px}
+
+.layui-layer-content b{color:#00F;font-weight:400}

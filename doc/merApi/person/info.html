@@ -1,0 +1,100 @@
+<style type="text/css">
+.a{background-color:red;margin:10px 0;padding:6px 5px;font-weight: bold;}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心模块 - 修改店铺信息</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">personal.storeInfo</td>
+		</tr>
+                <tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">李启源</td>
+		</tr>
+                <tr>
+			<td rowspan="15">请求参数</td>
+		</tr>
+                
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>store_environment</td>
+			<td>array</td>
+			<td>店铺环境(系列图)</td>
+		</tr>
+		<tr>
+			<td>store_name</td>
+			<td>varchar</td>
+			<td>店铺名称</td>
+		</tr>  
+		<tr>
+			<td>store_describe</td>
+			<td>varchar</td>
+			<td>店铺简介</td>
+		</tr>
+		<tr>
+			<td>gather_id</td>
+			<td>int</td>
+			<td>电脑城ID</td>
+		</tr> 
+		<tr>
+			<td>gather_value</td>
+			<td>array</td>
+			<td>(暂时不传,后期会隐藏地区选择按钮)店铺电脑城位置</td>
+		</tr> 
+		<tr>
+			<td>scope</td>
+			<td>array</td>
+			<td>商家营业范围</td>
+		</tr>                 
+		<tr>
+			<td>store_tel</td>
+			<td>varchar</td>
+			<td>店铺联系电话</td>
+		</tr> 
+		<tr>
+                    <td colspan="3"><a>以下是通过认证链接 点击访问时需 传递的参数</a></td>
+		</tr>                 
+                <tr>
+			<td>type</td>
+			<td>int</td>
+			<td>该字段用于区分是否是通过 点击认证链接访问的(type=1:通过认证链接 点击过去的；)</td>                    
+                </tr>
+                <tr>
+			<td>mer_card_front</td>
+			<td>varchar</td>
+			<td>身份证正面</td>                    
+                </tr>   
+                <tr>
+			<td>mer_card_back</td>
+			<td>varchar</td>
+			<td>身份证反面</td>                    
+                </tr>  
+                <tr>
+			<td>mer_name</td>
+			<td>varchar</td>
+			<td>身份证姓名</td>                    
+                </tr>  
+                <tr>
+			<td>mer_card</td>
+			<td>varchar</td>
+			<td>身份证号码</td>                    
+                </tr>                  
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": null
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

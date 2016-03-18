@@ -1,0 +1,90 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main>
+		<div class="site-wrap-address"><i></i><p>请确认收货地址</p><s class="tr-r"><i></i><b></b></s><a href="#"></a></div>
+		
+		<div class="site-wrap-address site-wrap-a">
+			<i></i>
+			<div>
+				<header><h6>收货人：刘三姐</h6><span>13565656525</span></header>
+				<p>收货地址：四川省成都市武侯区丰德国际广场B1座16楼</p>
+			</div>
+			<s class="tr-r"><i></i><b></b></s>
+			<a href="#"></a>
+		</div>
+		
+		<section class="confirm-wrap">
+			<div class="mer-wrap">
+				<figure><img ng-src="{{imgPath}}/temp/15.png"></figure>
+				<p>东华电脑城</p>
+			</div>
+			<div class="order-goods">
+				<figure><img ng-src="{{imgPath}}/temp/14.png"></figure>
+				<section>
+					<h3>华硕X552MJ2840</h3>
+					<div><span>尺寸：15寸</span><span>颜色：白色</span></div>
+					<p><span>￥5899</span><em>x1</em></p>
+				</section>
+			</div>
+			<div class="take-msg"><h6>买家留言：</h6><textarea placeholder="选填，可填写您和卖家达成一致的要求"></textarea></div>
+			<div class="price-total">
+				<span>共1件商品</span><span>合计<em>￥5899</em></span>
+			</div>
+		</section>
+		<ul class="confirm-list">
+			<li><h6>支付方式</h6>
+				<nav class="choice-nav">
+					<a href="javascript:;" class="current"><i></i><span>货到付款</span></a>
+					<a href="javascript:;"><i></i><span>在线支付</span></a>
+				</nav>
+			</li>
+			<li><h6>配送方式</h6>
+				<nav class="choice-nav">
+					<a href="javascript:;" class="current"><i></i><span>上门自提</span></a>
+					<a href="javascript:;"><i></i><span>市内配送</span></a>
+				</nav>
+			</li>
+			<li class="txt-1"><h6>自提地点</h6><div>成都市一环路南二段15号东华电脑城北楼104</div></li></li>
+			
+			<li class="txt-2" ng-class="{current:isOpen === true}"><h6>优惠券</h6><p>满100省5元优惠券</p><s class="tr-r"><i></i><b></b></s><label class="ng-label"><input type="checkbox" ng-model="isOpen"></label></li>
+			<li class="txt-3" ng-show="isOpen === true"><h6>&nbsp;</h6><p>满50省5元优惠券</p><i><b></b></i></li>
+			<li class="txt-3" ng-show="isOpen === true"><h6>&nbsp;</h6><p>满30省2元优惠券</p><i><b></b></i></li>
+			
+			<li><h6>满减</h6><s class="tr-r"><i></i><b></b></s><a href="#"></a></li>
+			<li class="txt-2"><h6>满减</h6><p>满100省5元优惠券</p><s class="tr-r"><i></i><b></b></s><a href="#"></a></li>
+		</ul>
+		<div class="h40px"></div>
+		<!---- 在线支付 ---->
+		<section class="shadow-wrap shadow-wrap-order" ng-class="{current:isPay === true}">
+			<div>
+				<header><a class="tr-l-1" href="javascript:;"><i></i><b></b></a><h3>在线支付</h3><a class="ico-close" href="javascript:;" ng-click="pay.closePay()"></a></header>
+				<div class="select-wrap">
+					<ul>
+						<li class="current"><h6>中信银行储蓄卡（6233）</h6><i></i></li>
+						<li><h6>中信银行信用卡（6666）</h6><i></i></li>
+						<li><h6>使用新卡支付</h6><s class="tr-r"><i></i><b></b></s><a href="#"></a></li>
+						<li><h6>微信支付</h6></li>
+						<li class="disabled"><h6>百度钱包<span>（账户余额不足）</span></h6></li>
+					</ul>
+				</div>
+				<a class="btn-1-1" href="javascript:;" ng-click="pay.openPayDetail()">确认</a>
+			</div>
+		</section>
+		<!---- 付款详情 ---->
+		<section class="shadow-wrap shadow-wrap-order" ng-class="{current:isPayDetail === true}">
+			<div>
+				<header><a class="tr-l-1" href="javascript:;"><i></i><b></b></a><h3>付款详情</h3><a class="ico-close" href="javascript:;" ng-click="pay.colsePayDetail()"></a></header>
+				<div class="select-wrap pay-detail">
+					<ul>
+						<li><h6>付款方式</h6><p>货到付款</p><s class="tr-r"><i></i><b></b></s><a href="#"></a></li>
+						<li><h6>需付款</h6><div class="price"><span>5889</span> 元</div></li>
+					</ul>
+				</div>
+				<a class="btn-1-1" href="javascript:;" ng-click="pay.success()">确认</a>
+			</div>
+		</section>
+	</main>
+	<footer class="bot-confirm">
+		<p><span>合计：<b>￥5899</b></span><em>（优惠25元）</em></p><a href="javascript:;" ng-click="pay.openPay()">确定</a>
+	</footer>

@@ -1,0 +1,102 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">供应模块 - 需求详情</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">supply.demandShow</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td rowspan="4">请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>id</td>
+			<td>int</td>
+			<td>需求产品ID</td>
+		</tr>
+		<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>页码</td>
+		</tr>
+		<tr>
+			<td>type=2</td>
+			<td>int</td>
+			<td>1(1:代表供应;2:代表需求)</td>
+		</tr>                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "id": "2",		#需求商品ID
+        "merchant_id": "30",	#需求商家ID
+        "type": "2",		#供需类型
+        "title": "东芝笔记本",	#商品名称
+        "class_id": "1",	#分类ID
+        "brand_id": "1",	#品牌ID
+        "size_id": "14",	#尺寸ID
+        "color_id": "0",	#颜色ID
+        "num": "10",		#需求商品数量
+        "main_pic": "",		#需求商品主图片
+        "pic_group": "",	#图片组
+        "describes": "日本",	#需求商品描述
+        "time": "20141017",	#需求商品发布时间
+        "price": "2000",	#需求商品价格
+        "total": 7,		#报价总数
+        "is_self_send": 0,	#判断是否是发布者(1是发布者;0不是)
+        "phone": "18782911321", #电话号码
+        "class_name": "电子",   #分类名
+        "color_name": "",       #颜色ID对应的value值
+        "size_name": "",        #尺寸ID对应的value值
+        "quote": [
+                {
+                    "lists": [
+                        {
+                            "id": "38",
+                            "need_mer_id": "105",           #需求商家ID
+                            "need_goods_id": "79",          #需求产品ID编号
+                            "supply_mer_id": "110",         #供应商家ID
+                            "supply_mer_goods_id": "73",    #供应产品ID编号
+                            "supply_rapaport": "5622.00",   #供应当前需求的报价
+                            "supply_content": "made in Ama",
+                            "supply_time": "1457490390",
+                            "store_name": "123",            #供应商家的店铺名
+                            "title": "好产品732"            #供应产品的名字
+                        },
+                        {
+                            "id": "42",
+                            "need_mer_id": "105",
+                            "need_goods_id": "79",
+                            "supply_mer_id": "110",
+                            "supply_mer_goods_id": "132",
+                            "supply_rapaport": "120.00",
+                            "supply_content": "司法所萨嘎",
+                            "supply_time": "1457601339",
+                            "store_name": "123",
+                            "title": "Iphone 6S"
+                        }
+                    ],
+                    "store_name": "123",                #供应商家的店铺名
+                    "store_phone": "18583985993"        #供应商家的电话
+                },
+                .........
+      ]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

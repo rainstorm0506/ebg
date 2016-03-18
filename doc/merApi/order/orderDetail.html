@@ -1,0 +1,73 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">订单管理模块 - 订单详情页数据</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">order.orderDetail</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">邱龙军</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>oid</td>
+			<td>string</td>
+			<td>订单号（订单列表里的'order_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+	{
+	    "code": 0,
+	    "message": "",
+	    "data": {
+	        "order_sn": "U4459-1594-3733",				#订单号
+	        "order_money": "28.02",					#订单金额
+	        "freight_money": "0.00",				#订单运费
+	        "pay_port": null,					#支付接口 ：（ 1=支付宝 , 2=银联 , 3=财付通 , 4=货到付款，5=邮政汇款）
+	        "pay_time": null,					#支付时间
+	        "pay_money": null,					#支付金额
+	        "merchant_title": "买家已收货",				#订单状态名称
+	        "cons_phone": "0",					#收货人电话
+	        "cons_name": "xxxx",					#收货人姓名
+	        "cons_address": "",					#收货人地址
+	        "user_remark": "",					#用户备注
+	        "delivery_way": "2",					#配送方式：（1=市内配送 , 2=上门自提）
+	        "nickname": "你好",
+	        "goods": [		#订单商品列表
+	            {
+	                "id": "14",											#商品ID号
+	                "goods_cover": "/personInfo/2016/01-17/42/29734924119395154401453019947.5847.jpg",		#商品主图
+	                "goods_attrs": "{
+		                \"866974adef063f390117a08b4bc90f24\":[\"ace18534e39507a11d466a193c7a57ba\",
+		                \"\\u989c\\u8272\",
+		                \"\\u9ec4\\u8272\"]
+	                }",												#商品下订单时商品属性值：规格、尺寸、颜色等等
+	                "num": "1",											#数量
+	                "unit_price": "0.01",										#商品单价
+	                "title": "sdfs1测试sdfs1测试xvxvxcvcv试测串试测试测试测试大",					#商品名称
+	                "uid": "42",											#购买用户ID
+	                "store_name": "凌度行车记录仪成都店",								#店铺名称
+	                "store_address": "更好发挥"									#店铺地址
+	            }
+	        ]
+	    }
+	}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>
