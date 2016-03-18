@@ -1,0 +1,13 @@
+	<!---------- main ---------->
+	<fieldset class="form-list">
+		<legend>找回密码</legend>
+		<form name="aForm" ng-submit="submitForm(aForm.$valid)" novalidate>
+			<send-code></send-code>
+			<ul>
+				<li><input class="tbox" type="password" placeholder="输入密码" id="password" ng-model="apassword" required ng-minlength="6" ng-maxlength="18"></li>
+				<li><input class="tbox" type="password" placeholder="确认密码" ng-model="bpassword" required pw-check="password"></li>
+			</ul>
+			<div class="wrap-btn"><input class="btn-1" type="submit" ng-disabled="aForm.$invalid" value="确&nbsp;&nbsp;认" ng-click="submit()"></div>
+		</form>
+	</fieldset>
+	<promt></promt>

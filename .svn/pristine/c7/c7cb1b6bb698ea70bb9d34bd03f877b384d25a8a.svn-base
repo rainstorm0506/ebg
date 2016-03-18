@@ -1,0 +1,5 @@
+﻿.tr-r:extend(.rel_m){@w:13/@b;.wh(@w,@w*2);.oh;.mt(-@w);
+    *:extend(.triangle,.abs_lt){.bls;.bor_w(@w 0 @w @w);.fs(1em);}
+    i{.blc(#aaa);}
+    b{.blc(#fff);.l(-2/@b);}
+}

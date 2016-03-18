@@ -1,0 +1,65 @@
+//  ajax get与post请求
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	
+	angularAMD.service('$ajax',function($http,$timeout,$localStorage,$rootScope){
+		// post 请求
+		
+		var setLocal = function(token,time,vers){
+			return $localStorage.$default({'x-token':token,'x-time':time,'x-vers':vers});
+		}
+		
+		//$localStorage.$reset();	// 重置本地存储
+		
+		//console.log($localStorage);
+		this.post =  function(url,data,callback,errback){
+			$http({
+				method : 'POST',
+				url : url,
+				data : data,
+				headers : {'x-token':$localStorage['x-token'] , 'x-time':$localStorage['x-time'] , 'x-vers':$localStorage['x-vers'] , 'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+			}).success(function(data,status,headers,config){
+				var code = data.code;
+
+				console.debug(data);
+				$rootScope.loading = true;
+			
+				if(code === 0){
+					callback(data);
+					
+					$localStorage.isLogin = true;		// 登录成功
+					$rootScope.loading = false;
+					
+					//var time = config.resTime - config.reqTime; console.log('响应时间：'+ time)
+					console.log($localStorage)
+				}else if(code === 100){
+					// 登录超时跳转到登录页面
+					/*
+						$timeout(function(){
+							top.location.href = 'login.html';
+						},3000)
+					*/
+				}else if(code === -1){ // 未登录
+					$rootScope.loading = false;
+				}else{
+					errback && errback();
+					$rootScope.loading = false;
+				}
+				setLocal(data['x-token'],data['x-time'],data['x-vers']);
+				
+			}).error(function(data,status,headers,cofig){
+				console.log('请求错误：' + status);
+			})
+		}
+		var path = 'http://192.168.0.240/webApp/api/';
+		this.api = {
+			token : path + 'global.token', 		// token 首页请求
+			login : path + 'user.login',		// 登录
+		 	 code : path + 'global.sendSmsCode'	// 短信验证码
+		}
+		
+		return this;
+	})
+})
+// API说明：http://192.168.0.240/doc/webApp.html
+// 线上测试地址：http://192.168.0.240/webApp/index.html

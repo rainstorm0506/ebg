@@ -1,0 +1,21 @@
+	<ul class="shipping-address-list">
+		<li ng-repeat="$p in data" class="animated" ng-class="{bounceInLeft:true}">
+			<section>
+				<header>
+					<h3 ng-bind="$p.consignee"></h3>
+					<span ng-bind="$p.phone"></span>
+				</header>
+				<address ng-bind="$p.address">四川省成都市武侯区桐梓林地铁站旁丰德国际广场B1座12楼</address>
+				<s class="tr-r" href="javascript:;"><i></i><b></b></s>
+				<a ui-sref="address.editor"></a>
+			</section>
+			<nav>
+				<a class="ship-def set-def" ng-class="{current:$p.is_default}" href="javascript:;"><b><i></i></b>默认地址</a>
+				<a class="ship-del" href="javascript:;" ng-click="del($index)"><i></i>删除</a>
+			</nav>
+		</li>
+	</ul>
+	<div class="h20px"></div>
+	<a class="btn-1 sm-mlr" ui-sref="address.add">添加收货地址</a>
+	<div class="h40px"></div>
+	<promt></promt>

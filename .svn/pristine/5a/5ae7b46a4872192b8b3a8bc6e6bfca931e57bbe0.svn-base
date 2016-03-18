@@ -1,0 +1,136 @@
+﻿// ======================================================================== library.less
+@import "h:/less/library.less";
+// ======================================================================== extend.less
+@import "public/extend.less";
+.triangle{.triangle}
+.omit{.omit}
+.clearfix{.clearfix}
+// ======================================================================== public.less
+@import "public.css";
+// ======================================================================== public part
+@import "private/goods-list.less";
+@import "private/sort-nav.less";
+@import "private/t-t.less";
+@import "private/refresh.less";
+@import "private/tr-r.less";
+// ======================================================================== 店铺首页
+.store-wrap:extend(.brn_bsc,.rel){.f22px;.bi_wh(100%,305/@a,bg-store);
+	>div{.w;.p_abs_lb}
+	section:extend(.flexbox all){.plr(3%);
+		>div:extend(.flex-1){}
+		dl:extend(.flexbox){
+			dd:extend(.brn_bsc){.bi_wh(22/@a,19/@a,ico-heart);.mr(1%);
+				&.current{.bi(ico-heart-0)}
+			}
+		}
+		>a:extend(.tc){.bc_wh(60/@a,50/@a,@mc);.c_fff;.ptb(5/@a);.m(14/@a 1% 0 3%);
+			>*:extend(.db){.mau;}
+			i:extend(.brn_bsc){.bi_wh(22/@a,21/@a,ico-15);}
+			span{.fs(20/@a);.mt(5/@n);.lh;}
+		}
+	}
+	figure{.ww(80/@a);.mr(2.5%);}
+	h2:extend(.omit){.fs(28/@a);.hh(36/@d);.c_fff;.mb(12/@d);}
+	footer:extend(.flexbox all,.tc){.rgba(255,255,255,0.5);.ptb(15/@a);
+		i{.bc_wh(1,40/@a,#fff);.mt(8/@a);}
+		div:extend(.flex-1){.lh;}
+		p{.mb(10/@a);.ar;}
+	}
+}
+// ---------------------------------- 底部导航
+.store-nav:extend(.flexbox all,.bc_fff,.tc){.f22px;.h(90/@a);.tbor_ddd;
+	a:extend(.flex-1,.rel){}
+	i{.dk;}
+	b:extend(.rel_m){.bc_wh(1,44/@a,#ddd);.mt(44/@a*@x);}
+	span{.fs(24/@a);.w;.p_abs_lb(0,10/@b);}
+	.current{.c(@mc);}
+}
+[class^='ico-m']{.h(30/@a);.mt(12/@a);}
+.ico-m-1{.w(30/@a);.bi(ico-m-1);}
+.ico-m-2{.w(27/@a);.bi(ico-m-2);}
+.ico-m-3{.w(23/@a);.bi(ico-m-3);}
+.ico-14{.bi_wh(30/@a,26/@a,ico-14);.mt(16/@a);}
+.current{
+	.ico-m-1{.bi(ico-m-1-0);}
+	.ico-m-2{.bi(ico-m-2-0);}
+	.ico-m-3{.bi(ico-m-3-0);}
+	.ico-14{.bi(ico-14-0);}
+}
+// ======================================================================== 店铺详情
+.store-nav-list:extend(.flexbox){.fs(@28px);.bc_eee;
+	menu:extend(.bc_fff){.w(35%);
+		li{.hh(88/@d);.pl(8%);.bbor_da(#eee);}
+	}
+	nav:extend(.flex-1){
+		a:extend(.flexbox all){.hh(88/@d);.plr(4%);.bbor(#fff);}
+		span:extend(.flex-1){.fs(24/@d);}
+		b{.blc(#eee);}
+	}
+}
+// ======================================================================== 店铺介绍
+.store-pro-list:extend(.bc_fff){.tbor_ddd;
+	li{.fs(@28px);.bbor_ddd;.mlr(3%);.ptb(30/@d);.lh(150%);}
+	article{.c_999;.mt(10/@d);}
+	p{.ti(2em)}
+}
+// ======================================================================== 逛一逛
+// ---------------------------------- t-b
+.t-b:extend(.triangle){@w:6/@a;.bts;.btc(#333);.bor_w(@w @w 0 @w);.fs(1em);}
+.current{
+	.t-b{@w:6/@a;.bbs;.btsd;.bbc(@mc);.bor_w(0 @w @w @w);}
+}
+.floor-main{.ox(auto);}
+.svg-wrap{.w(250%)}
+// ======================================================================== 
+.floor-nav:extend(.flexbox all,.bc_fff){.f22px;.hh(70/@a);.bbor_aaa;
+	span,a{.fs(26/@a);}
+	nav:extend(.flex-1){
+		div:extend(.flexbox){}
+	}
+	a:extend(.tc,.flex-1){.mlr(3%);
+		&.current{.h(68/@c);.bbor(@mc,2/@c);.c(@mc);}
+	}
+}
+.nav-list:extend(.rel){.bbor(#fff,2/@a);.plr(5/@a);
+	h6:extend(.rel){
+		i{.dk;.ml(5/@a);}
+		span{.dk;.w(120/@a);.tc;}
+	}
+	&.current{.bor_c(@mc);
+		span{.c(@mc);}
+	}
+	dl:extend(.bc_fff,.tc){.w;.p_abs_lt(0,70/@a);}
+	dd{.hh(60/@a);.bor_ddd;.plr(3%);.mt(-1);}
+}
+.nav-list-1{
+	h6 span{.w(40/@a);}
+}
+// ----------------------------------
+.floor-info:extend(.flexbox,.bc_fff){.f22px;.p(15/@a 10%);.tbor_aaa;
+	figure{.ww(153/@a);.bor_aaa;.mr(5%);}
+	dl{.lh(140%);}
+	dt{.c_000;.mb(5/@a);}
+	dd:extend(.flexbox){
+		span{
+			&:first-child{.w(110/@a);.tr;.nowrap;}
+		}
+		span:last-child:extend(.flex-1){}
+	}
+}
+// ----------------------------------
+.star-wrap{.h(18/@a);.mt(5/@a);
+	i:extend(.brn_bsc){.bi_wh(20/@a,18/@a,ico-star-1);.fl;.mr(5/@a);}
+	.current{.bi(ico-star-1-0);}
+}
+// ----------------------------------
+.floor-bot-nav:extend(.flexbox all,.tc){.fs(@30px);.hh(80/@e);.tbor_ddd;
+	a:extend(.rel){.c_fff;.h;}
+	.b-1{.bc(#ff7e00);}
+	.b-2{.w(50%);.bc(@mc);}
+	.b-3:extend(.flex-1){
+		i{.ml(auto);.mr(auto);.dk;.vt}
+		span{.fs(20/@e);.w;.c_666;.p_abs_lb(0,12/@n);.lh;}
+	}
+}
+.ico-12{.bi_wh(28/@e,32/@e,ico-12);.mt(10/@e);}
+.ico-13{.bi_wh(21/@e,19/@e,ico-13);.mt(18/@e);}

@@ -1,0 +1,55 @@
+// ============================================================ 发送验证码
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	angularAMD.directive('sendCode',function(){
+		return function(scope,elem,attr){
+			var $this = elem;
+			var time = 60;
+			var atime = 60;
+			var clear;
+			scope.timeFlag = true;
+			// ============================== 清除倒计时，复原按扭 ==============================
+			scope.change = function(){
+				if(scope.check === false){
+					clearInterval(clear);
+					$this.html('重新获取验证码').removeClass('sending');
+				}
+			}
+			// ============================== 点击倒计时 ==============================
+			$this.on('touchstart mousedown',function(){ // touchstart
+				// ============================== 判断是否禁用
+				if($this.attr('disabled') === 'disabled') return;
+				if($this.hasClass('sending')){
+					scope.timeFlag = false;
+					return;
+				} 
+				
+				// ============================== 发送验证码时，验证手机号码
+				/*
+				var tel = scope.tel;
+				var reg   = /^((((13[0-9]{1})|(15[0-9]{1}))|(18[0-9]{1}))+\d{8})$/.test(tel);
+				
+				if(tel === undefined || tel === ''){
+					alert('请输入您的正确手机号!');
+					return false;
+				}else if(!reg){
+					alert('您输入的手机号有误!');
+					return false;
+				}
+				*/
+				// ============================== 发送验证码效果
+				$this.addClass('sending').html('<b>'+ time +'</b> <span>秒后可重新获取验证码</span>');
+				clear = setInterval(function(){
+					time--;
+					if(time<0){
+						clearInterval(clear);
+						$this.html('重新获取验证码').removeClass('sending');
+						time = atime;
+						scope.timeFlag = true;
+					};
+					$this.find('b').text(time);
+				},1000);
+			})
+		}
+	})
+})

@@ -1,0 +1,53 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人订阅模块 - 我的关注</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">subscibe.myFocus</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td rowspan="1">请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "brand": [
+            "acer / 宏基",	#关注的品牌
+        ],
+        "classify": [
+            {
+                "id": "1",		#关注供应分类ID
+                "title": "电子",	#关注分类名称
+                "rank": "0",	#排序
+                "time": "1214",		#发布时间
+                "type": "5",	#关注类别(关注品牌=4,关注分类名称=5)
+                "user_id": "105",	#用户ID
+                "collect_id": "1",	#关注ID
+                "collect_time": "1456128656"	#关注时间
+            }
+        ]
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+	
+	
+</div>

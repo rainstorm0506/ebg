@@ -1,0 +1,105 @@
+﻿// ======================================================================== library.less
+@import "h:/less/library.less";
+// ======================================================================== extend.less
+@import "public/extend.less";
+.f28px{.fs(@28px)}
+.f24px{.fs(@24px)}
+.abs_lb{.abs_lb}
+.abs_c{.abs_c}
+.abs_m{.abs_m}
+.lh{.lh}
+.omit{.omit;}
+// ======================================================================== public.less
+@import "public.css";
+.btn-1-2{.bc_fff;.hh(64/@d);.bor(@mc);.c(@mc);}
+// ======================================================================== public part
+@import "private/shadow-wrap.less";
+@import "private/select-wrap.less";
+@import "private/checbox-wrap.less";
+@import "private/btn-send.less";
+@import "private/form-list.less";
+// ======================================================================== content.less
+.wrap-btn:extend(.sm-mlr,.flexbox){.mt(@30px);
+	>*:extend(.flex-1){}
+}
+.wrap-txt:extend(.flexbox all,.sm-mlr,.lh){.mt(@20px);
+	span:extend(.f24px){}
+	span:first-child:extend(.flex-1){}
+}
+.wrap-nav:extend(.flexbox,.sm-mlr){
+	>a:extend(.flex-1){
+		&:first-child{.mr(10/@d);}
+	}
+}
+// ======================================================================== 确认修改
+.confirm-wrap:extend(.tc){.ptb(@50px);
+	i:extend(.db){.m_b(@30px);}
+	p:extend(.f22px,.lh){}
+}
+.ico-success{.bi_ww(98*@px,ico-success);}
+// ======================================================================== 注册
+.txt-1:extend(.tc,.lh,.f22px){.c_999;.mt(25/@a);}
+.checbox-wrap{.mt(30/@a);
+	span{.fs(24/@a);}
+}
+// ======================================================================== 企业注册
+.txt-2:extend(.f22px,.sm-mlr){.hh(70/@a);}
+.select-site{.pr(3%);
+	span:extend(.flex-1,.rel){.c_ccc;.ml(20/@d);.h;
+		s:extend(.rel_m){.fr;.mt(14/@d*@x);}
+	}
+	.current{.c_333;}
+	.prov{.mr(3%);}
+	em:extend(.omit){.wh(82%);.fl;}
+}
+.select-sm:extend(.rel){
+	h6:extend(.flex-1){}
+	s:extend(.rel_m){.m_tr(14/@d*@x,20/@d);}
+	p{.mr(2%);.c_000;}
+}
+.ico-time:extend(.rel_m){.bi_ww(34/@d,ico-time);.m_tr(34/@d*@x,20/@d);}
+// ----------------------------------
+.select-wrap-scroll:extend(.rel,.tc){.h((88*3+2)/@a);.oh;
+	ul>li{.fs(28/@a);.hh(88/@d);.bor0;.c_999;.mb(1);.db;.transition(all 0.2s linear);
+		&.current{.fs(36/@a);.hh(88/@k);.c_333;}
+	}
+	dl{.w;}
+	dl:last-child:extend(.abs_lt){.index(-1)}
+	dd{.tbor_ddd;.h(88/@a);.w;
+		&:first-child{.tbor0}
+	}
+}
+.select-wrap-time{
+	ol:extend(.flexbox){.h;
+		>li:extend(.flex-1,.rel,.tc){}
+	}
+}
+// ======================================================================== 企业注册 2
+
+.tit-1{.fs(@26px);.hh(80/@c);}
+.upload-wrap:extend(.tc,.f28px){.h(282/@d);
+	>*:extend(.bc_fff,.rel){.ww(280/@d);.bor_ccc;.oh;}
+	>aside:extend(.tc){.fl;
+		i{.index(-1);}
+		img{.wh(auto);}
+	}
+	>div{.fr;
+		i:extend(.db,.brn_bsc){.bi_wh(77/@d,86/@d,upload);.m(80/@d auto 10/@d auto)}
+	}
+	input:extend(.wh,.abs_lt){.o(0);}
+	
+	p:extend(.lh){.fs(24/@d);.c_ccc;}
+}
+
+.pic-ico-1:extend(.abs_c){.bi_wh(205/@d,100%,pic-ico-1);.ml(205/@d*@x);}
+.pic-ico-2:extend(.abs_m){.bi_wh(100%,197/@d,pic-ico-2);.mt(197/@d*@x);.l;}
+.pic-ico-3:extend(.abs_m){.bi_wh(100%,204/@d,pic-ico-3);.mt(204/@d*@x);.l;}
+.upload-list:extend(.f22px){@b:22em;.mt(20/@b);.lh(200%);.c_999;.cb;.bbor_ccc;.pb(20/@b);}
+.upload-list-last{@b:22em;.mb(30/@b);.bbor0;}
+// ======================================================================== last.less
+.triangle{.triangle}
+.tr-b:extend(.rel){@w:14/@d;.wh(@w*2,@w);.oh;
+    *:extend(.triangle,.abs_lt){.bts;.bor_w(@w @w 0 @w);.fs(1em);}
+    i{.btc(#333);}
+    b{.btc(#fff);.t(-3/@d);}
+}

@@ -1,0 +1,42 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">全局说明</div>
+	<div class="a">API中所有的时间都传时间戳 , 所有的时间戳精确到秒 , 而非毫秒.</div>
+	<div class="a">所有的传递的页码 , 如果没有特殊说明 , 都是从1开始的</div>
+	<div class="a">测试地址 http://192.168.0.240/webApp/api/请求位置</div>
+	<div class="a">线上地址 http://web5.ebangon.com/api/请求位置</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px"><span class="red">系统参数</span></td>
+			<td colspan="2">通过 header 传递 (注意,除开明确表示不需要 <span class="red">系统参数</span> 的API接口 , 其他的都必须传递 <span class="red">系统参数</span>)</td>
+		</tr>
+		<tr>
+			<td>x-token</td>
+			<td>每一次请求的随机码(32位) , 第一次请求传空字符串</td>
+			<td>由PHP在每一次的请求中返回新的值</td>
+		</tr>
+		<tr>
+			<td>x-time</td>
+			<td>用户设备上的时间 (时间戳)</td>
+			<td rowspan="2">由 web APP决定</td>
+		</tr>
+		<tr>
+			<td>x-vers</td>
+			<td>web APP的版本号</td>
+		</tr>
+	</table>
+	<div class="a">所有的请求都是post , 除非接口中有特殊说明</div>
+	<div class="a">所有的返回都是 JSON 格式  , 全局设置都是统一的</div>
+<pre>
+{
+	"code" : 0,			# 错误码 ( 0=正确 , > 0 错误 , -1=未登录)
+	"x-token" : "232fwefewf"	# 随机码 , 在下一次请求中传递回来
+	"message":[],			# 如果错误码不等于0 , 这里会输出错误信息 (所有的错误包含在数组中)
+	"data":[]			# 在错误码等于0的情况下 , 如果有返回值 , 则包含在data中 (如果没有返回值 , 默认 是空数组)
+}
+</pre>
+</div>

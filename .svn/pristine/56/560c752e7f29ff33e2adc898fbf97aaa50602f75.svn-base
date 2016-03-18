@@ -1,0 +1,40 @@
+<?php
+/**
+ * 店铺设置控制器 - 控制器
+ * 
+ * @author Jeson.Q
+ */
+class MyStoreController extends MerchantController
+{
+	//店铺设置首页
+	public function actionIndex()
+	{
+		$this->leftNavType = 'store';
+		$form = ClassLoad::Only('MyStoreForm'); /* @var $form MyStoreForm */
+		$model = ClassLoad::Only('MyStore'); /* @var $model MyStore */
+		$id= (int)$this->getMerchantID();
+		$this->exitAjaxPost($form , 'formBox');
+		
+		if(isset($_POST['MyStoreForm']))
+		{
+			$form->attributes = $_POST['MyStoreForm'];
+			if($form->validate())
+			{
+				$model->setStoreInfo($_POST['MyStoreForm'], $id);
+				GlobalUser::setReflushUser($this->getUser() , 1);
+				GlobalMerchant::flush();
+				$this->redirect(array('home/index'));
+			}
+		}
+		//获取商家店铺数据
+		$myStoreData = $model->getStoreInfo($id);
+
+		// 查询列表并 渲染试图
+		$this->render('index' , array(
+			'info'=>$myStoreData,
+			'users'=>$this->getUser(),
+			'form'=>$form
+		));
+	}
+	
+}

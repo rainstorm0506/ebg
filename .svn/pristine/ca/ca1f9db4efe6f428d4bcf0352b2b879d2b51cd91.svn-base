@@ -1,0 +1,121 @@
+<?php
+class Used extends WebModels
+{
+	// 得到所有品牌
+	public function getAllbrand()
+	{
+		return $this->queryAll("SELECT id,logo,zh_name FROM goods_brand ORDER BY rank ASC");
+	}
+	// 得到所有分类
+	public function getAllclass()
+	{
+		return $this->queryAll("SELECT id,title FROM used_class ORDER BY rank ASC");
+	}
+	// 得到二手列表总数
+	public function getListCount($search)
+	{
+		$SQL = $this->_getListSQL($search , 'count');
+		return $SQL ? (int)$this->queryScalar($SQL) : 0;
+	}
+	// 得到二手列表
+	public function getList($search , $offset , $rows , $total , array $schema = array())
+	{
+		if(!$total || $offset >= $total)
+			return array ();
+		
+		if($SQL = $this->_getListSQL($search , 'list'))
+			return $this->queryAll($SQL . " LIMIT {$offset},{$rows}");
+		else return array ();
+	}
+	// 筛选
+	public function _getListSQL(array $search , $type)
+	{
+		{
+			static $returned = array ();
+			if(isset($returned[$type]))
+				return $returned[$type];
+			
+			$chain = $orderBy = $groups = '';
+			// 状态
+			$SQL = "WHERE g.shelf_id=1001 AND g.status_id=1013 AND g.delete_id=0";
+			// 分类
+			if($search['classOne'] > 0)
+				$SQL .= " AND g.class_one_id={$search['classOne']}";
+			if($search['classTwo'] > 0)
+				$SQL .= " AND g.class_two_id={$search['classTwo']}";
+			if($search['classThree'] > 0)
+				$SQL .= " AND g.class_three_id={$search['classThree']}";
+				
+				// 自营商品
+			if($search['self'] === 1)
+				$SQL .= ' AND g.is_self=1';
+				
+				// 品牌
+			if($search['brand_id'] > 0)
+				$SQL .= ' AND g.brand_id=' . $search['brand_id'];
+				
+				// 价格范围
+			if($search['priceStart'] > 0 && $search['priceEnd'] > 0)
+				$SQL .= " AND g.sale_price>={$search['priceStart']} AND g.sale_price<{$search['priceEnd']}";
+				
+				// 关键字
+			if($search['keyword'])
+				$SQL .= " AND g.title LIKE {$this->quoteLikeValue($search['keyword'])}";
+				
+				// 综合排序
+			$orderBy = "ORDER BY g.last_time DESC";
+			// 排序
+			if($search['order'] && $search['by'])
+			{
+				$by = $search['by'] == 'asc' ? 'ASC' : 'DESC';
+				switch($search['order'])
+				{
+					// 价格
+					case 'price' :
+						$orderBy = " ORDER BY g.sale_price {$by}";
+						break;
+					// 销量
+					case 'sales' :
+						$orderBy = " ORDER BY g.detail {$by}";
+						break;
+					// 上架时间
+					case 'putaway' :
+						$orderBy = " ORDER BY g.shelf_time {$by}";
+						break;
+				}
+			}
+			
+			$field = "g.id , g.is_self , g.shelf_id , g.title , g.cover , g.tag_id , g.collect , m.store_name , g.praise , g.sale_price";
+			$chain .= "LEFT JOIN user_merchant AS m ON m.uid=g.merchant_id";
+			$returned['count'] = "SELECT COUNT(*) FROM used_goods AS g {$chain} {$SQL}";
+			$returned['list'] = "SELECT {$field} FROM used_goods AS g {$chain} {$SQL} {$groups} {$orderBy}";
+			
+			return isset($returned[$type]) ? $returned[$type] : '';
+		}
+	}
+	
+	/**
+	 * 二手商品详情
+	 * @param		int			$id		二手商品ID
+	 * @param		bool		$img	是否显示图片
+	 */
+	public function intro($id , $img = true)
+	{
+		if($intro = $this->queryRow("SELECT * FROM used_goods WHERE id={$id} AND shelf_id=1001 AND status_id=1013 AND delete_id=0"))
+		{
+			if ($img)
+				$intro['img'] = $this->getGoodsPic($id);
+		}
+		return $intro;
+	}
+	// 商品图片
+	private function getGoodsPic($id)
+	{
+		return $this->queryAll("SELECT src FROM used_goods_photo WHERE used_id={$id} ORDER BY rank ASC");
+	}
+	// 商家信息
+	public function getMerchant($id)
+	{
+		return GlobalMerchant::getMerchantInfo($id);
+	}
+}

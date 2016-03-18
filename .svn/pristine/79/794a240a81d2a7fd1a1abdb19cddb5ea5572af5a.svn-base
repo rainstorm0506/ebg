@@ -1,0 +1,467 @@
+<?php
+class Personal extends ApiModels
+{
+	
+	// 店铺信息
+	public function getShop($uid = 0)
+	{
+		$uid = $uid == 0 ? $this->getMerchantID() : $uid;
+		$data = array ();
+		$data['mInfo'] = $this->getMInfo($uid);
+		$data['state'] = $this->getState($uid);
+		return $data;
+	}
+	private function getMInfo($uid)
+	{
+		$arr = $this->queryRow("SELECT m.*,u.*,g.title as gather_title FROM user_merchant AS m LEFT JOIN `user` AS u ON m.uid = u.id LEFT JOIN gather as g ON m.gather_id=g.id WHERE m.uid={$uid}");
+		
+		if(!empty($arr))
+		{
+			// 将当前的 营业范围ID 和value相对应起来
+			$arr['scope'][0] = array('scope_name' => '' , 'scope_id' => '');
+			return $arr;
+		}
+		return false;            		
+	}
+	private function getNameByDictId($arr_dict = array())
+	{
+		if(!empty($arr_dict))
+		{
+			return $arr_dict['name'];
+		}else
+		{
+			return "";
+		}
+	}
+	private function getState($uid)
+	{
+		$arr = $this->queryRow("SELECT * FROM user_merchant AS m LEFT JOIN user AS u ON m.uid = u.id WHERE m.uid={$uid}");
+		if(!empty($arr))
+			return $this->queryRow("SELECT s.merchant_title FROM user AS u LEFT JOIN status AS s ON u.status_id = s.id WHERE s.id={$arr['status_id']}");
+		return false;
+	}
+	/**
+	 * **** 当前商家用户的认证状态 ********
+	 */
+	// public function getCertificationState()
+	// {
+	// $uid = $this->getMerchantID();
+	// $arr = $this->queryRow("SELECT store_environment,store_name,store_describe,gather_id,scope,store_tel,store_address FROM user_merchant WHERE uid={$uid}");
+	// $state = true;
+	// if(!empty($arr)){
+	// if($arr['store_environment']=="" || $arr['store_name']=="" || $arr['gather_id']=="" || $arr['scope']=="" || $arr['store_tel']=="" || $arr['store_address']=="") $state = false;
+	// }else{
+	// $state = false;
+	// }
+	// return $state;
+	// }
+	
+	// 店铺商品
+	public function getGood(CFormModel $form , CPagination $page , $_p)
+	{
+		if(!$page->getItemCount() || $page->getOffset() > $page->getItemCount() || $_p > $page->getPageCount())
+			return array ();
+		$uid = $this->getMerchantID();
+		
+		$arr = $this->queryAll("select id,title,cover,sales,stock,discuss from goods where merchant_id={$uid} LIMIT {$page->getOffset()},{$page->getLimit()}");
+		if(!empty($arr))
+		{
+			return $arr;
+		}else
+		{
+			return array ();
+		}
+	}
+	public function getGoodCount(CFormModel $form)
+	{
+		$uid = $this->getMerchantID();
+		return $this->queryScalar("SELECT COUNT(id) from goods where merchant_id={$uid}");
+	}
+	
+	// 评价列表
+	public function getAppraise(CFormModel $form , CPagination $page , $_p)
+	{
+		$id = $form->id;
+		if(!$page->getItemCount() || $page->getOffset() > $page->getItemCount() || $_p > $page->getPageCount())
+			return array ();
+		$data = $this->queryAll("SELECT g.title,g.cover,o.merchant_id,o.goods_score,o.content,o.public_time,o.src,u.store_name,o.goods_id FROM  order_comment  AS o LEFT JOIN goods AS g ON o.goods_id=g.id LEFT JOIN user_merchant AS u ON g.merchant_id=u.uid  WHERE o.goods_id={$id} ORDER BY o.public_time ASC  LIMIT {$page->getOffset()},{$page->getLimit()}");
+		if(!empty($data))
+		{
+			foreach($data as $K => $val)
+			{
+				$data[$K]['src'] = $this->jsonDnCode($val['src']);
+			}
+			return $data;
+		}
+		return false;
+	}
+	public function getEvalCount($form)
+	{
+		return $this->queryScalar("SELECT COUNT(o.goods_id) FROM  order_comment  AS o LEFT JOIN goods AS g ON o.goods_id=g.id LEFT JOIN user_merchant AS u ON g.merchant_id=u.uid  WHERE o.goods_id={$form->id} ");
+	}
+	
+	// 我的积分兑换
+	public function getConvert()
+	{
+		$uid = $this->getMerchantID();
+		$data = $this->queryAll("SELECT g.title,p.time,p.points,p.`status`,p.goods_id  from goods AS g LEFT JOIN points_convert_code AS p ON g.merchant_id=p.user_id AND g.id=p.goods_id WHERE p.user_id={$uid}");
+		if(!empty($data))
+		{
+			$id_arr = array ();
+			foreach($data as $row)
+			{
+				$id_arr[$row['goods_id']] = $row['title'];
+			}
+			$id_arr = array_unique($id_arr);
+			// 构建返回的 数据格式
+			$temp = array ();
+			foreach($id_arr as $i => $item)
+			{
+				/**
+				 * **** 得到当前ID编号下面的子集 *****
+				 */
+				$child_arr = array ();
+				foreach($data as $row)
+				{
+					if($row['goods_id'] == $i)
+					{
+						$child_arr[] = $row;
+					}
+				}
+				
+				$temp['list'][] = array (
+					'id' => $i, 
+					'title' => $item, 
+					'child' => $child_arr 
+				);
+			}
+			return $temp;
+		}
+		return array ();
+	}
+	
+	// 反馈信息
+	public function getFeekBook($form)
+	{
+		$content = $form->content;
+		if(mb_strlen($content , 'utf8') <= 140)
+		{
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$user_id = $this->getMerchantID();
+				$content = $form->content;
+				$time = time();
+				$arr = array (
+					'type' => 1, 
+					'user_type' => 3, 
+					'user_id' => $user_id, 
+					'content' => $content, 
+					'time' => $time 
+				);
+				$this->insert('feedback' , $arr);
+				$transaction->commit();
+				return true;
+			}catch(Exception $e)
+			{
+				$transaction->rollBack();
+			}
+			return false;
+		}else
+		{
+			return false;
+		}
+	}
+	
+	// 电脑城列表
+	public function getGather()
+	{
+		$data = array ();
+		$tmp = GlobalGather::getGatherFirst();
+		foreach($tmp as $k => $val)
+		{
+			$data[] = array (
+				'id' => $k, 
+				'title' => $val 
+			);
+		}
+		return $data;
+	}
+	
+	// 修改 user对应店铺信息
+	public function modify_user_merchant($form)
+	{
+		$uid = $this->getMerchantID();
+		// $arr_store_environment = $form->store_environment;
+		// //图片最终存放的位置
+		// $uploads_arr = array();
+		// foreach ($arr_store_environment as $row) {
+		// $uploads_arr[] = $this->getPhotos($row, 'user_goods', $uid);
+		// }
+		// $form->store_environment = $uploads_arr;
+		// 准备 更新所需数据
+		
+		$update_info = array (
+			// 'store_avatar' => $form->store_avatar,
+			'store_environment' => json_encode($form->store_environment), 
+			'store_name' => $form->store_name, 
+			'store_describe' => $form->store_describe, 
+			'gather_id' => $form->gather_id, 
+			// 'gather_value' => json_encode($form->gather_value),
+			'scope' => json_encode($form->scope), 
+			'store_tel' => $form->store_tel 
+		);
+		$record = $this->queryRow("SELECT uid,mer_card FROM user_merchant WHERE uid={$uid}");
+		if(!empty($record))
+		{
+			// 执行更新
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$this->update('user_merchant' , $update_info , 'uid=' . $uid);
+				$transaction->commit();
+				return true;
+			}catch(Exception $e)
+			{
+				$transaction->rollBack();
+				return false;
+			}
+		}else
+		{
+			// 执行添加
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$update_info['uid'] = $uid;
+				$this->insert('user_merchant' , $update_info);
+				$transaction->commit();
+				return true;
+			}catch(Exception $e)
+			{
+				$transaction->rollBack();
+				return false;
+			}
+		}
+	}
+	// 商户 认证的时候，修改 用户身份信息
+	public function modify_user_info($form)
+	{
+		$uid = $this->getMerchantID();
+		// 准备 更新/添加 所需数据
+		
+		$update_info = array (
+			'mer_card_front' => $form->mer_card_front, 
+			'mer_card_back' => $form->mer_card_back, 
+			'mer_name' => $form->mer_name, 
+			'mer_card' => $form->mer_card 
+		);
+		$record = $this->queryRow("SELECT uid,mer_card FROM user_merchant WHERE uid={$uid}");
+		// 存在 记录 才更新(不存在 就添加)
+		if(!empty($record))
+		{
+			// 执行更新
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$this->update('user_merchant' , $update_info , 'uid=' . $uid);
+				$transaction->commit();
+				return true;
+			}catch(Exception $e)
+			{
+				$transaction->rollBack();
+				return false;
+			}
+		}else
+		{
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$update_info['uid'] = $uid;
+				$this->insert('user_merchant' , $update_info);
+				$transaction->commit();
+				return true;
+			}catch(Exception $e)
+			{
+				$transaction->rollBack();
+				return false;
+			}
+		}
+	}
+	// 对比 用户输入的旧密码 是否是正确的
+	public function getComparePwdRes($form)
+	{
+		$uid = $this->getMerchantID();
+		$sql = "SELECT password from user WHERE id={$uid}";
+		$pwd = $this->queryAll($sql);
+		
+		$input_pwd = GlobalUser::hashPassword($form->old_password);
+		if($pwd[0]['password'] == $input_pwd)
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
+	}
+	// 更新 当前用户的密码
+	public function updatePwd($form)
+	{
+		$uid = $this->getMerchantID();
+		$update_pwd_info = array (
+			'password' => GlobalUser::hashPassword($form->new_password) 
+		);
+		// 执行更新
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			$this->update('user' , $update_pwd_info , 'id=' . $uid);
+			$transaction->commit();
+			return true;
+		}catch(Exception $e)
+		{
+			$transaction->rollBack();
+			return false;
+		}
+	}
+	// 展示 当前商家的 黄页数据
+	public function getYPageList()
+	{
+		$uid = $this->getMerchantID();
+		$sql = "SELECT id,mer_id,title,scope,gather,address,content,phone,landline,qq,weixin,is_phone,is_landline,is_qq,is_weixin FROM yellow_page WHERE mer_id = {$uid}";
+		// $sql = "SELECT id,mer_id,title,scope,gather,address,content,phone,landline,qq,weixin,is_phone,is_landline,is_qq,is_weixin FROM yellow_page WHERE mer_id = 124";
+		
+		$mer_ypage_info = $this->queryRow($sql);
+		if(!empty($mer_ypage_info))
+		{
+			$scope_arr = json_decode($mer_ypage_info['scope']);
+			$mer_ypage_info['scope'] = json_decode($mer_ypage_info['scope']);
+			$gather_value = $this->queryColumn("SELECT title FROM gather WHERE id={$mer_ypage_info['gather']} LIMIT 1");
+			if(!empty($gather_value))
+			{
+				$mer_ypage_info['gather_val'] = $gather_value[0] == null ? "" : $gather_value[0];
+			}else
+			{
+				$mer_ypage_info['gather_val'] = "";
+			}
+			
+			foreach($scope_arr as $item)
+			{
+				$scope_value = $this->queryColumn("SELECT title FROM scope_business WHERE id={$item} LIMIT 1");
+				$mer_ypage_info['lists'][] = array (
+					'scope_id' => (int)$item, 
+					'scope_value' => $scope_value[0] 
+				);
+			}
+			return $mer_ypage_info;
+		}else
+		{
+			return $mer_ypage_info = array ();
+		}
+	}
+	/*
+	 * 修改当前商户对应的 黄页信息
+	 */
+	public function updateYellowInfo($form)
+	{
+		$uid = $this->getMerchantID();
+		// 准备 更新yellow_page所需数据
+		$update_info = array (
+			'title' => $form->title, 
+			'scope' => json_encode($form->scope), 
+			'gather' => $form->gather, 
+			'address' => $form->address, 
+			'content' => $form->content, 
+			'phone' => $form->phone, 
+			'landline' => $form->landline, 
+			'qq' => $form->qq, 
+			'weixin' => $form->weixin, 
+			'is_phone' => $form->is_phone, 
+			'is_landline' => $form->is_landline, 
+			'is_qq' => $form->is_qq, 
+			'is_weixin' => $form->is_weixin, 
+			'time' => time() 
+		);
+		// 准备 更新yellow_page_scope_business(商家经营范围)所需数据
+		$yellow_page_scope_info = array (
+			'mer_id' => $uid 
+		);
+		// 执行更新
+		$query_res = $this->queryRow("SELECT id FROM yellow_page WHERE mer_id={$uid}");
+		if(!empty($query_res) && is_array($query_res))
+		{
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$this->update('yellow_page' , $update_info , 'mer_id=' . $uid);
+				// $this->update('yellow_page',$update_info,'id='.(int)$form->id);
+				// 删除yellow_page_scope对应的数据
+				$this->delete('yellow_page_scope_business' , 'mer_id=' . $uid);
+				
+				foreach($form->scope as $row)
+				{
+					$this->insert("yellow_page_scope_business" , array (
+						'mer_id' => $uid, 
+						'sb_id' => $row 
+					));
+				}
+				$transaction->commit();
+				return true;
+			}catch(Exception $e)
+			{
+				$transaction->rollBack();
+				return false;
+			}
+		}else
+		{
+			// return false;
+			return array (
+				'warn' => "当前还未申请加入黄页" 
+			);
+		}
+	}
+	// 商家供需列表
+	public function getMerSup(CFormModel $form , CPagination $page , $_p , $merchant_id = "")
+	{
+		if(!$page->getItemCount() || $page->getOffset() > $page->getItemCount() || $_p > $page->getPageCount())
+			return array ();
+		$uid = $merchant_id == "" ? $this->getMerchantID() : $merchant_id;
+		$type = 'WHERE sg.type=1';
+		switch($form->type)
+		{
+			case 1 :
+				$type = 'WHERE sg.type=1';
+				break;
+			case 2 :
+				$type = 'WHERE sg.type=2';
+				break;
+		}
+		$temp = $this->queryAll("SELECT sg.*,u.phone FROM supply_goods as sg LEFT JOIN user as u on sg.merchant_id=u.id {$type} AND sg.merchant_id={$uid} LIMIT {$page->getOffset()},{$page->getLimit()}");
+		if(!empty($temp))
+		{
+			foreach($temp as &$row)
+			{
+				$row['pic_group'] = json_decode($row['pic_group']);
+			}
+			return $temp;
+		}else
+		{
+			return false;
+		}
+	}
+	public function getMerCount($form)
+	{
+		$uid = $this->getMerchantID();
+		$type = 'WHERE type=1';
+		switch($form->type)
+		{
+			case 1 :
+				$type = 'WHERE type=1';
+				break;
+			case 2 :
+				$type = 'WHERE type=2';
+				break;
+		}
+		
+		return $this->queryScalar("SELECT COUNT(id) FROM supply_goods {$type} AND merchant_id={$uid} ");
+	}
+}

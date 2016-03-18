@@ -1,0 +1,57 @@
+	<!---- 筛选 ---->
+	<section class="s-wrap-a">
+		<!---- 品牌 ---->
+		<h3 class="s-tit-1">品牌：</h3>
+		<nav class="sc-nav" select-only>
+			<a href="javascript:;" class="current"><i></i><span>不限</span></a>
+			<a href="javascript:;"><i></i><span>清华同方</span></a>
+			<a href="javascript:;"><i></i><span>苹果</span></a>
+			<a href="javascript:;"><i></i><span>华硕</span></a>
+			<a href="javascript:;"><i></i><span>宏基</span></a>
+			<a href="javascript:;"><i></i><span>东芝</span></a>
+			<a href="javascript:;"><i></i><span>联想</span></a>
+			<a href="javascript:;"><i></i><span>华为</span></a>
+		</nav>
+		<a class="s-more" href="#">查看更多</a>
+		<div class="line"></div>
+		<!---- 类型 ---->
+		<h3 class="s-tit-1">类型：</h3>
+		<nav class="sc-nav" select-only>
+			<a href="javascript:;" class="current"><i></i><span>不限</span></a>
+			<a href="javascript:;"><i></i><span>13.5</span></a>
+			<a href="javascript:;"><i></i><span>办公文具</span></a>
+			<a href="javascript:;"><i></i><span>办公家具</span></a>
+			<a href="javascript:;"><i></i><span>办公耗材</span></a>
+		</nav>
+		<div class="line"></div>
+		<!---- 价格 ---->
+		<h3 class="s-tit-1">价格：</h3>
+		<nav class="sc-nav" select-only>
+			<a href="javascript:;" class="current"><i></i><span>不限</span></a>
+			<a href="javascript:;"><i></i><span>3000以下</span></a>
+			<a href="javascript:;"><i></i><span>3000—5000</span></a>
+			<a href="javascript:;"><i></i><span>5000—10000</span></a>
+			<a href="javascript:;"><i></i><span>10000—15000</span></a>
+			<a href="javascript:;"><i></i><span>20000—30000</span></a>
+			<div><input type="number"><i>—</i><input type="number"></div>
+		</nav>
+		<div class="line"></div>
+		<!---- 价格 ---->
+		<h3 class="s-tit-1">价格：</h3>
+		<nav class="sc-nav" select-only>
+			<a href="javascript:;" class="current"><i></i><span>不限</span></a>
+			<a href="javascript:;"><i></i><span>13寸</span></a>
+			<a href="javascript:;"><i></i><span>15寸</span></a>
+			<a href="javascript:;"><i></i><span>21寸</span></a>
+		</nav>
+	</section>
+	<section class="s-wrap-b">
+		<div class="line"></div>
+		<div class="checbox-wrap">
+			<label>
+				<b><i ng-show="check===true"></i></b><span>只显示e办公自营商品</span>
+				<input type="checkbox" ng-checked="check" ng-init="check = true" ng-model="check">
+			</label>
+		</div>
+		<a class="btn-3" search-reset href="javascript:;">重置</a>
+	</section>

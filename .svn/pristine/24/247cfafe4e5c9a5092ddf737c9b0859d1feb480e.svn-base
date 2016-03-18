@@ -1,0 +1,72 @@
+﻿/* ================================ *** 页面公共部分 *** ================================ */
+// ======================================================================== web default style
+html,body{*width:100%;*height:100%;*overflow:hidden;}
+html:extend(.wh){.tc}	
+body:extend(.rel){
+    .yh;.tl;
+    .min_h(100%);.max_w(100%);.min_w(320px);.mau;.wb;.user-select;
+    .bc(#ececec);
+    .box-shadow(0 0 160px 0 #666);
+    .flex-v;
+	display:none \9;
+}
+body,a,input,select,textarea{.c_333;}
+
+input,select,textarea{.yh;}
+	
+img{.w}
+
+figure{
+	>a:extend(.wh){}
+	>img:extend(.wh){}
+	>*:extend(.db){}
+}
+
+*[class*='ico']{&:extend(.brn_bsc);}
+// ======================================================================== header style
+.header:extend(.flexbox all,.f22px){.hh(88/@a);.bc(#d32238);
+	>a:first-child{.wh(60/@a,88/@a);.fl;
+		&~.search-box{.w(84%);}
+	}
+	.tr-l:extend(.rel_m){.l(50%);.m_tl(-20/@a,-10/@a);.fl;}
+	h1:extend(.flex-1,.tc){.fs(36/@a);.c_fff;.mr(60/@k);}
+	>span:extend(.tc){.fs(28/@a);.plr(3%);.c_fff;.cd;}
+}
+.header-a{
+	h1{.mr}
+}
+// ======================================================================== footer style
+//.footer{.h(@footer);.bc(#3a3d42);}
+// ======================================================================== layout style
+main:extend(.flex-1){.ox;.oy;.min_h(1*@px);.bc(#ececec);}
+.animated{
+	&.ng-leave:extend(.dn){}
+}
+.o0{.op(0)}
+// ======================================================================== ie
+.header,main{width:100%\9;position:absolute\9;left:0\9;}
+.header{top:0\9;}
+//.footer{bottom:0\9;}
+main{top:5.5em\9;bottom:0\9;}
+// ================================== 搜索框
+.search-box:extend(.rel_m,.bc_fff,.tc){.wh(94%,68/@a);.m(68/@a*@x auto 0 auto);
+	&,input{.border-radius(100/@a);}
+	input{.w(92%);.fs(22/@a);.bg;.c_333;.vt;.h;}
+	i:extend(.brn_bsc){.bi_ww(37/@a,ico-search);.mt(37/@a*@x);.r(20/@a);.abs_m;}
+}
+.ng-label{.wh;.abs_lt;
+	input{.op(0);.vh}
+}
+*[class*='w-promt'],.promt span{.c_fff;.border-radius(5/@n);.gradient(#666,#444);}
+*[class*='w-promt']:extend(.tc){.w(320/@n);.ml(330/@n*@x);.fix_c;.t(25%);.p(15/@n 10/@n);}
+.promt:extend(.tc){;.w;.fix_lb(0,3%,-1);.op(0);.transition(all 0.5s linear);
+		&.current{.op(1);.bm(10%);.index(100);}
+		span{.dk;.p(15/@n 3%);.box-shadow(1/@n 1/@n 0.5/@n #888);}
+}
+// ================================== 加载中
+.loading-wrap:extend(.wh,.tc,.f22px){.fix_lt(0,88/@a,100);.rgba(255,255,255,0.2);
+	p:extend(.rel_m){.hh(100/@a);.mt(110/@a*@x);
+		*{.dk_vm}
+	}
+	i:extend(.brn_bsc){.ww(100/@a);.bi(loading,gif);.mr(3%);}
+}

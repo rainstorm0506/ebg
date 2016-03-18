@@ -1,0 +1,18 @@
+// ================================== 表单
+[class^='tbox']:extend(.bc_fff){.plr(20/@d);.bor0;
+	//&:focus{.bc(#fafafa);}
+}
+.form-list{.pb(@20px);
+	li:extend(.flexbox all,.bc_fff){.fs(@28px);.bbor(#e6e6e6);.hh(88/@d);
+		&:first-child{.tbor(#e6e6e6);}
+	}
+	h6{.ml(3%);.nowrap;}
+	[class^='tbox']:extend(.flex-1){.fs(1em);.h;}
+	[disabled]{.c_ccc;.bc(#f8f8f8);}
+	a[disabled]{.cd;.bor_c(#ddd);}
+}
+
+input{
+	&.ng-invalid{.bc(#fff5e4);}
+	&.ng-valid{.bc_fff}
+}

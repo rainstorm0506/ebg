@@ -1,0 +1,45 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">商家信息 - 获得商家等级</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">merchant.getLayer</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "id": "10",			#商家等级ID
+        "user_type": "3",		#商家类型
+        "name": "普通",			#等级名称
+        "start_exp": "0",		#开始成长值
+        "end_exp": "100",		#结束成长值
+        "goods_rate": "1.0000",		#商品折扣率
+        "fraction_rate": "1.0000",	#积分的倍率
+        "exp_rate": "1.0000",		#成长值的倍率
+        "money_rate": "1.0000",		#资金的倍率
+        "free_freight": "78.00"		#订单xx免运费
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

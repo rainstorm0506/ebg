@@ -1,0 +1,86 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心--首页</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">usercenter.myAddress</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">李启源</td>
+		</tr>
+                <tr>
+			<td rowspan="2" >请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>id(<b style="color:red;font-size: 16px;">修改时必传</b>)</td>
+			<td>int</td>
+			<td>收货地址ID编号(<b style="color:red;font-size: 16px;">修改时必传</b>)</td>
+		</tr>		
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "x-token": "96cfe4eaff248ba77850ace6ef28d26e",
+    "message": [],
+    "data": [
+        {
+            "id": "23",
+            "user_id": "98",            #当前登录 用户ID编号
+            "consignee": "李克勤",      #当前收货人 姓名
+            "dict_on_id": "29967",      #一级城市ID编号
+            "dict_two_id": "31555",     #二级城市ID编号
+            "dict_three_id": "31556",   #三级城市ID编号
+            "dict_four_id": "31559",    
+            "address": "丰德国际",      #具体位置信息
+            "phone": "18650215489",     #联系号码
+            "is_default": "1",          #是否为默认 地址(1:代表是 默认地址；2:代表不为默认地址)
+            "dict_on_name": "眉山市",   #一级城市 名字
+            "dict_two_name": "武侯区",  #二级城市 名字
+            "dict_three_name": "城区"   #三级城市 名字
+        },      
+        ...............
+    ]
+}
+</pre></td>
+		</tr>
+                <tr>
+                    <td>编辑时返回回显数据</td>
+                    <td colspan="3">
+                        <pre>
+{
+    "code": 0,
+    "x-token": "e967302f06c3fee476872a12a1fc4def",
+    "message": [],
+    "data": [
+        {
+            "id": "117",
+            "user_id": "98",
+            "consignee": "afdas",
+            "dict_one_id": "0",
+            "dict_two_id": "0",
+            "dict_three_id": "0",
+            "dict_four_id": "0",
+            "address": "",
+            "phone": "13245678923",
+            "is_default": "0",
+            "dict_on_name": "北京",
+            "dict_two_name": "北京",
+            "dict_three_name": "北京"
+        }
+    ]
+}
+                        </pre>
+                    </td>
+                </tr>
+	</table>
+</div>

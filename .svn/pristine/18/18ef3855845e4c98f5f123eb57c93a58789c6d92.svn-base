@@ -1,0 +1,18 @@
+	<!---------- 登录 ---------->
+	<fieldset class="form-list">
+		<legend>登录</legend>
+		<form name="aForm" ng-submit="submitForm(aForm.$valid)" novalidate>
+			<ul>
+				<li><input type="tel" class="tbox" placeholder="用户名/手机/邮箱" required ng-model="username"></li>
+				<li><input type="password" class="tbox" placeholder="请输入登录密码" required ng-model="password" ng-pattern="/^[a-zA-Z]\w{5,17}$/"></li>
+			</ul>
+			<div class="wrap-btn"><input class="btn-1" type="submit" ng-disabled="aForm.$invalid || isSubmit" value="确&nbsp;&nbsp;认"></div>
+			<div class="wrap-txt">
+				<span><a ui-sref="login.findPwd">找回密码</a></span>
+				<span><a ui-sref="register.register">注册账号</a></span>
+			</div>
+		</form>
+	</fieldset>
+
+	<promt></promt>
+	<loading></loading>

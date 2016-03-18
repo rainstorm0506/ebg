@@ -1,0 +1,155 @@
+<?php
+
+/**
+ * 售后服务 管理模型类
+ * @author jeson.Q 
+ * 
+ * @table content
+ */
+class GoodsReturn extends BaseActiveRecord {
+	/**
+	 *
+	 * @return string 设置表名
+	 */
+	public function tableName() {
+		return 'goods_return';
+	}
+	
+	/**
+	 *
+	 * @return GoodsComment the static model class
+	 */
+	public static function model($className = __CLASS__) {
+		return parent::model ( $className );
+	}
+	
+	/**
+	 * 根据关键字查询属性
+	 *
+	 * @param
+	 * $keyword
+	 * @return array|static[]
+	 */
+	public function searchAllByCondition($keyword) {
+		$select = 'SELECT * FROM ' . $this->tableName ();
+		$where = ' WHERE (id=?  OR content like ?) ';
+		$where .= 'AND type = 1';
+		$sql = $select . $where;
+		
+		return $this->findAllBySql ( $sql, array (
+			$keyword,
+			'%' . $keyword . '%' 
+		) );
+	}
+	
+	/**
+	 * 编辑 评论信息
+	 * 
+	 * @param array $post
+	 * @param int $id
+	 */
+	public function modify(array $post, $id) {
+		$id = ( int ) $id;
+		$datastr = '';
+		if ($id) {
+			// 批量 安全过滤特殊字符和 脚步xss
+			foreach ( $post as $key => $val ) {
+				$datastr = $this->safe_replace ( $val );
+				$post [$key] = $this->remove_xss ( $datastr );
+			}
+			// 组装数据
+			$field = array ();
+			$field ['reply_content'] = trim ( $post ['reply_content'] );
+			$field ['reply_time'] = time ();
+			
+			return ClassLoad::Only ( 'SModels' )->update ( 'goods_return', $field, "id={$id}" );
+		}
+		return false;
+	}
+	
+	/**
+	 * 获得 单个评论信息
+	 * 
+	 * @param int $id
+	 */
+	public function getActiveInfo($id) {
+		$id = ( int ) $id;
+		$info = array ();
+		if ($id) {
+			$sql = "SELECT * FROM " . $this->tableName () . " WHERE id={$id}";
+			$info = $row = Yii::app ()->getDb ()->createCommand ( $sql )->queryRow ( true, array () );
+			
+			return $info;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 查询 评论列表
+	 * 
+	 * @param string $keyword
+	 * @param int $offset
+	 * @param int $limit
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getList($keyword = '', $offset = 0, $limit = 20, $type = null) {
+		$criteria = new CDbCriteria ();
+		$params = array ();
+		
+		// 判断是否关键字收索
+		if ($keyword) {
+			$criteria->addCondition ( 'id = :id_param   OR content like :title_param ' );
+			$params [':id_param'] = $keyword;
+			$params [':title_param'] = '%' . $keyword . '%';
+			$criteria->params = array_merge ( $params );
+		}
+		$criteria->limit = $limit;
+		$criteria->offset = $offset;
+		
+		return $this->findAll ( $criteria );
+	}
+	
+	/**
+	 *
+	 * 统计评论总数
+	 * 
+	 * @param string $keyword
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getTotalNumber($keyword = '', $type = null) {
+		$criteria = new CDbCriteria ();
+		$params = array ();
+		// 判断是否关键字收索
+		if ($keyword) {
+			$criteria->addCondition ( 'id = :id_param  OR content like :title_param ' );
+			$params [':id_param'] = $keyword;
+			$params [':title_param'] = '%' . $keyword . '%';
+			;
+			$criteria->params = array_merge ( $params );
+		}
+		
+		return $this->count ( $criteria );
+	}
+	
+	/**
+	 * 根据id修改数据状态
+	 *
+	 * @param
+	 * $cid
+	 * 
+	 * @return boolean|static[]
+	 */
+	public function updateCommentShow($cid, $status = 1) {
+		$itemArr = array (
+			'is_show' => $status == '2' ? 0 : 1 
+		);
+		if ($cid) {
+			return ClassLoad::Only ( 'SModels' )->update ( 'goods_return', $itemArr, 'id=' . intval ( $cid ) );
+		} else {
+			return false;
+		}
+	}
+}

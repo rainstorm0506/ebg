@@ -1,0 +1,21 @@
+	<fieldset class="form-list">
+		<legend>编辑收货地址</legend>
+		<form>
+			<ul>
+				<li><input type="text" class="tbox" value="王小丫" placeholder="请输入收货人姓名"></li>
+				<li><input type="tel" class="tbox" value="18547978888" placeholder="请输入收货人电话"></li>
+				<li><input type="text" class="tbox" value="丰德国际B1座12楼" placeholder="请输入收货人地址"></li>
+				<li><input type="text" class="tbox" value="1201" placeholder="请输入收货人地址"></li>
+			</ul>
+		</form>
+	</fieldset>
+	<div class="bottom-wrap">
+		<div class="checbox-wrap">
+			<label>
+				<b><i ng-show="check===true"></i></b><span>设为默认地址</span>
+				<input type="checkbox" ng-checked="check" ng-init="check = true" ng-model="check">
+			</label>
+		</div>
+		<a class="btn-1" href="javascript:;">保存</a>
+	</div>
+	<div class="h40px"></div>

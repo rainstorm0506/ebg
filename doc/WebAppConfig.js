@@ -7,7 +7,8 @@
 		"global.viferyImgCode" : "异步验证图片验证码",
 		"global.sendSmsCode" : "发送手机短信码",
 		"global.viferySmsCode" : "异步验证手机短信码",
-		"global.upload" : "上传图片"
+		"global.upload" : "上传图片",
+		"global.dict" : "获取地区"
 	},
 	{
 		"0" : "个人 / 企业模块",
@@ -36,7 +37,9 @@
 	},
         {
             "0" : "企业会员",
-            "companyUser.myPurchaseList" : "企业会员(个人集采列表)"
+            "companyUser.myPurchaseList" : "企业会员(个人集采列表)",
+            "companyUser.createPurchase" : "企业会员(集采发布)",
+            "companyUser.delPurchase" : "企业会员(编辑删除集采)"
         },
 	{
 		"0" : "二手模块",
@@ -48,5 +51,11 @@
 		"0" : "积分商城模块",
 		"credits.list" : "积分商城列表",
 		"credits.info" : "商品详情"
+	},
+	{
+		"0" : "全新商品模块",
+		"goods.list" : "商品列表",
+		"goods.search" : "选择分类获取其它筛选条件",
+		"goods.info" : "商品详情"
 	}
 ]

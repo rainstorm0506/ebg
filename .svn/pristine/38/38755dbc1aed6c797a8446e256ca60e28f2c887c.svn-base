@@ -1,0 +1,5 @@
+<?php
+	echo '<div class="navigation"><ul>';
+	echo '<li>'.CHtml::link('后台日志列表' , $this->createUrl('backLog/list') , Views::linkClass('backLog' , 'list')).'</li>';
+	echo '</ul><i class="clear"></i></div>';
+?>

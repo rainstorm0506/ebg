@@ -1,0 +1,64 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">集采订单管理模块 - 单个商品数据</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">purchase.goodsDetail</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">邱龙军</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>gid</td>
+			<td>int</td>
+			<td>商品ID</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "goods": [
+            {
+                "id": "10",
+                "purchase_sn": "R8459-7601-3750",
+                "name": "设备",
+                "class_one_id": "2",
+                "class_two_id": "151",
+                "class_three_id": "160",
+                "num_min": "100",
+                "num_max": "120",
+                "descript": "价格多",
+                "price_min": "1000.00",
+                "price_max": "4000.00",
+                "params": "黑色,A4,打印/复印/扫描/传真",
+                "create_time": "1456294027",
+                "recom": "0",
+                "is_recom": "2",
+                "offer_num": "0",
+                "isPrice": ""
+            },
+        ]
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>

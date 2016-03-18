@@ -1,0 +1,53 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	
+	<!---------- main ---------->
+	<main>
+		<ul class="commit-list">
+			<li>
+				<header>
+					<figure><img ng-src="{{imgPath}}/temp/13.png"></figure>
+					<p>135****5652</p>
+					<aside class="star-wrap">
+						<i class="current"></i>
+						<i class="current"></i>
+						<i class="current"></i>
+						<i></i>
+						<i></i>
+					</aside>
+				</header>
+				<article>真的是太好了。回家就马上装上打游戏了，一点都不卡。真的是太好了。回家就马上装上打游戏了，一点都不卡。真的是太好了。回家就马上装上打游戏了，一点都不卡。</article>
+				<footer>
+					<div>
+						<span>尺寸：25寸</span>
+						<span>颜色：银色</span>
+					</div>
+					<time>2016-01-04</time>
+				</footer>
+			</li>
+			<li>
+				<header>
+					<figure><img ng-src="{{imgPath}}/temp/13.png"></figure>
+					<p>135****5652</p>
+					<aside class="star-wrap">
+						<i class="current"></i>
+						<i class="current"></i>
+						<i class="current"></i>
+						<i></i>
+						<i></i>
+					</aside>
+				</header>
+				<article>真的是太好了。回家就马上装上打游戏了，一点都不卡。真的是太好了。回家就马上装上打游戏了，一点都不卡。真的是太好了。回家就马上装上打游戏了，一点都不卡。</article>
+				<footer>
+					<div>
+						<span>尺寸：25寸</span>
+						<span>颜色：银色</span>
+					</div>
+					<time>2016-01-04</time>
+				</footer>
+			</li>
+		</ul>
+		<div class="h40px"></div>
+	</main>
+	<!---------- nav ---------->
+	<public-nav></public-nav>

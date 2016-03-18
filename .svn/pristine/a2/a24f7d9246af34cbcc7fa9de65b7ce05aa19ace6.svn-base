@@ -1,0 +1,38 @@
+﻿	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main class="floor-main">
+		<div class="svg-wrap">
+			<object id="floorOne" data="{{imgPath}}/floor/dong-floor-1.svg" height="100%" type="image/svg+xml" data="data:image/svg+xml;base64,[data]">
+				<img ng-src="{{imgPath}}/floor/dong-floor-1.png" alt="PNG image of standAlone.svg">
+			</object>
+			<!--
+			<object id="floorTwo" data="{{imgPath}}/floor/dong-floor-2.svg" width="100%" height="100%" type="image/svg+xml" data="data:image/svg+xml;base64,[data]">
+				<img ng-src="{{imgPath}}/floor/dong-floor-2.png" alt="PNG image of standAlone.svg">
+			</object>
+			-->
+		</div>
+	</main>
+	<div>
+		<section class="floor-info">
+			<figure><img ng-src="{{imgPath}}/temp/17.png"></figure>
+			<dl>
+				<dt>成都市武候区双星电脑旗舰店</dt>
+				<dd><span>店铺地址：</span><span>东华电脑城D1-23</span></dd>
+				<dd><span>经营年份：</span><span>5年</span></dd>
+				<dd><span>保证金：</span><span>10000</span></dd>
+				<dd><span>推荐指数：</span>
+					<span class="star-wrap">
+						<i class="current"></i>
+						<i class="current"></i>
+						<i class="current"></i>
+						<i></i>
+						<i></i>
+					</span>
+				</dd>
+			</dl>
+		</section>
+	</div>
+	<!---------- 底部导航指令 ---------->
+	<store-nav></store-nav>
+	

@@ -1,0 +1,23 @@
+// ============================================================ 提示
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	angularAMD.directive('promt',function($sessionStorage,$timeout){
+		return {
+			restrict : 'E',
+			replace : true,
+			template : '<p class="w-promt-a" ng-if="!isLogin" ng-class="{current:flag}" ng-bind="promtText"></p>',
+			link : function(scope,elem,attr){
+				
+				scope.isLogin = $sessionStorage.isLogin;
+				
+				scope.promt = function(txt){
+					scope.promtText = txt;
+					scope.flag = true;
+					$timeout(function(){
+						scope.flag = false;
+					},1500);
+				}
+			}
+		}
+	})
+})

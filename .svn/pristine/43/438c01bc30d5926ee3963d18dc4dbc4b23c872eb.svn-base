@@ -1,0 +1,13 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---- sort ---->
+	<nav class="sort-nav" select-only>
+		<a data-ui-sref="secondHand.all" ui-sref-active="current"><span>综合排序</span><i class="t-t"></i></a>
+		<a data-ui-sref="secondHand.sales" class="flex-1" ui-sref-active="current"><span>销量</span><i class="t-t"></i></a>
+		<a data-ui-sref="secondHand.price" class="flex-1" ui-sref-active="current"><span>价格</span><i class="t-t"></i></a>
+		<a data-ui-sref="secondHand.screening" class="flex-1" ui-sref-active="current"><span>筛选</span><i class="t-t"></i></a>
+	</nav>
+	<!---------- main ---------->
+	<main ui-view="viewMain" class="animated fadeIn"></main>
+	<a class="btn-1-1 animated zoomIn" ng-show="hasBtn === true" ng-hide="hasBtn !== true" href="#">确认</a>
+	<promt></promt>

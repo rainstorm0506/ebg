@@ -1,0 +1,34 @@
+	<!---------- 注册 ---------->
+	<fieldset class="form-list">
+		<legend>注册</legend>
+		<form name="aForm" ng-submit="submitForm(aForm.$valid)" novalidate>
+			<ul>
+				<li>
+					<input class="tbox" name="tel" type="tel" placeholder="请输入新手机号码" ng-disabled="!check" ng-model="tel" required ng-pattern="/^((((13[0-9]{1})|(15[0-9]{1}))|(18[0-9]{1}))+\d{8})$/">
+					
+				</li>
+				<li ng-show="!aForm.tel.$invalid">
+					<input class="tbox" name="telImgCode" type="number" placeholder="请输入图片验证码" ng-class="{error:isImgCode===false}" ng-disabled="!check" ng-model="telImgCode" required ng-minlength="6" ng-maxlength="6">
+					<a class="img-code" href="javascript:;"><img ng-hide="!check" ng-src="{{vifery.imgCodePath}}" ng-click="vifery.changeImgCode()"></a>
+				</li>
+				<li>
+					<input class="tbox" type="number" placeholder="请输入验证码" ng-class="{error:isTelCode===false}" ng-disabled="aForm.tel.$invalid || !check || !codeDisabled" ng-model="telCode" required ng-pattern="/^\d{6}$/">
+					<a class="btn-send" href="javascript:;" send-code ng-disabled="!check || !isImgCode" ng-click="vifery.sendTelCode(true)">发送验证码</a>
+				</li>
+				<li><input class="tbox" type="password" placeholder="输入密码" id="password" ng-disabled="!check" ng-model="apassword" required ng-pattern="/^[a-zA-Z]\w{5,17}$/"></li>
+				<li><input class="tbox" type="password" placeholder="确认密码" ng-disabled="!check" ng-model="bpassword" required pw-check="password"></li>
+				<li><input class="tbox" type="text" placeholder="输入推荐码（非必填）" ng-disabled="!check" ng-model="pcode" ng-pattern="/^[a-zA-Z0-9]*$/"></li>
+			</ul>
+			<div class="checbox-wrap">
+				<label>
+					<b><i ng-show="check===true"></i></b><span>我已阅读并同意</span>
+					<input type="checkbox" ng-checked="check" ng-init="check = true" ng-model="check" ng-change="change()">
+				</label>
+				<span><a href="#">《e办公个人用户协议》</a></span>
+			</div>
+			<div class="wrap-btn"><input class="btn-1" type="submit" value="注册并登陆" ng-disabled="aForm.$invalid || !check || !isTelCode || !isImgCode"></div>
+			<div class="wrap-btn"><a class="btn-1-2" ui-sref="register.comanyRregister">升级为企业账号</a></div>
+			<p class="txt-1">为大宗集采企业用户量身定制</p>
+		</form>
+	</fieldset>
+	<promt></promt>

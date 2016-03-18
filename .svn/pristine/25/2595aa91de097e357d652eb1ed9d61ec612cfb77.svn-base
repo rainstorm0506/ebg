@@ -1,0 +1,334 @@
+<?php
+class PersonalController extends ApiController{
+	
+	/**
+	 * 店铺商品列表
+	 */
+	public function actionGood()
+	{
+		$form=ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+		$form->apt = $this->getpost('apt');
+		$form->page = $this->getPost('page');
+		if($form->validateGood())
+		{
+			$_p = $this->getPost('page');
+			$model = ClassLoad::Only('Personal');/* @var $model Personal */
+			$page = ClassLoad::Only ( 'CPagination' ); /* @var $page CPagination */
+			$page->pageSize = 6;
+			$page->setCurrentPage ( $_p > 0 ? ($_p - 1) : 0 );
+			$page->setItemCount($model->getGoodCount($form));
+			if($info =$model->getGood($form, $page, $_p))
+			{
+				$this->jsonOutput(0,$info);
+			}else{
+				$this->jsonOutput(2,'未找到信息');
+			}
+		}
+		$this->jsonOutput(1,$this->jsonOutput(1,$this->getFormError($form)));
+	}
+	
+	/**
+	 * 评价列表
+	 */
+	
+	public function actionEvaluate()
+	{
+		
+		$form = ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+		$form->apt = (int)$this->getPost('apt');
+		$form->id = (int)$this->getPost('id');
+		$form->page = (int)$this->getPost('page');
+		if($form->validateAppraise())
+		{
+			$_p = (int)$this->getPost ('page');
+			$model = ClassLoad::Only('Personal');/* @var $model Personal */
+			$page = ClassLoad::Only ( 'CPagination' ); /* @var $page CPagination */
+			$page->pageSize = 6;
+			$page->setCurrentPage ( $_p > 0 ? ($_p - 1) : 0 );
+			$page->setItemCount($model->getEvalCount($form));
+			if($info = $model->getAppraise($form, $page, $_p))
+			{
+				$this->jsonOutput(0,$info);
+			}else{
+				$this->jsonOutput(2,'未找到评价!');
+			}
+		}
+		$this->jsonOutput(1,$this->getFormError($form));
+	}
+	
+	/**
+	 * 我的积分兑换
+	 * @param		int		APP抛数据的时间
+	 */
+	public function actionConvert(){
+		$form=ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+		$form->apt = $this->getpost('apt');
+		
+		if($form->validateShop())
+		{
+			$model = ClassLoad::Only('Personal');/* @var $model Personal */
+			if($info =$model->getConvert())
+			{
+				$this->jsonOutput(0,$info);
+			}else{
+				$this->jsonOutput(2,'未找到信息');
+			}
+		}
+		$this->jsonOutput(1,$this->jsonOutput(1,$this->getFormError($form)));
+	}
+	
+	/**
+	 * 问题反馈
+	 * @param		int			apt			APP抛数据的时间
+	 * @param		text		content		反馈信息
+	 */
+	public function actionFeedBook()
+	{
+		$form=ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+		$form->apt = $this->getpost('apt');
+		$form->content = $this->getPost('content');
+		if($form->validateFeed())
+		{
+			$model = ClassLoad::Only('Personal');/* @var $model Personal */
+			if($info = $model->getFeekBook($form))
+			{
+				$this->jsonOutput(0,$info);
+			}else{
+				$this->jsonOutput(2,'反馈提交失败!');
+			}
+		}
+		$this->jsonOutput(1,$this->getFormError($form));
+	}
+	/**
+	 * 店铺信息
+	 * @param		int			apt			APP抛数据的时间
+	 */
+	
+	public function actionShop()
+	{
+		$form = ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+		$form->apt = (int)$this->getPost('apt');
+
+		if($form->validateShop()){
+			$model = ClassLoad::Only('Personal');/* @var $model Personal */
+                        $info = $model->getShop();
+                        die(var_dump($info));
+			if($info = $model->getShop())
+			{
+				$this->jsonOutput(0,$info);
+			}else{
+				$this->jsonOutput(2,'未找到该信息!');
+			}
+		}
+		$this->jsonOutput(1,$this->getFormError($form));
+	}
+	
+	/**
+	 * 电脑城列表
+	 * @param	int		apt		APP抛数据的时间
+	 */
+	public function actionGetGather()
+	{
+		$form = ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+		$form->apt = (int)$this->getPost('apt');
+		if($form->validateShop()){
+			$model = ClassLoad::Only('Personal');/* @var $model Personal */
+			if($info = $model->getGather())
+			{
+				$this->jsonOutput(0,$info);
+			}else{
+				$this->jsonOutput(2,'未找到该信息!');
+			}
+		}
+		$this->jsonOutput(1,$this->getFormError($form));
+	}
+	/**
+		*修改店铺信息
+		* @param	array		store_environment   店铺环境组图
+		* @param	varchar		store_name          店铺名称
+		* @param	varchar		store_describe      店铺简介
+		* @param	int		gather_id           电脑城ID
+		* @param	varchar		gather_value        店铺电脑城位置
+		* @param	varchar		scope               商家营业范围
+		* @param	varchar		store_tel           店铺联系电话
+		*/
+	public function actionStoreInfo()
+	{
+		$form = ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+		$form->apt = (int)$this->getPost('apt');
+		//$form->store_avatar = trim((string)$this->getPost('store_avatar'));
+		$form->store_environment = (array)$this->getPost('store_environment');
+		$form->store_name = trim((string)$this->getPost('store_name'));
+		$form->store_describe = trim((string)$this->getPost('store_describe'));
+		$form->gather_id = (int)  $this->getPost("gather_id");
+		//$form->gather_value = (array)$this->getPost('gather_value');
+		$form->scope = (array)$this->getPost('scope');
+		$form->store_tel = trim((string)$this->getPost('store_tel'));
+		/******   用户 初次认证传过来的身份证等 信息  ********/
+                //$mer_card_front,$mer_card_back,$mer_name,$mer_card;
+                $form->mer_card_front = trim((string)$this->getPost('mer_card_front'));
+                $form->mer_card_back = trim((string)$this->getPost('mer_card_back'));
+                $form->mer_name = trim((string)$this->getPost('mer_name'));
+                $form->mer_card = trim((string)$this->getPost('mer_card'));
+
+                $type = $this->getPost('type')==""?0:(int)$this->getPost('type');    //当 商户认证的时候 传该参数
+                
+                if(!$type){   //点击 设置==》进行修改
+                    if($form->validateStore())
+                    {
+                            $model= ClassLoad::Only('Personal');/* @var $model Personal */
+                            if($info=$model->modify_user_merchant($form))
+                            {
+                                    $this->jsonOutput(0,$info);
+                            }else{
+                                    $this->jsonOutput(2,'未找到数据或不能修改!');
+                            }
+                    }
+                            $this->jsonOutput(1,$this->getFormError($form));                    
+                }else{
+                    //点击 认证 进入
+                    if($form->validateMerinfo())
+                    {
+                            $model= ClassLoad::Only('Personal');/* @var $model Personal */
+
+                            if($info=$model->modify_user_info($form))
+                            {
+                                    $this->jsonOutput(0,$info);
+                            }else{
+                                    $this->jsonOutput(2,'未找到数据或不能修改!');
+                            }
+                    }
+                            $this->jsonOutput(1,$this->getFormError($form));                      
+                }
+	}
+        /*
+         * 个人中心==》设置==》修改密码
+         * @param	int		apt             APP抛数据的时间
+         * @param	varchar		old_password	旧密码
+         * @param	varchar		new_password	修改后的密码
+         */
+        public function actionModifyPwd()
+        {
+            $form = ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+            $form->apt = (int)$this->getPost('apt');
+            $form->old_password = trim((string)$this->getPost('old_password'));
+            $form->new_password = trim((string)$this->getPost('new_password'));
+
+            if($form->validatePwd()){
+                $model= ClassLoad::Only('Personal');/* @var $model Personal */
+                if($model->getComparePwdRes($form))
+                {
+                    //两次密码比对成功
+                        //更新密码
+                        if($info = $model->updatePwd($form)){
+                            $this->jsonOutput(0,$info);
+                        }else{
+                            $this->jsonOutput(2,'密码修改失败!!');
+                        }
+                }else{
+                        $this->jsonOutput(2,'旧密码不正确!');
+                }
+            }
+            $this->jsonOutput(1,$this->getFormError($form));            
+        }
+        /*
+         * 商家 对应的黄页详情
+         * @param	int		apt	APP抛数据的时间
+         */
+        public function actionYellowInfo()
+        {
+            $form = ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+            $form->apt = (int)$this->getPost('apt');
+            if($form->validateShop()){  //验证apt
+                $model= ClassLoad::Only('Personal');/* @var $model Personal */
+                $info = $model->getYPageList();
+                $this->jsonOutput(0, $info);
+            }else{
+                $this->jsonOutput(1,$this->getFormError($form));
+            }
+        }
+        /*
+         * 黄页 设置
+         * @param	int		apt             APP抛数据的时间
+         * @param	int		gather          电脑城ID
+         * @param	int		phone           商户手机号码
+         * @param	varchar		title           公司名称
+         * @param	varchar		address         公司详细地址
+         * @param	varchar		content         黄页详情
+         * @param	varchar		landline        座机号
+         * @param	varchar		qq              QQ号
+         * @param	varchar		weixin          微信号
+         * @param	array		scope           公司主营范围
+         * 
+         * @param	array		is_phone           手机号是否显示
+         * @param	array		is_landline           座机号是否显示
+         * @param	array		is_weixin           微信号是否显示
+         * @param	array		is_qq           QQ号是否显示
+         */
+        public function actionSet()
+        {
+        	
+            //$form = ClassLoad::Only('YellowPageForm');/* @var $form YellowPageForm */
+            $form = ClassLoad::Only('YellowForm');/* @var $form YellowForm */
+            $form->apt = (int)$this->getPost('apt');
+            $form->gather = (int)$this->getPost('gather');
+            $form->phone = $this->getPost('phone');
+            
+            $form->title = trim((string)$this->getPost('title'));
+            $form->address = trim((string)$this->getPost('address'));
+            $form->content = trim((string)$this->getPost('content'));
+            $form->landline = trim((string)$this->getPost('landline'));
+            $form->qq = trim((string)$this->getPost('qq'));
+            $form->weixin = trim((string)$this->getPost('weixin'));
+            
+            $form->is_phone = (int)$this->getPost('is_phone');
+            $form->is_landline = (int)$this->getPost('is_landline');
+            $form->is_qq = (int)$this->getPost('is_qq');
+            $form->is_weixin = (int)$this->getPost('is_weixin');
+            
+            $form->scope = (array)$this->getPost('scope');
+            //$form->scope = (int)$this->getPost('scope');
+               
+            if($form->validateYellowInfo()){    //表单验证后台 成功
+                $model = ClassLoad::Only('Personal');   /* @var $model Personal */
+                    if($info = $model->updateYellowInfo($form)){
+                        $this->jsonOutput(0,$info);
+                    }else{
+                        $this->jsonOutput(2,'黄页设置失败!!');
+                    }                
+            }else{
+                $this->jsonOutput(1,  $this->getFormError($form));
+            }
+        }
+        /**
+	 * 商家供需列表
+	 *@param		int			apt			APP抛数据的时间
+	 *@param		int			page			分页的页码
+	 *@param		int			type			列表的类型(1:供应列表；2:需求列表)
+	 */
+	public function actionMerSupply()
+	{
+		$form = ClassLoad::Only('PersonForm');/* @var $form PersonForm */
+		$form->apt = (int)$this->getPost('apt');
+		$form->type = (int)$this->getPost('type');
+		$form->page = (int)$this->getPost('page');
+		$merchant_id = (int)$this->getPost('merchant_id');
+		if($form->validatorMerSup())
+		{
+			$_p = $this->getPost('page');
+			$model = ClassLoad::Only('Personal');/* @var $model Personal */
+			$page = ClassLoad::Only ( 'CPagination' ); /* @var $page CPagination */
+			$page->pageSize = 6;
+			$page->setCurrentPage ( $_p > 0 ? ($_p - 1) : 0 );
+			$page->setItemCount($model->getMerCount($form));
+			
+			if($info = $model->getMerSup($form, $page, $_p,$merchant_id))
+			{
+				$this->jsonOutput(0,$info);
+			}else{
+				$this->jsonOutput(2,'未找到数据!');
+			}
+		}
+		$this->jsonOutput(1,$this->getFormError($form));
+	}  
+}

@@ -1,0 +1,13 @@
+	<!---------- 编辑收货地址 ---------->
+	<fieldset class="form-list">
+		<legend>编辑收货地址</legend>
+		<form>
+			<ul>
+				<li><input type="password" class="tbox" placeholder="请输入旧密码"></li>
+				<li><input type="password" class="tbox" placeholder="请输入新密码"></li>
+				<li><input type="password" class="tbox" placeholder="确认新密码"></li>
+			</ul>
+		</form>
+	</fieldset>
+	<a class="btn-1 sm-mlr" href="#">确定</a>
+	<div class="h40px"></div>

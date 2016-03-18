@@ -1,0 +1,69 @@
+<style type="text/css">
+	.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+	table{width:100%;border-collapse:collapse}
+	td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">积分商城模块 - 商品详情</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">credits.info</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">谭甜</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>发起时间</td>
+		</tr>
+		<tr>
+			<td>id</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>商品id</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "2319594324004b25f29ac0e74f9cf57a",	# 随机码 , 在下一次请求中传递回来
+    "message": [],
+	"data": {
+		"id": "9",													#商品id
+		"class_one_id": "6",												#商品一级分类id
+		"class_two_id": "219",												#商品二级分类id
+		"class_three_id": "221",											#商品三级分类id
+		"brand_id": "52",												#品牌id
+		"goods_num": "CP2459741094242",											#商品货号
+		"stock": "-999",												#库存（-999表示无限库存）
+		"weight": "0.15",												#重量
+		"points": "1999",												#需要积分
+		"title": "得力(deli)9810笔筒文具套装礼盒 粉色/蓝色 颜色随机",							#商品名称
+		"cover": "/points/2016/02-25/0/40879358308715628801456384962.5773.jpg",						#商品主图
+		"content": "的发生的方法是胜多负少",										#商品详情
+		"args": "[]",													#商品参数
+		"attrs": "{\"attrs\":[],\"attrVal\":[]}",									#商品属性
+		"shelf_time": "0",												#上架时间
+		"sales": "1",													#销量
+		"person": "1",													#个人会员可兑换
+		"merchant": "1",												#商家会员可兑换
+		"company": "1",													#企业会员可兑换
+		"remark": "                    文具套装                ",							#备注
+	}
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

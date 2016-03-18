@@ -1,0 +1,45 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">全局说明</div>
+	<div class="a">API中所有的时间都传时间戳 , 所有的时间戳精确到秒 , 而非毫秒.</div>
+	<div class="a">所有的传递的页码 , 如果没有特殊说明 , 都是从1开始的</div>
+	<div class="a">测试地址 http://192.168.0.240/merApi/请求位置</div>
+	<div class="a">线上地址 http://merApi.ebangon.com/请求位置</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px"><span class="red">系统参数</span></td>
+			<td colspan="2">通过 POST 传递 (注意,除开明确表示不需要 <span class="red">系统参数</span> 的API接口 , 其他的都必须传递 <span class="red">系统参数</span>)</td>
+		</tr>
+		<tr>
+			<td>S_APISID</td>
+			<td>会话ID</td>
+			<td>由PHP后台 生成</td>
+		</tr>
+		<tr>
+			<td>S_TOKEN</td>
+			<td>每一次请求的随机码(32位)</td>
+			<td rowspan="3">App生成的数据</td>
+		</tr>
+		<tr>
+			<td>S_VECODE</td>
+			<td>数据验证码(32位)</td>
+		</tr>
+		<tr>
+			<td>S_VERSIONS</td>
+			<td>APP的版本号(由APP决定)</td>
+		</tr>
+	</table>
+	<div class="a">所有的普通信息请求都是post</div>
+	<div class="a">所有的返回都是 JSON 格式  , 全局设置都是统一的</div>
+<pre>
+{
+	"code" : 0,			# 错误码 ( 0=正确 , !== 0 错误)
+	"message":"",			# 如果错误码不等于0 , 这里会输出错误信息 (如果多条数据 , 用###分割)
+	"data":[]			# 在错误码等于0的情况下 , 如果有返回值 , 则包含在data中 (如果没有返回值 , 默认 null)
+}
+</pre>
+</div>

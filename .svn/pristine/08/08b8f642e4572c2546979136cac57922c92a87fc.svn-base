@@ -1,0 +1,131 @@
+// ============================================================ 发送验证码
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	angularAMD.directive('sendCode',function($timeout){
+		return {
+			restrict : 'E',
+			replace : true,
+			template : '<ul><li><input class="tbox" name="tel" type="tel" placeholder="请输入新手机号码" ng-disabled="!check" ng-model="tel" required ng-pattern="/^((((13[0-9]{1})|(15[0-9]{1}))|(18[0-9]{1}))+[0-9]{8})$/"></li>\
+						<li ng-show="!aForm.tel.$invalid">\
+							<input class="tbox" name="telImgCode" type="number" placeholder="请输入图片验证码" ng-class="{error:isImgCode===false}" ng-disabled="!check" ng-model="telImgCode" required ng-minlength="6" ng-maxlength="6">\
+							<a class="img-code" href="javascript:;"><img ng-hide="!check" ng-src="{{vifery.imgCodePath}}" ng-click="vifery.changeImgCode()"></a>\
+						</li>\
+						<li>\
+							<input class="tbox" type="number" placeholder="请输入验证码" ng-class="{error:isTelCode===false}" ng-disabled="aForm.tel.$invalid || !check || !codeDisabled" ng-model="telCode" required ng-pattern="/^[0-9]{6}$/">\
+							<a class="btn-send" href="javascript:;" ng-disabled="!check || !isImgCode" ng-click="vifery.sendTelCode(true)">发送验证码</a>\
+						</li><ul>',
+			link : function(scope,elem,attr){
+				var $this = angular.element(document.querySelector('.btn-send'));
+				if(attr.check !== ''){
+					scope.check = true;
+				}
+				var atime = 60;
+				var time = atime;
+				
+				var clear;
+				scope.timeOver = true;	// 时间是结束
+				scope.hasReg = false;   // 是否已结注册
+				// ============================== 清除倒计时，复原按扭 ==============================
+				scope.change = function(){
+					if(scope.check === false){
+						clearInterval(clear);
+						time = atime;
+						$this.html('重新获取验证码').removeClass('sending');
+					}
+				}
+				// ============================== 点击倒计时 ==============================
+				$this.on('touchstart mousedown',function(){ // touchstart
+					scope.codeDisabled = true;	// 禁用短信验证码框
+					// ============================== 判断是否禁用
+					if($this.attr('disabled') === 'disabled') return;
+					if($this.hasClass('sending')){
+						scope.timeOver = false;
+						return;
+					}
+					// ============================== 发送验证码效果
+					$this.addClass('sending').html('<b>'+ time +'</b> <span>秒后可重新获取验证码</span>');
+					clear = setInterval(function(){
+						scope.timeOver = true;
+						if(scope.hasReg) {time = 0};
+						time--;
+						if(time<0){
+							clearInterval(clear);
+							var txt = scope.hasReg ? '获取验证码' : '重新获取验证码'
+							$this.html(txt).removeClass('sending');
+							time = atime;
+							scope.$apply(function(){
+								scope.timeOver = true;
+							})
+						};
+						$this.find('b').text(time);
+					},1000);
+				})
+			},
+			controller : function($scope,$ajax){
+				$scope.checkCode = function(){
+					if($scope.vcode !== $scope.telCode){
+						$scope.promt('验证码输入有误');
+					}
+				}
+				// 验证图片验证码是否正确
+				$scope.$watch('telImgCode',function(newVal,oldVal){
+					if(newVal !== oldVal && newVal !== undefined){
+						$ajax.post(E.API.viferyImgCode,{type:1,code:newVal},function(data){
+							if(data.code === 0){
+								$scope.isImgCode = true;
+							}else{
+								$scope.promt('数字验证码输入错误！');
+								$scope.isImgCode = false; // 禁用数字验证按钮
+							}
+						})
+					}
+				})
+				// 验证手机验证码是否正确
+				$scope.$watch('telCode',function(newVal,oldVal){
+					if(newVal !== oldVal && newVal !== undefined){
+						$ajax.post(E.API.viferySmsCode,{type:1,phone:$scope.tel,code:newVal},function(data){
+							if(data.code === 0){
+								$scope.isTelCode = true;
+							}else{
+								$scope.promt('手机验证码输入错误！');
+								$scope.isTelCode = false; // 禁用电话验证按钮
+							}
+						})
+					}
+				})
+				
+				// 图片验证
+				$scope.vifery = {
+					imgCodePath : E.path + E.API.imgCode + '?type=1&_=',
+					changeImgCode : function(){	// 切换图片验证码
+						this.imgCodePath +=  Math.random();
+						if($scope.telImgCode !== undefined && $scope.telImgCode !== ''){
+							$scope.isImgCode = false; // 禁用数字验证按钮
+							$scope.isTelCode = false; // 禁用电话验证按钮
+							$scope.codeDisabled = false;
+							$scope.telCode = '';
+							$scope.hasReg = true;
+						}
+					},
+					sendTelCode : function(){ // 发送手机验证码
+						if($scope.timeOver){
+							$ajax.post(E.API.sendSmsCode,{type:1,phone:$scope.tel,test:1},function(data){
+								if(data.message[0] === '此手机号码已注册!'){
+									$scope.promt('此手机号码已注册');
+									$scope.hasReg = true;
+								}else{
+									$scope.hasReg = false;
+									console.log(data.data.vcode)
+									if(data.data.vcode !== $scope.telCode && $scope.telCode !=="" && $scope.telCode !== undefined){
+										$scope.promt('手机验证码输入错误！');
+									  	$scope.isTelCode = false; // 禁用验证按钮
+									}
+								}
+							})
+						}
+					}
+				}
+			}
+		}
+	})
+})

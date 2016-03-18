@@ -1,0 +1,69 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">通讯录 - 通讯录列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">contactsBook.scopeBusiness</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">谭甜</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+	{
+		"code": 0,
+		"message": "",
+		"data": [
+			{
+				"id": 5,
+				"title": "手机"
+			},
+			{
+				"id": 6,
+				"title": "手机配件"
+			},
+			{
+				"id": 7,
+				"title": "电脑"
+			},
+			{
+				"id": 8,
+				"title": "电脑配件"
+			},
+			{
+				"id": 9,
+				"title": "办公用品"
+			},
+			{
+				"id": 11,
+				"title": "电脑耗材"
+			},
+			{
+				"id": 12,
+				"title": "办公耗材"
+			},
+			{
+				"id": 13,
+				"title": "测试"
+			}
+		]
+	}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>

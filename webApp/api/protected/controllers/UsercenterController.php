@@ -107,7 +107,8 @@ class UsercenterController extends WebApiController{
     public function actionMyAddress()
     {
         $usercenter_model = ClassLoad::Only('Usercenter');  /* @var $usercenter_model Usercenter */
-        if($info = $usercenter_model->getMyAddress()){
+        $id = (int)  $this->getPost('id',0);
+        if($info = $usercenter_model->getMyAddress($id)){
             $this->jsonOutput(0, $info);
         }else{
             $this->jsonOutput(2, "未找到数据");
@@ -130,16 +131,24 @@ class UsercenterController extends WebApiController{
        
         $address_form_model->dict_three_id = (int)$this->getPost('dict_three_id');
         $address_form_model->is_default = (int)$this->getPost('is_default');
+        $address_model = ClassLoad::Only('Usercenter');  /* @var $address_model Usercenter */
         
-        if($address_form_model->validateAddress()){   //表单验证通过的时候
-            $address_model = ClassLoad::Only('Usercenter');  /* @var $address_model Usercenter */
+        if($address_form_model->id!=0){ //执行修改
             if($info = $address_model->setAddress($address_form_model)){
-                $this->jsonOutput(0, $info);
+                $this->jsonOutput(0,$info);
             }else{
-                $this->jsonOutput(2, "地址添加失败");
+                $this->jsonOutput(2,"更新收货地址失败!!!");
             }
-        }else{
-            $this->jsonOutput(1, $this->getFormError($address_form_model));
+        }else{  //执行添加
+            if($address_form_model->validateAddress()){   //表单验证通过的时候
+                if($info = $address_model->setAddress($address_form_model)){
+                    $this->jsonOutput(0, $info);
+                }else{
+                    $this->jsonOutput(2, "地址添加失败");
+                }
+            }else{
+                $this->jsonOutput(1, $this->getFormError($address_form_model));
+            }            
         }
     }
     /*
@@ -297,7 +306,25 @@ class UsercenterController extends WebApiController{
             $this->jsonOutput(2,"该手机已经绑定账户,请更换手机号码");
         }
     }
+    /*
+     * 验证 用户输入的 手机
+     */
     public function actionModifyPhone()
+    {
+        $form = ClassLoad::Only('ModifyPhoneForm'); /* @var $form ModifyPhoneForm */
+        $form->code = (int)  $this->getPost('code',0);  //短信验证码
+        $form->new_phone = $this->getPost('new_phone',0);  //短信验证码
+        $form->vxCode = (int)  $this->getPost('vxCode',0);  //图形验证码
+        if($form->validate()){  //同步 验证 图形验证码，短信验证码
+            $usercenter_model = ClassLoad::Only('Usercenter');  /* @var $usercenter_model Usercenter */
+            if($info = $usercenter_model->setPhone($form->new_phone))
+                $this->jsonOutput (0,$info);
+            $this->jsonOutput(2,"更新账户失败!!");           
+        }else{
+            $this->jsonOutput(1,$form->getErrors());
+        }
+    }
+    public function actionModifyPhone_1()
     {
         $code = (int)  $this->getPost('code',0);
         $new_phone = trim($this->getPost('new_phone'));
@@ -307,15 +334,27 @@ class UsercenterController extends WebApiController{
         if($over_time>self::VALIDITYTIME){  //验证码 过期
             $this->jsonOutput(2,"验证码已过期");
         }else{  //执行更新 电话号码的操作
-            $session['verifyTime'] = time();
             if($_SESSION['msg'.$this->getUid()]['verCode']==$code){
-                $usercenter_model = ClassLoad::Only('Usercenter');  /* @var $usercenter_model Usercenter */;
+                $usercenter_model = ClassLoad::Only('Usercenter');  /* @var $usercenter_model Usercenter */
                 if($info = $usercenter_model->setPhone($new_phone))
                     $this->jsonOutput (0,$info);
                 $this->jsonOutput(2,"更新账户失败!!");
             }else{
                 $this->jsonOutput(1,"验证码不正确!!");
             }
+        }
+    }
+    
+    /*
+     * 获取所有的 地区
+     */
+    public function actionGetArea()
+    {
+        $usercenter_model = ClassLoad::Only('Usercenter');  /* @var $usercenter_model Usercenter */;
+        if($info = $usercenter_model->getAllArea()){
+            $this->jsonOutput(0,$info);
+        }else{
+            $this->jsonOutput(2,"未找到数据!!!");
         }
     }
 }

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="Keywords" content="<?php echo CHtml::encode($this->pageKeywords); ?>">
+<meta name="Description" content="<?php echo CHtml::encode($this->pageDescription); ?>">
+<link rel='shortcut icon' href='<?php echo Views::imgShow('images/favicon.ico'); ?>' type='image/x-icon' />
+<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+<?php Views::css(array('merchant'));Views::jquery();Views::js(array('html5')); ?>
+</head>
+<body>
+	<section class="header-nav">
+		<div>
+			<aside>
+				<span><?php echo CHtml::link('<em>e办公首页<b>.</b>电脑城在线</em>' , $this->createFrontUrl('home/index')); ?></span>
+				<i>|</i>
+				<span>欢迎来到e办公<b>.</b>电脑城在线</span>
+			</aside>
+			<nav>
+				<div class="s-wrap">
+					<h5><span><?php echo $this->viewsUserName; ?></span><s class="tr-b"><i></i><b></b></s></h5>
+					<dl>
+					<?php
+						echo '<dd>'.CHtml::link('我的首页' , $this->createUrl('home/index') , array('rel'=>'nofollow')).'</dd>';
+						echo '<dd>'.CHtml::link('商家中心' , $this->createUrl('order/index') , array('rel'=>'nofollow')).'</dd>';
+						echo '<dd>'.CHtml::link('商品管理' , $this->createUrl('goods/index') , array('rel'=>'nofollow')).'</dd>';
+						echo '<dd>'.CHtml::link('退出' , $this->createFrontUrl('home/logout') , array('rel'=>'nofollow')).'</dd>';
+					?>
+					</dl>
+				</div><i>|</i>
+				<span><?php echo CHtml::link('管理订单' , $this->createUrl('order/index') , array('rel'=>'nofollow')); ?></span><i>|</i>
+				<span><?php echo CHtml::link('企业采购' , $this->createFrontUrl('purchase/index') , array('rel'=>'nofollow')); ?></span><i>|</i>
+				<span><?php echo CHtml::link('e维修' , $this->createFrontUrl('maintain/index') , array('rel'=>'nofollow')); ?></span><i>|</i>
+				<span><?php echo CHtml::link('e配送' , $this->createFrontUrl('dispatching/index') , array('rel'=>'nofollow')); ?></span><i>|</i>
+				<span><?php echo CHtml::link('服务中心' , $this->createFrontUrl('service/index') , array('rel'=>'nofollow')); ?></span>
+			</nav>
+		</div>
+	</section>
+	<section class="header">
+		<div>
+			<h1 class="logo"><?php echo CHtml::link('<i>E办公</i>' , $this->createFrontUrl('home/index')); ?></h1><i></i>
+			<a href="<?php echo $this->createFrontUrl('cart/index'); ?>">
+				<div class="shopping-cart-btn">
+					<b></b><span>我的购物车</span><i>&gt;</i>
+					<?php echo '<em id="cartCount"'.($this->viewsCartCount>0?'':'style="display:none"').'>'.$this->viewsCartCount.'</em>'; ?>
+				</div>
+			</a>
+			<?php
+				$this->beginWidget('CActiveForm', array('action'=>$this->createFrontUrl('class/search'),'method'=>'get','htmlOptions'=>array('class'=>'search-wrap')));
+				echo CHtml::textField ('keyword' , '' , array('class' => 'tbox38'));
+				echo CHtml::submitButton('搜索' , array('name'=>null));
+				$this->endWidget();
+			?>
+		</div>
+	</section>
+	<section class="nav-wrap nav-fold">
+		<div>
+			<aside>
+				<h2><span>全部商品分类</span><s class="tr-t"><i></i><b></b></s></h2>
+				<?php echo GlobalGoodsClass::getHtmlCode(false); ?>
+			</aside>
+			<nav>
+			<?php
+				echo CHtml::link('商品首页' , $this->createFrontUrl('class/index'),array('target'=>'_blank')).'<i></i>';
+				echo CHtml::link('e办公专区' , $this->createFrontUrl('class/self'),array('target'=>'_blank')).'<i></i>';
+				echo CHtml::link('企业采购' , $this->createFrontUrl('purchase/index'),array('target'=>'_blank')).'<i></i>';
+				echo '<div><h6>'.CHtml::link('逛一逛' , $this->createFrontUrl('stroll/index'),array('target'=>'_blank'));
+				echo '<b class="t-b"></b></h6><nav>';
+				foreach (GlobalGather::getGatherFirst() as $gk => $gt)
+					echo CHtml::link($gt , $this->createFrontUrl('stroll/index' , array('g'=>$gk)));
+				echo '</nav></div><i></i>';
+				echo CHtml::link('积分商城' , $this->createFrontUrl('credits/index'),array('target'=>'_blank')).'<i></i>';
+				echo CHtml::link('二手市场' , $this->createFrontUrl('used/index'),array('target'=>'_blank'));
+			?>
+			</nav>
+		</div>
+	</section>
+	<!-- header end -->
+	<?php 
+		$merchantId = $this->getMerchantID();
+		$user = $this->getUser();
+		$merchanData = ClassLoad::Only('User')->getMerchantInfo($merchantId);
+	?>
+	<section class="merchant-banner">
+		<div>
+			<section style="height: 155px;margin-top: -70px;">
+				<figure style="margin-top:13px"><img src="<?php echo Views::imgShow(empty($merchanData['store_avatar']) ? 'images/default-face.jpg' : $merchanData['store_avatar']);?>" width="120" height="120"></figure>
+				<article>
+					<header><h2><?php echo $merchanData['store_name']; ?></h2><i></i><i></i><i></i><i></i></header>
+					<p>
+						<span>我的积分：<?php echo $user['fraction']; ?>分</span><i>|</i>
+						<span><?php echo CHtml::link('店铺设置' , $this->createUrl('myStore/index'));?></span><i>|</i>
+						<span><?php echo CHtml::link('查看店铺' , $this->createFrontUrl('store/index', array('mid'=>$merchanData['uid'])), array('target'=>'_blank'));?></span>
+					</p>
+					<p><span>我的保证金：<?php echo $merchanData['mer_ensure_money']; ?></span><i>|</i><span>我的联系方式：<?php echo $merchanData['store_tel']; ?></span></p>
+					<div class="growth" style="margin-top:5px">
+						<span>成长值</span>
+						<dl><dd style="width:<?php echo GlobalUser::getExpRatio($user['user_type'] , (int)$user['exp']); ?>"></dd></dl>
+						<i><?php echo $user['exp']; ?></i>
+					</div>
+					<p style="margin-top:3px">
+						<span><?php echo CHtml::link('我的推荐码' , $this->createUrl('myRecommend/index'));?></span>
+						<i>|</i>
+						<span style="margin-right: 20px">我的提现：￥<?php echo $user['money']; ?></span>
+						<?php echo CHtml::link('提现' , $this->createUrl('myWithdrawal/showWithdrawal'),array('class'=>'btn-1 btn-1-8',"style"=>"margin-top:5px"));?>
+					</p>
+				</article>
+			</section>
+			<aside>
+				<?php echo CHtml::link('<i class="l-ico-1"></i><span>修改登录密码</span>' , $this->createFrontUrl('merchant/editPassword'),array('style'=>'width:85px'));?>
+			</aside>
+		</div>
+	</section>
+	<main>
+		<?php if ($this->showLeftNav): ?>
+		<!-- subnav start -->
+		<nav class="merchant-subnav">
+			<ul id="merchantSubNav">
+				<li <?php if($this->leftNavType == 'home'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="ico-home"></b></i><span>店铺首页</span>' , $this->createUrl('home/index'));?>
+				</li>
+				<li <?php if($this->leftNavType == 'order'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="m-ico-1"></b></i><span>订单管理</span>' , $this->createUrl('order/index'));?>
+				</li>
+				<li <?php echo ($this->leftNavType == 'goods') ? 'class="current"' : ''; ?>>
+				<?php
+					echo CHtml::link('<i><b class="m-ico-2"></b></i><span>商品管理</span>' , null);
+					echo '<nav '.($this->leftNavType == 'goods' ? 'style="display:block"' : '').'>';
+					echo CHtml::link('所有商品' , $this->createUrl('goods/index') , Views::linkClass('goods' , array('index','modify','show','seo')));
+					echo CHtml::link('添加商品' , $this->createUrl('goods/create'), Views::linkClass('goods' , 'create'));
+					echo CHtml::link('复制商品' , $this->createUrl('goods/copy'), Views::linkClass('goods' , array('copy','copyShow','copyExec'))) . '</nav>';
+				?>
+				</li>
+				<li <?php if($this->leftNavType == 'store'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="m-ico-4"></b></i><span>店铺管理</span>' , $this->createUrl('myStore/index'));?>
+				</li>
+				<li <?php if($this->leftNavType == 'comment'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="m-ico-1"></b></i><span>评论管理</span>' , $this->createUrl('comment/index'));?>
+				</li>
+				<li <?php if($this->leftNavType == 'purchase'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="m-ico-5"></b></i><span>集采管理</span>' , $this->createUrl('purchase/index'));?>
+				</li>
+
+				<li <?php if($this->leftNavType == 'usedGoods.list'||$this->leftNavType == 'usedGoods.create'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="m-ico-6"></b></i><span>二手商品</span>' , 'javascript:;');?>
+					<?php
+						echo '<nav '.($this->leftNavType == 'usedGoods.list'||$this->leftNavType == 'usedGoods.create' ? 'style="display:block"' : '').'>';
+						echo CHtml::link('进入二手市场' , $this->createFrontUrl('used/index'));
+						echo CHtml::link('我的二手商品' , $this->createUrl('usedGoods/list'),$this->leftNavType == 'usedGoods.list'?array('class'=>'current'):'');
+						echo CHtml::link('添加二手商品' , $this->createUrl('usedGoods/create'),$this->leftNavType == 'usedGoods.create'?array('class'=>'current'):'');
+					?>
+					</nav>
+				</li>
+				<li <?php if($this->leftNavType == 'exchange'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="c-ico-6"></b></i><span>我的兑换</span>' , $this->createUrl('myExchange/index'));?>
+				</li>
+				<li <?php if($this->leftNavType == 'withdrawal'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="c-ico-9"></b></i><span>提现记录</span>' , $this->createUrl('myWithdrawal/index'));?>
+				</li>
+				<li <?php if($this->leftNavType == 'commission'):?>class="current"<?php endif;?>>
+					<?php echo CHtml::link('<i><b class="c-ico-11"></b></i><span>推荐提成</span>' , $this->createUrl('commission/index'));?>
+				</li>
+			</ul>
+		</nav>
+		<?php endif; ?>
+		<?php echo $content; ?>
+	</main>
+
+	<footer class="footer">
+		<div>
+			<section>
+				<h5>联系我们</h5>
+				<p>4000-456-423</p>
+				<a class="ico-qq" rel="external nofollow" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2944775460&site=qq&menu=yes"><i></i></a>
+				<a class="ico-sina" rel="external nofollow" href="http://weibo.com/ebangong?is_all=1" target="_wb"><i></i></a>
+			</section>
+			<?php echo GlobalContent::getHtmlFooterList(); ?>
+			<aside>
+				<i></i>
+				<span>关注我们</span>
+			</aside>
+		</div>
+		<footer>Copyright © 成都东鼎泰兴网络科技有限公司 All Rights Reserved - 蜀ICP备15027731号-2</footer>
+	</footer>
+<script>
+$.fn.navSlide = function(){
+	$(this).click(function(){
+		if($(this).parent().hasClass('default')) return false;
+		if($(this).next().css('display') === 'none'){
+			$(this).addClass('current').parent().addClass('current').siblings().removeClass('current')
+		}
+		$(this).next().slideToggle()
+	})
+}
+$('#merchantSubNav li > a').navSlide();
+</script>	
+</body>
+</html>

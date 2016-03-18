@@ -1,0 +1,63 @@
+<?php
+/**
+ * 
+ * @author 18385 yp
+ *
+ */
+class RecommForm extends WebForm
+{
+	public $start_time,$end_time,$ordersn,$keyword,$key,$realname;
+	/**
+	 *
+	 * @return array 设置访问规则
+	 */
+	public function rules()
+	{
+		return array(
+			array('key,keyword','checkPhone'),
+			array('start_time,end_time','checkTime'),
+		);
+	}
+	
+	
+	//检查输入的手机号码格式
+	public function checkPhone(){
+		if($this->key){
+			if(empty($this->keyword)){
+				$this->addError('keyword','请输入搜索关键字');
+			}
+			
+		}
+		if($this->keyword){
+			if(empty($this->key)){
+				$this->addError('key','请选择搜索关键词');
+			}
+		}
+	}
+	
+	public function checkTime(){
+		if($this->start_time){
+			$start = strtotime($this->start_time);
+			if($start > time()){
+				$this->addError('start_time','开始时间不得大于当前时间');
+			}
+			
+		}
+		if($this->end_time){
+			$end   = strtotime($this->end_time);
+			if($end > time()){
+				$this->addError('end_time','结束时间不得大于当前时间');
+			}
+		}
+		
+		if($this->start_time && $this->end_time){
+			if($end <= $start){
+				$this->addError('end_time,start_time','开始时间不得大于结束时间');
+			}
+		}
+		
+	}
+	
+	
+
+}

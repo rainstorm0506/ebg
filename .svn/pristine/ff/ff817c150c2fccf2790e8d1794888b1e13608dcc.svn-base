@@ -1,0 +1,45 @@
+	<!-- 商品列表 -->
+	<ul class="goods-list goods-list-1" ng-if="isGoodsListAll === true">
+		<li>
+			<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/09.png"></a><i>自营</i></figure>
+			<h6><a ui-sref="detail">2015 Apple/12 英MacBook</a></h6>
+			<p><span>¥ 2788.00</span></p>
+			<footer>
+				<a href="javascript:;">赞11</a>
+				<a class="share-small" href="javascript:;"><i></i><span>分享</span></a>
+			</footer>
+		</li>
+	</ul>
+	<!-- 积分列表 -->
+	<ul class="goods-list" ng-if="isIntegral === true">
+		<li ng-repeat="obj in data" class="animated" ng-class="{zoomIn:true}">
+			<figure><a ui-sref="integralDetail({id:obj.id})"><img ng-src="{{obj.cover}}"></a></figure>
+			<h6><a ui-sref="integralDetail({id:obj.id})" ng-bind="title"></a></h6>
+			<p class="txt-1"><x ng-bind="obj.sales"></x>人已兑换</p>
+			<div class="txt-2"><x ng-bind="obj.points"></x>积分 企业用户兑换</div>
+		</li>
+	</ul>
+	
+	<!-- 二手商品列表 -->
+	<ul class="goods-list" ng-if="isGoodsList === true">
+		<li ng-repeat="obj in data" class="animated" ng-class="{zoomIn:true}">
+			<figure ng-switch on="obj.is_self">
+				<a ui-sref="secondDetail({id:obj.id})"><img ng-src="{{obj.cover}}"></a>
+				<i ng-switch-when="1">自营</i>
+			</figure>
+			<h6><a ui-sref="secondDetail({id:obj.id})" ng-bind="obj.title"></a></h6>
+			<p><span>¥ <x ng-bind="obj.sale_price"></x></span><em><x ng-bind="obj.collect"></x>人收藏</em></p>
+		</li>
+	</ul>
+	
+	<!-- 店铺商品 -->
+	<ul class="goods-list" ng-if="isStoreList === true">
+		<li>
+			<figure><a href="index.html#/detail"><img ng-src="{{imgPath}}/temp/09.png"></a><i>自营</i></figure>
+			<h6><a href="index.html#/detail">2015 Apple/12 英MacBook</a></h6>
+			<p><span>¥ 2788.00</span><em>销量30件</em></p>
+		</li>
+	</ul>
+	
+	<a class="refresh css3" href="javascript:;"><span>点击刷新</span><i></i></a>
+	<div class="h40px"></div>

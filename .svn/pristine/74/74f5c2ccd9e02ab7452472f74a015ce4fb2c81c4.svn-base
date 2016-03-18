@@ -1,0 +1,58 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">二手商品模块 - 二手商品成色</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">used.useTime</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">谭甜</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": [
+        {
+            "id": 100,
+            "title": "全新"
+        },
+        {
+            "id": 95,
+            "title": "95成新"
+        },
+        {
+            "id": 90,
+            "title": "9成新"
+        },
+        {
+            "id": 85,
+            "title": "85成新"
+        },
+        {
+            "id": 80,
+            "title": "8成新"
+        },
+        {
+            "id": 70,
+            "title": "7成及以下"
+        }
+    ]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

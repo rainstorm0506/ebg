@@ -1,0 +1,22 @@
+// ============================================================ 搜索模块指令
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	angularAMD.directive('headerPublic',function(){
+		return{
+			restrict : 'E',
+			replace : true,
+			template : '<header class="header"><a href="javascript:window.history.go(-1);"><s class="tr-l"><i></i><b></b></s></a>\
+							<h1 ng-bind="title | fTitle">e办公移动平台</h1>\
+						</header>',
+			link : function(scope,elem,attr){
+				
+			}
+		}
+	})
+	angularAMD.filter('fTitle',function(){
+		return function(name){
+			if(name)
+				return name.replace(title,'');
+		}
+	})
+})

@@ -1,0 +1,209 @@
+<?php
+	/**
+	 * 企业会员-模型
+	 *
+	 * @table user_company
+	 *
+	 * @author 夏勇高
+	 */
+	class Company extends SModels {
+		
+		/**
+		 * 根据 关键词 搜索 企业
+		 * @param		string		$keyword		搜索关键词
+		 * @param		int			$rows			查询条数
+		 *
+		 * @author		邱龙军
+		 */
+		public function searchKeyword($keyword , $rows = 10)
+		{
+			$keyword = $this->quoteLikeValue($keyword);
+		
+			return $this->queryAll("
+					SELECT uid,com_name,com_property
+					FROM user_company
+					WHERE com_name LIKE {$keyword} OR uid = ".(int)$keyword."
+			LIMIT 0,{$rows}
+			");
+		}
+		
+		/**
+		 * 获取企业集采订单信息
+		 */
+		public function getPurchases($comuid)
+		{
+			$SQL="SELECT o.id,o.create_time,o.user_id,o.link_man,o.phone,o.price_endtime,
+					CASE o.is_closed WHEN 0 THEN '未拆分' WHEN 1 THEN '正在报价' WHEN 3 THEN '结束报价' ELSE '' END AS state
+				FROM purchase_order o WHERE o.user_id={$comuid}";
+			return $this->queryAll($SQL);
+		}
+		
+		/**
+		 * 添加企业会员
+		 */
+		public function create(array $post)
+		{
+			// 事务操作
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$phone = trim($post['phone']);
+				$reCode = trim($post['re_code']);
+				$reUid = GlobalUser::getReUid($reCode);
+				
+				$this->insert("user", array(
+					'source'		=>	1,
+					'user_type'		=>	2,
+					'phone'			=>	$phone,
+					'user_code'		=>	$phone,
+					're_code'		=> $reCode,
+					're_uid'		=> $reUid,
+					'reg_time'		=>	time(), 
+					'nickname'		=> trim($post['nickname']),
+					'password'		=> GlobalUser::hashPassword($post['password']),
+					'face'			=> $this->getPhotos(empty($post['face'])?'':$post['face'] , 'company'),
+					'status_id'		=>	613,
+					'last_time'		=>	0
+				));
+				$uid = $this->getInsertId();
+			
+				$this->insert('user_company', array(
+					'uid'					=> $uid,
+					'com_name'				=> $post['com_name'],
+					'com_address'			=> $post['com_address'],
+					'com_num'				=> $post['com_num'],
+					'dict_one_id'			=> $post['dict_one_id'],
+					'dict_two_id'			=> $post['dict_two_id'],
+					'dict_three_id'			=> $post['dict_three_id'],
+					'com_property'			=> $post['com_property'],
+					'com_license'			=> $this->getPhotos(empty($post['com_license'])?'':$post['com_license'] , 'company'),
+					'com_tax'				=> $this->getPhotos(empty($post['com_tax'])?'':$post['com_tax'] , 'company'),
+					'com_org'				=> $this->getPhotos(empty($post['com_org'])?'':$post['com_org'] , 'company'),
+					'com_license_timeout'	=> strtotime($post['com_license_timeout']),
+				));
+			
+				$transaction->commit();
+				return $uid;
+			}catch(Exception $e){
+				$transaction->rollback();
+			}
+			return false;
+		}
+
+		/**
+		 * 删除企业会员
+		 */
+		public function clear($uid) {
+			// 事务操作
+			$db=Yii::app()->db;
+			$tran=$db->beginTransaction();
+			try{
+				
+				$this->delete('user', "id={$uid}");
+				$this->delete('user_company', "uid={$uid}");
+
+				$tran->commit();
+			}catch(Exception $e){
+				$tran->rollback();
+			}
+		}
+
+		/**
+		 * 修改企业会员
+		 */
+		public function modify($post, $uid)
+		{
+			$uData					= array();
+			$uData['face']			= $this->getPhotos(empty($post['face'])?'':$post['face'] , 'company');
+			$uData['nickname']		= trim($post['nickname']);
+			if(trim($post['password']) != '')
+				$uData['password']	= GlobalUser::hashPassword($post['password']);
+			
+			$ary = array();
+			$ary['com_name']				= $post['com_name'];
+			$ary['dict_one_id']				= $post['dict_one_id'];
+			$ary['dict_two_id']				= $post['dict_two_id'];
+			$ary['dict_three_id']			= $post['dict_three_id'];
+			$ary['com_address']				= $post['com_address'];
+			$ary['com_num']					= $post['com_num'];
+			$ary['com_property']			= $post['com_property'];
+			$ary['com_license']				= $this->getPhotos(empty($post['com_license'])?'':$post['com_license'] , 'company');
+			$ary['com_tax']					= $this->getPhotos(empty($post['com_tax'])?'':$post['com_tax'] , 'company');
+			$ary['com_org']					= $this->getPhotos(empty($post['com_org'])?'':$post['com_org'] , 'company');
+			$ary['com_license_timeout']		= strtotime($post['com_license_timeout']);
+			
+			// 事务操作
+			$transaction = Yii::app()->getDb()->beginTransaction();
+			try
+			{
+				$this->update('user', $uData, "id={$uid}");
+				$this->update('user_company', $ary, "uid={$uid}");
+				
+				$transaction->commit();
+				return true;
+			}catch(Exception $e){
+				$transaction->rollback();
+			}
+			return false;
+		}
+
+		/**
+		 * 按ID获取企业会员信息
+		 */
+		public function getInfo($id) {
+			$id = (int)$id;
+			$info = array();
+			if ($id) {
+				$sql = "SELECT * FROM user_company WHERE uid={$id}";
+				$info = Yii::app() -> getDb() -> createCommand($sql) -> queryRow(true, array());
+			}
+			return $info;
+		}
+
+		/**
+		 * 根据关键字查询企业会员信息列表
+		 * @param      string      $keyword    搜索关键字
+		 * @param       int         $offset     偏移量
+		 * @param       int         $rows       读取条数
+		 * @param       int         $total      总行数
+		 * @return      array
+		 */
+		public function getCompanyList($keyword, $offset, $rows, $total) {
+			if (!$total || $offset>=$total)
+				return array();
+	
+			$SQL = 'SELECT * FROM `user` u INNER JOIN user_company c ON u.id = c.uid WHERE u.user_type=2';
+			if ($keyword)
+			{
+				$keyword = $this->quoteLikeValue($keyword);
+				$SQL .= " AND (u.phone LIKE {$keyword} OR u.nickname LIKE {$keyword} OR c.com_name LIKE {$keyword})";
+			}
+			$SQL .= " ORDER BY u.reg_time DESC LIMIT {$offset},{$rows}";
+			return $this->queryAll($SQL);
+		}
+
+		/**
+		 * 统计商家会员记录数
+		 */
+		public function countCompany($keyword) {
+			$sql = "SELECT COUNT(*) FROM `user` u INNER JOIN user_company c ON u.id = c.uid WHERE u.user_type=2";
+			if ($keyword) {
+				$keyword = $this->quoteLikeValue($keyword);
+				$sql .= " AND (u.phone LIKE {$keyword} OR u.nickname LIKE {$keyword} OR c.com_name LIKE {$keyword})";
+			}
+			return (int)$this -> queryScalar($sql);
+		}
+
+		/**
+		 * 检测公司名称是否重名
+		 * @param   $comName  String    公司名称
+		 */
+		public function checkComName($comName, $id) {
+			if (!$comName)
+				return false;
+
+			$SQL = $id ? "AND uid!={$id}" : '';
+			return (boolean)$this -> queryRow("SELECT uid FROM user_company WHERE `com_name`={$this->quoteValue($comName)} {$SQL}");
+		}
+
+	}

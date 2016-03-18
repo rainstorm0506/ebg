@@ -1,0 +1,356 @@
+<?php
+	/**
+	 * 采购管理控制器
+	 *
+	 * @author 刘军军
+	 */
+	class PurchaseController extends SController
+	{
+		/**
+		 * is_split:0为拆分,1已经拆分
+		 * 查询采购单列表
+		 */
+		public function actionList()
+		{  
+// 			$this->checkUserPurview("m.l");
+			$post = array();
+			if(isset($_POST['PurchaseForm'])){
+				$post = $_POST['PurchaseForm'];
+			}
+			$is_split = $this->getQuery('is_split');
+			$model=ClassLoad::Only('Purchase');/* @var $model Purchase */
+			$page=ClassLoad::Only('CPagination');/* @var $page CPagination */
+			$page->pageVar='p';
+			$page->setItemCount($model->getCount($post,$is_split));
+			$page->pageSize = 30;
+			$this->render('list', array(
+				'searchPost' =>$post,
+				'page' =>$page,
+				'list' => $model->searchAllByCondition($post, $page->getOffset(), $page->getLimit(), $page->getItemCount(),$is_split))
+			);
+		}
+		
+		/**
+		 * 代企业发布
+		 **/
+		public function actionCreate()
+		{
+			//$this->checkUserPurview('m.m');
+			$form = ClassLoad::Only('PurchaseForm'); /* @var $form PurchaseForm */
+			$model = ClassLoad::Only('Purchase');/* @var $model Purchase */
+			$this->exitAjaxPost($form);
+			if (isset ( $_POST ['PurchaseForm'] )) {
+				$form->attributes = $_POST ['PurchaseForm'];
+				if ($form->validate ()) {
+					$lastid = $model->create ( $_POST ['PurchaseForm']);
+					$this->redirect ( array (
+							'purchase/list'
+					) );
+				}
+			}
+			$info = array();
+			$this->render ( 'create', array (
+					'form' => $form,
+					'info' => $info ,
+					'tree' => GlobalGoodsClass::getTree()
+			) );
+		}
+		
+		/** 
+		 * 拆分采购单 
+		 **/
+		public function actionEdit()
+		{
+			//$this->checkUserPurview('m.m');
+			$form = ClassLoad::Only('PurchaseForm'); /* @var $form PurchaseForm */
+			$model = ClassLoad::Only('Purchase');/* @var $model Purchase */
+			$this->exitAjaxPost($form);
+			if(!$id=(string)$this->getQuery('id', 0))
+				$this->error('错误的ID');
+			if(!$info=$model->getInfoActive($id))
+				$this->error('暂未发现次采购单信息');
+			if (strlen($info['file_data'])>0){
+				if(in_array(pathinfo($info['file_data'], PATHINFO_EXTENSION),array("gif","jpg","png","bmp","jpeg"))){
+					$info['is_img'] = 1;
+				}else{
+					$info['is_img'] = 2;
+				}
+			}else{
+				$info['is_img'] = 0;
+			}
+			if (strlen($info['file_data'])>1){
+					$info['imgs_data'] = array();
+					$info['file_down'] = array();
+					$files = json_decode($info['file_data']);
+					$info['is_img'] = 2;
+					foreach ($files as $key=>$row){
+					if(in_array(pathinfo($row, PATHINFO_EXTENSION),array("gif","jpg","png","bmp","jpeg"))){
+						$info['is_img'] = 1;
+						$info['file_img'][] = $row;
+						$info['file_down'][] = $row;
+					}else{
+						$info['file_down'][] = $row;
+					}
+				}
+			}else{
+				$info['is_img'] = 0;
+			}
+			if (isset ( $_POST ['PurchaseForm'] )) {
+				if(!json_decode($_POST ['PurchaseForm']['goods'],true)){
+					$this->error('请先拆分采购单');
+					$this->redirect ( array (
+							'purchase/edit',
+							'id'=>$info['id']
+					) );
+				}
+				$form->attributes = $_POST ['PurchaseForm'];
+				if ($form->validate ()) {
+					$model->modify ( $_POST ['PurchaseForm'],$id);
+					$this->redirect ( array (
+							'purchase/list' 
+					) );
+				}
+			}
+
+			$this->render ( 'edit', array (
+				'form' => $form,
+				'info' => $info ,
+				'tree' => GlobalGoodsClass::getTree()
+			) );
+		}
+		
+		/**
+		 * 采购单详情
+		 */
+		public function actionDetail()
+		{
+			//$this->checkUserPurview('m.m');
+		
+			$form = ClassLoad::Only('PurchaseForm'); /* @var $form PurchaseForm */
+			$model = ClassLoad::Only('Purchase');/* @var $model Purchase */
+			$this->exitAjaxPost($form);
+		
+			if(!$id=(string)$this->getQuery('id', 0))
+				$this->error('错误的ID');
+			if(!$info=$model->getInfoActive($id))
+				$this->error('暂未发现次采购单信息');
+			if (strlen($info['file_data'])>1){
+					$info['file_img'] = array();
+					$info['file_down'] = array();
+					$files = json_decode($info['file_data']);
+					$info['is_img'] = 2;
+					foreach ($files as $key=>$row){
+					if(in_array(pathinfo($row, PATHINFO_EXTENSION),array("gif","jpg","png","bmp","jpeg"))){
+						$info['is_img'] = 1;
+						$info['file_img'][] = $row;
+						$info['file_down'][] = $row;
+					}else{
+						$info['file_down'][] = $row;
+					}
+				}
+			}else{
+				$info['is_img'] = 0;
+			}
+			// 查询列表并 渲染试图
+			$this->render ( 'detail', array (
+					'form' => $form,
+					'goodinfo' => $info,
+					'tree' => GlobalGoodsClass::getTree()
+			) );
+		}
+		
+		/**
+		 * 当前商品推荐
+		 */
+		public function actionCrecom()
+		{
+			$model=ClassLoad::Only('Purchase');/* @var $model Purchase */
+			if(!$id = (string)$this->getQuery('id', 0))
+				$this->error('错误的商品id');
+			if(!$goodinfo = $model->getGoodsActive($id))
+				$this->error('无此商品信息');
+			$recom = $model->getRecomDetail($id,1);
+			$this->render('crecom', array(
+					'goodinfo' => $goodinfo,
+					'recom'    => $recom,
+					'id'       => $id
+			));
+		}
+		
+		/**
+		 * ajax 根据id相关分类推荐
+		 */
+		public function actionSearchById()
+		{
+			$model = ClassLoad::Only('Purchase');/* @var $model Purchase */
+			$p = (int)$this->getQuery('p', 1);
+			$id = (string)$this->getQuery('id', 1);
+			$pg_id = (int)$this->getQuery('pg_id', 1);
+			$count = 20;
+			$limit = "limit ".(($p - 1) * $count) . "," . $count;		
+			$info = $model->findGoods (false,$id, $limit ,$pg_id);
+
+			$sum = $model->getTotalNumber(false,$id);
+			$page_str = '';
+			if ($sum > $count) {
+				$page_str = $this->getPage ( $sum, $count, $p, $search = 'crecom' );
+			}
+
+			$data['goods'] = $info;
+			$data['page'] = $page_str;
+			$this->jsonOutput(0 , $data);
+		}
+		
+		/**
+		 * ajax 根据搜索内容查询相关商品
+		 */
+		public function actionSearchByKeyword()
+		{
+			$model = ClassLoad::Only('Purchase');/* @var $model Purchase */
+			$p = (int)$this->getQuery('p', 1);
+			$search=$this->getQuery('search', '');
+			$pg_id = (int)$this->getQuery('pg_id', 1);
+			$count = 20;
+			$limit = "limit ".(($p - 1) * $count) . "," . $count;
+			$info = $model->findGoods ($search,0, $limit,$pg_id);
+			$sum = $model->getTotalNumber($search,0);
+			$page_str = '';
+			if ($sum > $count) {
+				$page_str = $this->getPage ( $sum, $count, $p, $search = 'search' );
+			}
+			$data['goods'] = $info;
+			$data['page'] = $page_str;
+			$this->jsonOutput(0 , $data);
+		}
+		
+		/**
+		 * ajax 根据搜索内容查询相关商品
+		 */
+		public function actionRecomDetail()
+		{
+			$model = ClassLoad::Only('Purchase');/* @var $model Purchase */
+			if(!$id = (int)$this->getQuery('id', 0))
+				$this->error('错误的商品id');
+			if(!$goodinfo = $model->getRecomDetail($id,1))
+				$this->error('无此商品信息');
+			$this->render('recomDetail', array(
+					'goodinfo' => $goodinfo,
+			));
+		}
+		
+		
+		/**
+		 * ajax 商家报价详情
+		 */
+		public function actionOfferMerchant()
+		{
+			$model = ClassLoad::Only('Purchase');/* @var $model Purchase */
+			if(!$id = (int)$this->getQuery('id', 0))
+				$this->error('错误的商品id');
+			if(!$goodinfo = $model->getRecomDetail($id,2))
+				$this->error('无此商品信息');
+			$this->render('offerMerchant', array(
+					'goodinfo' => $goodinfo,
+					'tree' => GlobalGoodsClass::getTree()
+			));
+		}
+		
+		/**
+		 * 设置推荐
+		 */
+		public function actionAddrecom()
+		{	
+			$model = ClassLoad::Only('Purchase');/* @var $model Purchase */
+			if(!$id=(int)$this->getQuery('id', 0)){	
+				$this->jsonOutput(1 , $data=array('code'=>1,'mes'=>'商品id错误'));
+			}
+			
+			if(!$recomids=$this->getQuery('recomids', 0)){	
+				$this->jsonOutput(1 , $data=array('code'=>2,'mes'=>'推荐的商品id错误'));
+			}
+			if($model->addRecomGoods($recomids, $id)){
+				$this->jsonOutput(0 , $data=array('code'=>0,'mes'=>'推荐成功'));
+			}else{
+				$this->jsonOutput(1 , $data=array('code'=>3,'mes'=>'推荐失败'));
+			}
+		}
+		
+
+		/**
+		 * 删除采购订单
+		 */
+		public function actionDelete()
+		{
+			$this->checkUserPurview("m.d");
+
+			if(!$id=(string)Yii::app()->getRequest()->getQuery('id', 0))
+				$this->error('错误的ID');
+				$model=ClassLoad::Only('Purchase');	
+				$model->deletes($id);		
+				$this->redirect(array('purchase/list'));
+			
+		}
+		
+		/**
+		 * 上架采购订单
+		 */
+		public function actionDorecom()
+		{
+			if(!$id=(string)$this->getQuery('id', 0))
+				$this->error('错误的ID');
+			$model=ClassLoad::Only('Purchase');/* @var $model Purchase */
+			//if($info->getPurchaseMes($id)){   /* 不推荐也可以上架 */
+			//		$this->error('错误的ID');
+			//}
+			$model->doRecom($id);
+			$this->redirect(array('purchase/list','id'=>$id));
+				
+		}
+		
+		/**
+		 * 关闭采购订单
+		 */
+		public function actionClosed()
+		{
+		
+			if(!$id=(string)Yii::app()->getRequest()->getQuery('id', 0))
+				$this->error('错误的ID');
+			$model=ClassLoad::Only('Purchase');
+			$model->closed($id);
+			$this->redirect(array('purchase/list'));
+				
+		}
+		
+		/*****
+		*	或者用当前用户加时间戳保证文件不重名
+		*	相关采购但文件下载
+		*   */
+		public function actionDownload(){
+			$fileName = $_REQUEST['src'];
+			if (strlen($fileName)>0){
+				$extension =  pathinfo($fileName, PATHINFO_EXTENSION);
+				$fileSendName = '采购文件'.date('Y-m-d-H:i:s',time());
+				yii::app ()->request->sendFile ($fileSendName.'.'.$extension,  file_get_contents (Views::imgShow($fileName)));
+			}else{
+				$this->error("未找到文件");
+			}
+		}
+		public function getPage($sum, $count, $p, $search) {
+			$lastpage = ceil( $sum / $count );
+			$page_str = '';
+			$page_str = '<ul class="linkx">';
+			$page_str .= '<li><div>共'.$sum.'条记录</div></li>';
+			if ($p != 1) {
+				$page_str .= '<li class="cursors"><div class="'.$search.'" p="1">首页</div></li>';
+				$page_str .= '<li class="cursors"><div class="'.$search.'" p="'.($p-1).'">上页</div></li>';
+			}
+			if ($p != $lastpage) {
+				$page_str .= '<li class="cursors"><div class="'.$search.'" p="'.($p+1).'">下页</div></li>';
+				$page_str .= '<li class="cursors"><div class="'.$search.'" p="'.($lastpage).'">尾页</div></li>';
+			}
+			$page_str .= '</ul>';
+			return $page_str;
+		}
+
+	}
+?>

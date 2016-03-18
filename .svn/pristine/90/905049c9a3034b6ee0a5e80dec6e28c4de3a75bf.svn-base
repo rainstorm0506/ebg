@@ -1,0 +1,51 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main>
+		<ul class="my-commit-list">
+			<li>
+				<figure><img ng-src="{{imgPath}}/temp/23.png"></figure>
+				<section>
+					<h3>华硕X552MJ2840华硕X552MJ2840</h3>
+					<article>这个笔记本还不错，我非常喜欢，而且物流也挺快的，下次还选这家。</article>
+					<div><span>规格：深灰色13寸</span><time>2016-01-12</time></div>
+					<dl>
+						<dd><img ng-src="{{imgPath}}/temp/24.png"></dd>
+					</dl>
+				</section>
+			</li>
+			<li>
+				<figure><img ng-src="{{imgPath}}/temp/23.png"></figure>
+				<section>
+					<h3>华硕X552MJ2840华硕X552MJ2840</h3>
+					<article>这个笔记本还不错，我非常喜欢，而且物流也挺快的，下次还选这家。</article>
+					<div><span>规格：深灰色13寸</span><time>2016-01-12</time></div>
+				</section>
+			</li>
+			<li>
+				<figure><img ng-src="{{imgPath}}/temp/23.png"></figure>
+				<section>
+					<h3>华硕X552MJ2840华硕X552MJ2840</h3>
+					<article>这个笔记本还不错，我非常喜欢，而且物流也挺快的，下次还选这家。</article>
+					<div><span>规格：深灰色13寸</span><time>2016-01-12</time></div>
+				</section>
+			</li>
+			<li>
+				<figure><img ng-src="{{imgPath}}/temp/23.png"></figure>
+				<section>
+					<h3>华硕X552MJ2840华硕X552MJ2840</h3>
+					<article>这个笔记本还不错，我非常喜欢，而且物流也挺快的，下次还选这家。</article>
+					<div><span>规格：深灰色13寸</span><time>2016-01-12</time></div>
+				</section>
+			</li>
+			<li>
+				<figure><img ng-src="{{imgPath}}/temp/23.png"></figure>
+				<section>
+					<h3>华硕X552MJ2840华硕X552MJ2840</h3>
+					<article>这个笔记本还不错，我非常喜欢，而且物流也挺快的，下次还选这家。</article>
+					<div><span>规格：深灰色13寸</span><time>2016-01-12</time></div>
+				</section>
+			</li>
+		</ul>
+	</main>
+	<a class="btn-1" ui-sref="commit">去评价</a>

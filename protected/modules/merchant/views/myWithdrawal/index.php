@@ -1,10 +1,5 @@
-<nav class="current-stie">
-	<span><?php echo CHtml::link('首页' , '/');?></span><i>&gt;</i>
-	<span><?php echo CHtml::link('商家中心' , $this->createUrl('home/index'));?></span><i>&gt;</i>
-		<span>我的提现详情</span>
-	</nav>
-	<main>
-		<section class="company-content-all"><header class="company-tit">提现<nav><span>提现明细</span></nav></header>
+	<section class="company-content">
+		<header class="company-tit">提现<nav><span>提现明细</span></nav></header>
 		<div class="box-wrap">
 			<table class="goods-tab goods-tab-2">
 				<colgroup>
@@ -49,4 +44,3 @@
 		<?php $this->widget('WebListPager', array('pages' => $page)); ?>
 		<?php endif;?>	
 	</section>
-</main>

@@ -1,0 +1,13 @@
+﻿// ================================== 弹窗
+.shadow-wrap:extend(.f22px){.wh(100%);.fix_lt;.index(-1);.rgba(0,0,0,0);
+	&,>div,.ico-close{.transition(all 0.3s linear);}
+	>div:extend(.bc_fff){.w;.p_abs_lb(0,-100%);}
+	>a:extend(.abs_lb){.w;}
+	header:extend(.rel,.sm-mlr,.tc){.fs(28/@a);.hh(80/@d);.bbor_da(#ddd);}
+	&.current{.index(1);.rgba(0,0,0,0.3);
+		>div{.bm;}
+		.ico-close{.rotate(360);}
+	}
+	.btn-1-1:extend(.rel){.border-radius(0)}
+}
+.ico-close{.bi_ww(40/@d,ico-close);.p_abs_rt(0,50%);.mt(40/@d*@x);}

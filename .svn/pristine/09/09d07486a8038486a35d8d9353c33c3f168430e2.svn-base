@@ -1,0 +1,237 @@
+<?php
+	Views::js(array('jquery-dragPlug','comment.commentPage'));
+	Yii::app()->clientScript->registerCoreScript('webUploader');
+?>
+<style type="text/css">
+.comment_score i{cursor:pointer}
+</style>
+<!-- 当前位置 -->
+	<nav class="current-stie">
+		<span><a href="/">首页</a></span><i>&gt;</i>
+		<span><?php echo CHtml::link('个人中心' , $this->createUrl('/member'));?></span><i>&gt;</i>
+		<span><?php echo CHtml::link('我的评论' , $this->createUrl('/member/comment'));?></span><i>&gt;</i>
+		<span>商品评论</span>
+	</nav>	
+	<main>
+		<div class="sweet-promt sweet-promt-1">累计评价<span><?php echo isset($goodsInfo['cnt']) ? $goodsInfo['cnt'] : ''?></span></div>
+		<ul class="comments-list comments-list-all">
+			<li>
+				<aside>
+					<figure><a href="<?php echo $info['goods_type'] ==2 ? '/used/intro?id='.$info['goods_id'] : '/goods?id='.$info['goods_id'];?>" target="_blank" title="<?php echo $info['goods_title'];?>"><img src="<?php echo Views::imgShow($info['goods_cover']); ?>" width="188" height="188"></a></figure>
+					<h5><a href="<?php echo $info['goods_type'] ==2 ? '/used/intro?id='.$info['goods_id'] : '/goods?id='.$info['goods_id'];?>" target="_blank" title="<?php echo $info['goods_title'];?>"><?php echo isset( $info['goods_title'] ) ? (strlen($info['goods_title'])>10 ? String::utf8Truncate($info['goods_title'] , 10 , $etc = '...'): $info['goods_title']) : '';?></a></h5>
+					<dl class="txt-list-1">
+						<?php 
+							$goodsAttr = json_decode($info['goods_attrs'],true);
+							foreach ($goodsAttr as $value){
+								echo '<dt>'.$value[1].':</dt><dd>'.$value[2]."</dd><br>";
+							}
+						?>
+						<dt>卖家：<dt><dd class="name"><?php echo String::utf8Truncate($info['store_name'] , 8 , $etc = '...'); ?></dd>
+						<dt>订单编号：<dt><dd><?php echo $info['order_sn']; ?></dd>
+						<dt>数量：<dt><dd><?php echo $info['num']; ?>件</dd>
+						<dt>单价：<dt><dd class="mc">￥<?php echo $info['unit_price']; ?></dd>
+					</dl>
+				</aside>
+				<section>
+					<?php $active = $this->beginWidget('CActiveForm', array('id'=>'append-form','enableAjaxValidation'=>true, 'action'=>$this->createUrl('submitComment'), 'htmlOptions'=>array('class'=>'form-wraper','enctype'=>"multipart/form-data"))); ?>
+					<header class="goods-comments">
+						<span>*商品评分：</span>
+						<nav class="comment_score">
+							<i score="1" class="current"></i>
+							<i score="2"></i>
+							<i score="3"></i>
+							<i score="4"></i>
+							<i score="5"></i>
+						</nav>
+						<input type="hidden" name="goods_score" class="goods_scores" value="1"/>
+						<input type="hidden" name="order_sn" value="<?php echo $info['order_sn'];?>"/>
+						<input type="hidden" name="goods_id" value="<?php echo $info['goods_id'];?>"/>
+						<input type="hidden" name="merchant_id" value="<?php echo $info['merchant_id'];?>"/>
+					</header>
+					<textarea placeholder="请输入您的评价" name="content"></textarea>
+					<h6>晒图<i>1/5</i></h6>
+					<div class="goods-pic-wrap imgx">
+							<div class="goods-pic goods-img" >
+								<div name="GoodsForm[img][]"></div>
+								<div name="GoodsForm[img][]"></div>
+								<div name="GoodsForm[img][]"></div>
+								<div name="GoodsForm[img][]"></div>
+								<div name="GoodsForm[img][]"></div>
+							</div>
+					</div>
+					<footer class="crbox18-group">
+						<label><input checked type="checkbox"><i>匿名评价</i></label>
+						<a class="btn-1 btn-1-12" href="javascript:;" onclick="submitComment($(this));">提交评论</a>
+					</footer>
+					<?php $this->endWidget(); ?>
+				</section>
+			</li>
+		</ul>
+	</main>
+<script>
+var __web_uploader = function(setMinPic , imgJson , imgSelect)
+{
+	var config = {
+		pick: {id:(imgSelect||'.goods-img>div[class!="webuploader-container"]') , label:'<i>+</i><p>点击上传图片</p>'},
+		swf: 'Uploader.swf',
+		chunked: false,
+		chunkSize: 512 * 1024,
+		accept: {title: 'Images',extensions: 'gif,jpg,jpeg,bmp,png',mimeTypes: 'image/*'},
+		server: '<?php echo Yii::app()->params['imgUploadSrc']; ?>',
+		preview : '<?php echo Yii::app()->params['imgPreviewSrc']; ?>',
+		disableGlobalDnd: true,
+		fileSizeLimit: 5 * 1024 * 1024,			//验证文件总大小是否超出限制
+		fileSingleSizeLimit: 5 * 1024 * 1024	//验证单个文件大小是否超出限制
+	};
+
+	//判断浏览器是否支持图片的base64
+	var isSupportBase64 = (function()
+	{
+		var data = new Image() , support = true;
+		data.onload = data.onerror = function()
+		{
+			if (this.width != 1 || this.height != 1)
+				support = false;
+		}
+		data.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+		return support;
+	})();
+
+	//-------------------------------事件绑定说明----------------------------------
+	//	http://fex.baidu.com/webuploader/doc/index.html#WebUploader_Uploader_events
+	var uploader = WebUploader.create(config);
+
+	uploader
+	//当验证不通过时触发
+	.on('error', function(error)
+	{
+		var code = '上传错误';
+		switch (error)
+		{
+			case 'Q_TYPE_DENIED'		: code = '文件类型不匹配'; break;
+			case 'Q_EXCEED_NUM_LIMIT'	:
+			case 'Q_EXCEED_SIZE_LIMIT'	: code = '只能上传'+config.fileNumLimit+'个文件'; break;
+			case 'F_EXCEED_SIZE'		: code = '只能上传5M以内的图片'; break;
+			case 'F_DUPLICATE'			: code = '此文件已上传'; break;
+		}
+		alert(code);
+	})
+	//当文件被加入队列以后触发 , 预览并上传
+	.on('fileQueued', function(file)
+	{
+		var div = $('#rt_' + file.source.ruid);
+		div.nextAll().remove();
+		div.after('<b class="uploading">正在上传中...</b>');
+
+		uploader.upload();
+	})
+	//当文件上传成功时触发
+	.on('uploadSuccess' , function(file , json)
+	{
+		var container = $('#rt_' + file.source.ruid).parent() , code = '' , name = container.attr('name');
+		container.children(':hidden').remove();
+		container.children('b').remove();
+		container.children('img').remove();
+		container.children('div[class="preview-set"]').remove();
+		container.children('a[class="preview-close"]').remove();
+
+		if (json.error != 0)
+		{
+			alert(json.message);
+			return false;
+		}
+
+		code = '<input type="hidden" name="'+name+'" value="'+json.src+'">';
+		uploader.makeThumb(file, function(error , ret)
+		{
+			if (error)
+			{
+				code += '<b>预览错误</b>';
+				container.prepend(code);
+			}else{
+				if (isSupportBase64)
+				{
+					code += '<img src="'+ret+'"><a class="preview-close">x</a>';
+					//code += setMinPic ? '<div class="preview-set"><span></span><a>设为主图</a></div>' : '';
+					container.prepend(code);
+
+					container.children('a.preview-close').click(function(){
+						uploader.removeFile(file);
+					});
+				}else{
+					$.ajax(config.preview , {method: 'POST', data: ret, dataType:'json'}).done(function(response)
+					{
+						if (response.result)
+						{
+							code += '<img src="'+response.result+'"><a class="preview-close">x</a>';
+							//code += setMinPic ? '<div class="preview-set"><span></span><a>设为主图</a></div>' : '';
+							container.prepend(code);
+
+							container.children('a.preview-close').click(function(){
+								uploader.removeFile(file);
+							});
+						}else{
+							code += '<b>预览出错</b>';
+							container.prepend(code);
+						}
+					});
+				}
+			}
+		});
+	});
+
+	if (!$.isEmptyObject(imgJson))
+	{
+		var i = 0 , _code ='' , name = $(imgSelect).attr('name') , cover = $('#goods_cover').val();
+		for (; i < 5 ; i++)
+		{
+			if (imgJson[i])
+			{
+				_code = (cover == imgJson[i]) ? '<a class="this">主图</a>' : '<a>设为主图</a>';
+				$(imgSelect).eq(i).prepend('<input type="hidden" value="'+imgJson[i]+'" name="'+name+'">' +
+					//(setMinPic?('<div class="preview-set"><span></span>'+_code+'</div>'):'') +
+					'<img src="'+imgDomain+imgJson[i]+'"><a class="preview-close">x</a>');
+			}
+		}
+	}
+};
+$(document).ready(function(){
+	__web_uploader(true , {} , '.goods-img>div[name="GoodsForm[img][]"]');
+	$('.imgx')
+	//图片关闭
+	.on('click' , 'a.preview-close' , function(){
+		var container = $(this).parent();
+		container.children(':hidden').remove();
+		container.children('b').remove();
+		container.children('img').remove();
+		container.children('div[class="preview-set"]').remove();
+		container.children('a[class="preview-close"]').remove();
+	});
+	//打分
+	$('.comment_score i').click(function(){
+		var indexs = $(this).attr('score');
+		for(var j=0;j<5;j++){
+			if(j<indexs){
+				$(this).parent().find('i:eq('+j+')').attr('class','current');
+			}else{
+				$(this).parent().find('i:eq('+j+')').removeClass('current');
+			}
+		}
+		$('.goods_scores').val(indexs);
+	});
+});
+//用户提交评论
+function submitComment(item){
+	var itemStr='',itemStr='',textarea;
+	form = $('#append-form');
+	textarea = form.find('textarea');
+	if(textarea.val() == ''){
+		alert('评论内容不能为空！');
+		textarea.css('border','1px solid red').focus();
+		return false;
+	}
+	form.submit();
+	return false;
+}
+</script>
+

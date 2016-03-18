@@ -1,0 +1,83 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">通讯录 - 更多商家</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">contactsBook.moreMerchant</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">谭甜</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>keyword</td>
+			<td>string</td>
+			<td>搜索关键字（选填）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>scope</td>
+			<td>int</td>
+			<td>经营范围id（选填）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>brand</td>
+			<td>int</td>
+			<td>品牌id（选填）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>pageNow</td>
+			<td>int</td>
+			<td>查询当前页（开始位置（默认为第一页开始））</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>pageSize</td>
+			<td>int</td>
+			<td>查询当前页（查询个数（选填，默认为6个））</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+	{
+	    "code": 0,
+	    "message": "",
+	    "data":[
+	        {
+	            "store_name": "康师傅成都店",					#店铺名称
+	            "uid": "8",								#商家id
+	            "scope":"人民日报",							#主营业务
+	            "mer_no": "A12",							#店铺编号
+	            "store_address": "四川省成都市锦江区",				#店铺地址
+	            "store_tel": "13999999999"						#店铺电话
+	        },
+	        {
+	            "store_name": "好巴适豆腐干",					#店铺名称
+	            "uid": "14",							#商家id
+	            "scope":"人民日报",							#主营业务
+	            "mer_no": "",							#店铺编号
+	            "store_address": "四川省成都市锦江区",				#店铺地址
+	            "store_tel": "1388888888"						#店铺电话
+	        }
+        ]
+	}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>

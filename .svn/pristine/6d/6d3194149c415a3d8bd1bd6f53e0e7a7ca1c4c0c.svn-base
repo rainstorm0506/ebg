@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,user-scalable=no,target-densitydpi=device-dpi">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+	<meta http-equiv="Expires" content="-1">
+	<meta name="apple-touch-fullscreen" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<title ng-bind="title">e办公移动平台</title>
+	<link rel="stylesheet" href="public/css/store.css">
+	<script src="public/js/pc.js" defer></script>
+	<script src="public/js/lib/require.js"></script>
+	<script src="app/module/store/main.js"></script>
+</head>
+<body ui-view class="animated fadeIn">
+	
+</body>
+</html>

@@ -1,0 +1,52 @@
+﻿	<!---------- 企业用户信息填写 ---------->
+	<form class="sm-wrap-p">
+		<!---- 营业执照 ---->
+		<h3 class="tit-1">营业执照</h3>
+		<section class="upload-wrap">
+			<aside><i class="pic-ico-1"></i></aside>
+			<div>
+				<i></i>
+				<p>上传</p>
+				<input type="file">
+			</div>
+		</section>
+		<ul class="upload-list">
+			<li>1、请上传公司营业执照复印件照片并盖公司公章；</li>
+			<li>2、证件信息清晰可见，且不能被遮挡；</li>
+			<li>3、仅支持JPG格式，图片大小不超过5M；</li>
+		</ul>
+		
+		<!---- 营业执照 ---->
+		<h3 class="tit-1">税务登记</h3>
+		<section class="upload-wrap">
+			<aside><i class="pic-ico-2"></i></aside>
+			<div>
+				<i></i>
+				<p>上传</p>
+				<input type="file">
+			</div>
+		</section>
+		<ul class="upload-list">
+			<li>1、请上传公司营业执照复印件照片并盖公司公章；</li>
+			<li>2、证件信息清晰可见，且不能被遮挡；</li>
+			<li>3、仅支持JPG格式，图片大小不超过5M；</li>
+		</ul>
+		
+		<!---- 营业执照 ---->
+		<h3 class="tit-1">组织机构代码</h3>
+		<section class="upload-wrap">
+			<aside><i class="pic-ico-3"></i></aside>
+			<div>
+				<i></i>
+				<p>上传</p>
+				<input type="file">
+			</div>
+		</section>
+		<ul class="upload-list upload-list-last">
+			<li>1、请上传公司营业执照复印件照片并盖公司公章；</li>
+			<li>2、证件信息清晰可见，且不能被遮挡；</li>
+			<li>3、仅支持JPG格式，图片大小不超过5M；</li>
+		</ul>
+		<a class="btn-1" href="#">提交审核</a>
+	</form>
+

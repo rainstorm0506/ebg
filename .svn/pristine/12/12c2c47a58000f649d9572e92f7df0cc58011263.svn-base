@@ -1,0 +1,11 @@
+<?php
+date_default_timezone_set('PRC');
+
+$root = dirname(__FILE__);
+require_once($root . '/../Yii/yii.php');
+
+$config = require_once($root.'/../protected/config/main.php');
+$config = CMap::mergeArray($config , require_once($root.'/protected/config/main.php'));
+#print_r($config);exit;
+
+Yii::createWebApplication($config)->run();

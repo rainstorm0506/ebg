@@ -1,0 +1,83 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心 /订单 </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">usercenter.myOrders</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>非必传</td>
+			<td>订单类型(101:待付款；106:待收货；103：代发货；107:已完成；0/不传:全部订单)</td>
+		</tr>		
+		<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>必</td>
+			<td>分页参数</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "ca9b889fcf1b64ec6d49049f095a1aa5",
+    "message": [],
+    "data": [
+		{
+            "id": "10",
+            "order_sn": "Z5459-7602-9455",
+            "parent_order_sn": "",
+            "user_id": "42",
+            "merchant_id": "109",
+            "order_status_id": "102",
+            "goods_money": "1.00",
+            "freight_money": "10.00",
+            "discount_money": "0.00",
+            "edit_money": "0.00",
+            "order_money": "11.00",
+            "pay_type": "1",
+            "is_pay": "0",
+            "is_back_goods": "0",
+            "receive_money": "0.00",
+            "cancel_status_id": "0",
+            "create_time": "111",
+            "user_delete": "0",
+            "merchant_delete": "0",
+            "buy_bonus": "0.00",
+            "sale_bonus": "0.00",
+            "re_bonus": "0.00",
+            "re_uid": "0",
+            "store_name": "苹果代工厂",
+            "goods_cover": "/goods/2016/02-20/29/271688128121057031971455944676.2747.jpg",
+            "num": "1",
+            "title": "ewrw",
+            "retail_price": "121.00",
+            "base_price": "0.00",
+            "goods_id": "10",
+            "attrs": "颜色:红色;尺寸:5寸;内存:32G;"		
+		}        
+    ],
+    .........
+}        
+</pre></td>
+		</tr>
+	</table>
+</div>

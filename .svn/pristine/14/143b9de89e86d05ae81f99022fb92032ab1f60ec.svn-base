@@ -1,0 +1,68 @@
+<?php
+$path = dirname(__FILE__).'/../../../';
+return array
+(
+	'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+	'name' => 'api',
+	'language' => 'zh_cn',
+
+	//预加载区域
+	'import' => array
+	(
+		'system.extensions.ebg.*',
+		'application.form.*',
+		'application.models.*',
+		'application.components.*',
+	),
+
+	//默认控制器
+	'defaultController' => 'home',
+
+	//应用程序组件
+	'components' => array
+	(
+		//开启自定义的错误通知,调试状态下请关闭
+		'errorHandler' => array('errorAction'=>'home/error'),
+		
+		//启用基于cookie的认证
+		'user' => array('allowAutoLogin' => true , 'autoRenewCookie'=>true),
+		'db' => require($path . 'protected/config/db.php'),
+
+		//session设置
+		'session'				=> array
+		(
+			'autoStart'			=> false,
+			'class'				=> 'system.web.CDbHttpSession',
+			'connectionID'		=> 'db',
+			'timeout'			=> 3600,
+			'sessionName'		=> 'S_APISID',
+			'sessionTableName'	=> 'yii_app_user_session',
+		),
+		
+		//URL write
+		'urlManager' => array
+		(
+			'urlFormat'			=> 'path',
+			'showScriptName'	=> false,
+			'rules'				=> array
+			(
+				''												=> 'home/index',
+				'<modules:\w+>.<controller:\w+>.<action:\w+>'	=> '<modules>/<controller>/<action>',
+			),
+		),
+	),
+
+	#扩展全局的参数
+	#using Yii::app()->params['paramName']
+	'params' => array(
+		'domain' => 'http://www.ebg.com/',
+		//图片服务器地址
+		'imgDomain' => 'http://img.ebg.com/',
+		//图片上传请求地址
+		'imgUploadSrc' => 'http://img.ebg.com/imgUpload.php',
+		//图片预览请求地址
+		'imgPreviewSrc' => 'http://img.ebg.com/imgPreview.php',
+		//除开图片之外的上传请求地址 (含文件分片处理)
+		'fileUploadSrc' => 'http://img.ebg.com/fileUpload.php',
+	),
+);

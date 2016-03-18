@@ -1,0 +1,318 @@
+<?php
+	Yii::app()->getClientScript()->registerCoreScript('layer');
+	Views::css(array('page/default'));
+?>
+<style>
+#tab{position:relative;}
+#tab .tabList ul li{float:left;background:#fefefe;
+	background:-moz-linear-gradient(top, #fefefe, #ededed);	
+	background:-o-linear-gradient(left top,left bottom, from(#fefefe), to(#ededed));
+	background:-webkit-gradient(linear,left top,left bottom, from(#fefefe), to(#ededed));
+	border:1px solid #ccc;padding:5px 0;
+	width:100px;text-align:center;margin-left:-1px;
+	position:relative;cursor:pointer;}
+#tab .tabCon{position:absolute;left:-1px;top:32px;border:1px solid #ccc;border-top:none;width:100%;height:800px;}
+#tab .tabCon div{position:absolute;padding:10px;opacity:0;filter:alpha(opacity=0);}
+#tab .tabList li.cur{border-bottom:none;background:#fff;}
+#tab .tabCon div.cur{opacity:1;filter:alpha(opacity=100);}
+#reco { border: 1px solid #ccc;
+    border-radius: 3px;
+    display: inline-block;
+    height: 30px;
+    letter-spacing: 3px;
+    line-height: 30px;
+    padding: 0 12px;}
+.clickbutton{border: 1px solid #ccc;
+	border-radius: 3px;
+	display: inline-block;
+	height: 30px;
+	letter-spacing: 3px;
+	line-height: 30px;
+	padding: 0 12px;}
+</style>
+<fieldset class="public-wraper">
+	<h1 class="title">会员基本信息</h1>
+	<ul class="form-wraper">
+		<li><span>手机号：</span><?php echo $info['phone']; ?></li>
+		<li><span>昵称：</span><?php echo $info['nickname']; ?></li>
+		<li><span>会员推荐码：</span><?php echo $info['user_code']; ?></li>
+		<li><span>推荐人推荐码：</span><?php echo empty($info['re_code'])?'无':$info['re_code']; ?></li>
+		<li>
+			<span>头像：</span>
+			<a title="点击看大图" class="additem" onclick="$('#mydialog').dialog('open'); return false;" href="#">
+				<img width="80" height="80" src="<?php echo Views::imgShow(empty($info['face'])?'images/default-face.jpg':$info['face']); ?>" alt="<?php echo $info['nickname']; ?>">
+			</a>
+		</li>
+		<li><span>注册时间：</span><?php echo date('Y-m-d H:m:s',$info['reg_time']); ?></li>
+		<li><span>最后登录时间：</span><?php echo $info['last_time']<=0?"未登录":date('Y-m-d H:i:s', $info['last_time']); ?></li>
+		<input name="id" type="hidden" value="<?php echo $id;?>"/>
+	</ul>
+</fieldset>
+<fieldset class="public-wraper" style="height: 800px;">
+		<span style="font-family:'Arial Normal', 'Arial';font-weight:400;">推荐提成</span>
+		<span style="font-family:'Arial Negreta', 'Arial';font-weight:700;">> </span>
+		<span style="font-family:'Arial Negreta', 'Arial';font-weight:700;">提成详情</span>
+		<span><a class="btn-5" style="display: inline-block;" href="<?php echo $this ->createUrl('user/view', array('id'=>$info['id'],'type'=>'推荐奖金','condition'=>$condition));?>">返回</a></span>
+		<div style="width:99%;" class="list">
+			<?php $active = $this->beginWidget('CActiveForm', array('id'=>'reco-form','enableAjaxValidation'=>true,'htmlOptions'=>array('class'=>'form-wraper','style'=>'height:40px;'))); ?>
+			<?php 
+			echo $active->dropDownList($Recommform ,'status' , CMap::mergeArray(array(''=>'订单状态 ') , array('101'=>'待付款','103'=>'待备货','105'=>'备货中','115'=>'备货完成','106'=>'发货中','107'=>'完成')),array('class'=>'sbox32'));
+			?>
+			<span>下单时间：</span>
+			<?php $active->widget ( 'Laydate', array (
+					'id' => 'start_time',
+					'name' => 'start_time',
+					'class' => "tbox38 tbox38-1",
+					'style' => 'width:120px;height:30px;',
+					'placeholder'=>'开始时间'
+			) );
+			?><i>—</i><?php 
+			$active->widget ( 'Laydate', array (
+					'id' => 'end_time',
+					'name' => 'end_time',
+					'class' => "tbox38 tbox38-1",
+					'style' => 'width:120px;height:30px',
+					'placeholder'=>'结束时间'
+			) );
+			?>
+			<span style="margin-left:50px;">
+			<?php 
+			echo $active->dropDownList($Recommform ,'key' , CMap::mergeArray(array(''=>' 搜索关键字 ') , array('real_name'=>'姓名','phone'=>'电话','order_sn'=>'订单号')),array('class'=>'sbox32'));
+			?>
+			</span>
+			
+			<?php echo CHtml::textField ('keyword','', array('placeholder'=>'关键字','class'=>'tbox38','style'=>"height:30px;"));?>
+			<a id="reco" href="javascript:;">搜索</a>
+			<a id="outre" href="javascript:;" class="clickbutton">导出excel</a>
+			<a id="resert" href="javascript:;" class="clickbutton">搜索重置</a>
+			<span style="position: absolute;right:10px;">总订单数：<i id="orders"></i></span>
+			<?php $this->endWidget(); ?>
+			<table class="public-table">
+				
+				<thead>
+					<tr>
+						<th width="100">下单时间</th>
+						<th width="80">我推荐的人</th>
+						<th width="100">订单号</th>
+						<th width="100">订单金额</th>
+						<th width="180">订单号状态</th>
+						<th width="80">提成金额</th>
+					</tr>
+				</thead>
+				<tbody id="RecommPage">
+				
+				</tbody>
+			</table>
+			<div class="page" style="opacity:1">
+				
+			</div>
+			
+		</div>
+</fieldset>
+
+<?php 
+$this->beginWidget('zii.widgets.jui.CJuiDialog', array(  
+		'id'=>'mydialog',//弹窗ID  
+		// additional javascript options for the dialog plugin  
+		'options'=>array(//传递给JUI插件的参数  
+			'title'=>$info['nickname'].' 头像',
+			'autoOpen'=>false,//是否自动打开  
+			'top'=>'0',
+			'width'=>'auto',//宽度  
+			'height'=>'auto',//高度  
+			'buttons'=>array(  
+		),
+	),
+));  
+?>
+<div class="popup-content">
+	<div style="text-align: center;">
+		<img src="<?php echo Yii::app()->params['imgDomain'].$info['face']; ?>" alt="<?php echo $info['nickname']; ?>">
+	</div>
+</div>
+<?php 
+	$this->endWidget('zii.widgets.jui.CJuiDialog');  
+?>
+
+<script type="text/javascript">
+$("#mydialog").html();
+//获取数据 
+var curPage = 1; //当前页码 
+var total,pageSize,totalPage; //总记录数，每页显示数，总页数 
+
+function getData(page,data){  
+	var id = $("input[name='id']").val();
+    $.ajax({
+        type: 'POST', 
+        url: '/supervise/user/RecommPage', 
+        data: {'pageNum':page,'id':id,'data':data},
+        dataType:'json',
+        success:function(json){
+            $("#RecommPage").empty();//清空数据区 
+            total = json.total; //总记录数 
+            curPage = page; //当前页 
+            totalPage = json.totalPage; //总页数 
+            var li = ""; 
+            var list = json.list;
+            if(list == ''){
+            	li+="<tr><td class='else' colspan='10'>当前无数据</td></td>";
+            }else{
+            	$.each(list,function(index,array){ //遍历json数据列 
+	            	li+="<tr>";
+					li+="<td>"+array['create_time']+"</td>";
+					li+="<td>";
+					if(array['realname']){
+						li+="<p>"+array['realname']+"</p>";
+					}else if(array['nickname']){
+						li+="<p>"+array['nickname']+"</p>";
+					}else{
+						li+="<p></p>";
+					}
+					li+=""+array['phone']+"</td>";
+					li+="<td>"+array['order_sn']+"</td>";
+					li+="<td>"+array['order_money']+"</td>";
+					li+="<td>"+array['back_title']+"</td>";
+					li+="<td>"+array['re_bonus']+"</td>";
+					li+="</tr>";
+	            });
+                
+            }
+            $("#orders").text(total);
+            $("#RecommPage").append(li);
+            
+        },
+        complete:function(){ //生成分页条 
+            getPageBar(); 
+        },
+    }); 
+} 
+//获取分页条 
+function getPageBar(){
+	pageStr = "<ul id='yw0' class='link'>";
+    //页码大于最大页数 
+    if(curPage>totalPage) curPage=totalPage; 
+    if(curPage<1) curPage=1; 
+    pageStr += "<li class='itemCount'>共<span>"+total+"</span>条数据</li>";
+    //如果是第一页 
+    if(curPage==1){ 
+        pageStr += "<li class='first'><a href='javascript:void(0)'>首页</a></li><li><a href='javascript:void(0)'>上一页</a></li>";
+    }else{ 
+        pageStr += "<li class='first'><a href='javascript:void(0)' rel='1'>首页</a></li><li><a href='javascript:void(0)' rel='"+(curPage-1)+"'>上一页</a></li>"; 
+    }
+    //分页的展示  ,五个为一组
+    if(curPage <= 5 && totalPage-5 <=0){
+    	for(i=1;i<= totalPage;i++){
+			if(i == curPage){
+				pageStr += "<li class='page selected'><a href='javascript:void(0)' rel='"+i+"'>"+i+"</a>";
+			}else{
+				pageStr += "<li class='page'><a href='javascript:void(0)' rel='"+i+"'>"+i+"</a>";	
+			}
+		}
+    }else if(curPage <= 5 && totalPage-5 >=0){
+		for(i=1;i<= 5;i++){
+			if(i == curPage){
+				pageStr += "<li class='page selected'><a href='javascript:void(0)' rel='"+i+"'>"+i+"</a>";
+			}else{
+				pageStr += "<li class='page'><a href='javascript:void(0)' rel='"+i+"'>"+i+"</a>";	
+			}
+		}
+    }else if(curPage <= totalPage -5 ){
+        var end = (parseInt(curPage)+4);
+    	for(i=curPage;i <= end;i++){
+			if(i == curPage){
+				pageStr += "<li class='page selected'><a href='javascript:void(0)' rel='"+i+"'>"+i+"</a>";
+			}else{
+				pageStr += "<li class='page'><a href='javascript:void(0)' rel='"+i+"'>"+i+"</a>";	
+			}
+		}
+    }else if(curPage > totalPage -5){
+    	for(i=totalPage-4;i<=totalPage;i++){
+			if(i == curPage){
+				pageStr += "<li class='page selected'><a href='javascript:void(0)' rel='"+i+"'>"+i+"</a>";
+			}else{
+				pageStr += "<li class='page'><a href='javascript:void(0)' rel='"+i+"'>"+i+"</a>";	
+			}
+		}
+    }
+    //如果是最后页 
+    if(curPage>=totalPage){ 
+        pageStr += "<li class='next'><a href='javascript:void(0)'>下一页</a></li><li class='last'><a href='javascript:void(0)'>尾页</a></li>"; 
+    }else{ 
+        pageStr += "<li><a href='javascript:void(0)' rel='"+(parseInt(curPage)+1)+"'>下一页</a></li><li><a href='javascript:void(0)' rel='"+totalPage+"'>尾页</a></li>";
+    }
+
+    pageStr +="<select id='yw1' class='downlist' name='yw1'>";
+    for(j=1;j<=totalPage;j++){
+    	if(j == curPage){
+    		pageStr +="<option selected='selected' value='"+j+"'>"+j+"</option>";
+    	}else{
+    		pageStr +="<option value='"+j+"'>"+j+"</option>";
+    	}
+    	
+    }
+    
+    pageStr +="</select>";
+
+    pageStr += "</ul>";
+    if(totalPage > 1){
+    	$(".page").html(pageStr); 
+    }else{
+    	$(".page").empty();
+    }
+    
+}
+$(function($){
+    getData(1);
+    $('div.page').on('change','select' , function(){
+        var rel = $(this).val()
+        if(rel){ 
+            getData(rel,$("#reco-form").serialize()); 
+        } 
+    });
+    $('div.page').on('click','span a' , function(){
+        var rel = $(this).attr("rel");
+        if(rel){ 
+            getData(rel,$("#reco-form").serialize()); 
+        } 
+    });
+    $('#reco').on('click',function(){
+        var status = $("#RecommForm_status option:selected").val();
+        var start_time = $("#start_time").val();
+        var end_time = $("#end_time").val();
+        var RecommForm = $("#RecommForm_key").val();
+        var keyword = $("#keyword").val();
+        if(start_time == '' && end_time == '' && RecommForm == '' && keyword=='' && status == ''){
+        	getData(1);
+            return;
+        }else if(RecommForm == '' && keyword !=''){
+        	layer.msg('选择搜索关键字!');
+            return;
+        }else if(RecommForm != '' && keyword ==''){
+        	layer.msg('输入关键字');
+            return;
+        }
+		getData(1,$("#reco-form").serialize());
+    })
+	//导出excel
+	$('#outre').on('click',function(){
+		var id = $("input[name='id']").val();
+		var status = $("#RecommForm_status option:selected").val();
+		var start_time = $("#start_time").val();
+		var end_time = $("#end_time").val();
+		var RecommForm = $("#RecommForm_key").val();
+		var keyword = $("#keyword").val();
+
+		var url = '/supervise/user/reUserOrder?id='+id+'&status='+status+'&start='+start_time+'&end='+end_time+'&type='+RecommForm+'&keys='+keyword;
+		window.location.href = url;
+	});
+  //搜索条件重置
+	$('#resert').on('click',function(){
+		$("#start_time").val('');
+		$("#end_time").val('');
+		$("#RecommForm_key").val('');
+		$("#keyword").val('');
+		getData(1,$("#reco-form").serialize());//请求返回的数据
+	});
+	
+});
+</script>

@@ -1,0 +1,46 @@
+	<!---------- 搜索指令 ---------->
+	<header-search ng-if="isSearch === true"></header-search>
+	<!---------- header ---------->
+	<header-public ng-if="isHeader === true"></header-public>
+	<!---------- main ---------->
+	<main>
+		<section class="store-wrap">
+			<div>
+				<section>
+					<figure><img ng-src="{{imgPath}}/temp/18.png"></figure>
+					<div>
+						<h2>东华数码专营店</h2>
+						<dl>
+							<dd class="current"></dd>
+							<dd class="current"></dd>
+							<dd class="current"></dd>
+							<dd class="current"></dd>
+							<dd></dd>
+						</dl>
+					</div>
+					<a href="#"><i></i><span>收藏</span></a>
+				</section>
+				<footer>
+					<div>
+						<p>100</p>
+						<h6>全部商品</h6>
+					</div>
+					<i></i>
+					<div>
+						<p>20</p>
+						<h6>最近上新</h6>
+					</div>
+				</footer>
+			</div>
+		</section>
+		<!---- sort ---->
+		<nav class="sort-nav" ng-if="isSearch === true">
+			<a data-ui-sref="store.all" ui-sref-active="current"><span>综合排序</span><i class="t-t"></i></a>
+			<a data-ui-sref="store.sales" class="flex-1" ui-sref-active="current"><span>销量</span><i class="t-t"></i></a>
+			<a data-ui-sref="store.price" class="flex-1" ui-sref-active="current"><span>价格</span><i class="t-t"></i></a>
+			<a data-ui-sref="store.time" ui-sref-active="current"><span>上价时间</span><i class="t-t"></i></a>
+		</nav>
+		<div ui-view="viewStoreGoods" class="animated fadeIn"></div>
+	</main>
+	<!---------- 底部导航指令 ---------->
+	<store-nav></store-nav>

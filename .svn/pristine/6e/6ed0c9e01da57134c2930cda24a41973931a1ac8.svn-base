@@ -1,0 +1,23 @@
+	<!---------- main ---------->
+	<fieldset class="form-list">
+		<legend>找回密码</legend>
+		<form name="aForm" ng-submit="submitForm(aForm.$valid)" novalidate>
+			<ul>
+				<li>
+					<input class="tbox" name="tel" type="tel" placeholder="请输入新手机号码" ng-model="tel" required ng-pattern="/^((((13[0-9]{1})|(15[0-9]{1}))|(18[0-9]{1}))+\d{8})$/">
+					
+				</li>
+				<li ng-show="!aForm.tel.$invalid">
+					<input class="tbox" name="telImgCode" type="number" placeholder="请输入图片验证码" ng-class="{error:isImgCode===false}" ng-model="telImgCode" required ng-minlength="6" ng-maxlength="6">
+					<a class="img-code" href="javascript:;"><img ng-src="{{vifery.imgCodePath}}" ng-click="vifery.changeImgCode()"></a>
+				</li>
+				<li>
+					<input class="tbox" type="number" placeholder="请输入验证码" ng-class="{error:isTelCode===false}" ng-disabled="aForm.tel.$invalid || !codeDisabled" ng-model="telCode" required ng-pattern="/^\d{6}$/">
+					<a class="btn-send" href="javascript:;" send-code ng-disabled="!isImgCode" ng-click="vifery.sendTelCode()">发送验证码</a>
+				</li>
+				<li><input class="tbox" type="password" placeholder="输入密码" id="password" ng-model="apassword" required ng-minlength="6" ng-maxlength="18"></li>
+				<li><input class="tbox" type="password" placeholder="确认密码" ng-model="bpassword" required pw-check="password"></li>
+			</ul>
+			<div class="wrap-btn"><input class="btn-1" type="submit" ng-disabled="aForm.$invalid" value="确&nbsp;&nbsp;认" ng-click="submit()"></div>
+		</form>
+	</fieldset>

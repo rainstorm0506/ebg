@@ -1,0 +1,100 @@
+<?php
+/**
+ * 商品  - 控制器
+ * 
+ * @author simon
+ *
+ */
+class GoodsController extends WebController
+{
+	//商品详情
+	public function actionIndex()
+	{
+		if (!$id = (int)$this->getQuery('id'))
+			$this->error('错误的商品ID');
+		
+		$model = ClassLoad::Only('Goods');/* @var $model Goods */
+		if (!$goods = $model->getGoodsInfo($id))
+			$this->error('查询不到的商品数据');
+
+		if (!$store = GlobalMerchant::getMerchantInfo($goods['merchant_id']))
+			$this->error('查询不到的商家信息');
+		
+		if (!$seo = GlobalSEO::getSeoInfo('g', $id))
+		{
+			$seo = array(
+				'seo_title'			=> "{$goods['title']}报价，价格，参数-e办公商城",
+				'seo_keywords'		=> "{$goods['title']}报价，{$goods['title']}图片，{$goods['title']}参数",
+				'seo_description'	=> "e办公商城正品{$goods['title']}报价，超低价格，优质服务，提供{$goods['title']}参数图片查询，购买{$goods['title']}就上e办公商城。",
+			);
+		}
+		$this->setPageSeo($seo);
+		
+		#print_r($this->getUnJsonArray($goods['amount_ratio']));exit;
+		$goodsAttrs = GlobalGoods::getAttrs($id);
+		$this->render('index' , array(
+			'goods'			=> $goods,
+			'pic'			=> $model->getGoodsPic($id),
+			'attrs'			=> $model->getGoodsAttrs($this->getUnJsonArray($goods['attrs']),$goodsAttrs,(int)$goods['class_one_id'],(int)$goods['class_two_id'],(int)$goods['class_three_id']),
+			'goodsAttrs'	=> $goodsAttrs,
+			'args'			=> $this->getUnJsonArray($goods['args']),
+			'amountRatio'	=> $this->getUnJsonArray($goods['amount_ratio']),
+			'userRatio'		=> $model->getUserRatio($this->getUnJsonArray($goods['user_layer_ratio'])),
+			'goodsJoin'		=> $model->getJoinGoods($this->getUnJsonArray($goods['join_goods'])),
+			'store'			=> $store,
+		));
+	}
+	
+	//商品快照
+	public function actionSnapshoot()
+	{
+		if (!$vers = (string)$this->getQuery('vers'))
+			$this->error('错误的请求!');
+		
+		if (!preg_match('/^([1-2])\.(\d+)\.(\d+)\.(\d{10})$/' , $vers , $vers))
+			$this->error('错误的请求!');
+		
+		$model = ClassLoad::Only('Goods');/* @var $model Goods */
+		
+		if (!$shoot = $model->getSnapshoots($vers))
+			$this->error('查询不到的商品快照数据');
+		
+		$this->render('snapshoot' , array(
+			'shoot'		=> $shoot,
+			'store'		=> GlobalMerchant::getMerchantInfo($shoot['merchant_id']),
+		));
+	}
+
+	/**
+	 * 商品评论
+	 * 
+	 * @param		GET		int		gid			商品ID
+	 * @param		GET		int		page		分页码
+	 */
+	public function actionComment()
+	{
+		if (!$gid = (int)$this->getQuery('gid'))
+			$this->error(1 , '错误的商品ID');
+		
+		$model = ClassLoad::Only('Goods');/* @var $model Goods */
+		$page = ClassLoad::Only('CPagination');/* @var $page CPagination */
+		$page->setItemCount($model->getCommentCount($gid));
+		$page->pageSize = 10;
+		
+		$_uid = array();
+		$list = $model->getCommentList($gid , $page->getOffset() , $page->getLimit() , $page->getItemCount());
+		foreach ($list as $val)
+			$_uid[$val['user_id']] = $val['user_id'];
+		
+		$this->renderPartial('comment' , array(
+			'page'	=> $page,
+			'list'	=> $list,
+			'user'	=> $model->getUserGroup($_uid , true),
+		));
+	}
+	
+	private function getUnJsonArray($jsonString)
+	{
+		return ($jsonString && ($_temp = @json_decode($jsonString,true)) && json_last_error()==JSON_ERROR_NONE) ? $_temp : array();
+	}
+}

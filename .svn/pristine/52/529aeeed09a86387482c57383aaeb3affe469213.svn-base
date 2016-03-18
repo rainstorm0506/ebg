@@ -1,0 +1,59 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心模块 - 好评列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">personal.errand</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+			<tr>
+			<td>id</td>
+			<td>int</td>
+			<td>商品ID</td>
+		</tr>
+		<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>页码</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": [
+        {
+            "title": "sdfs1测试大",			#商品名称	
+            "cover": "/goods/2/14.7041.png",		#商品封面图
+            "merchant_id": "105",			#商家ID
+            "goods_score": "2",				#商品评分
+            "content": "dfgfdg",			#评价详情
+            "public_time": "1455886652",		#评论时间
+            "src": [
+                "/comment/2016/02-19/42/100.0548.gif"	#晒单图
+            ],
+            "store_name": "凌度行车记录仪成都店"	#用户账号
+        }
+    ]
+}
+</pre></td>
+		</tr>
+	</table>
+	
+	
+</div>

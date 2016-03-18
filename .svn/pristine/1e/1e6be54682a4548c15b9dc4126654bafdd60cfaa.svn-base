@@ -1,0 +1,12 @@
+	<!---------- 修改手机号码 ---------->
+	<fieldset class="form-list">
+		<legend>修改手机号码</legend>
+		<form>
+			<ul>
+				<li><input type="tel" class="tbox" placeholder="请输入旧密码"><a class="btn-send" href="javascript:;">发送验证码</a></li>
+				<li><input type="text" class="tbox" placeholder="请输入验证码"></li>
+			</ul>
+		</form>
+	</fieldset>
+	<a class="btn-1 sm-mlr" href="#">确定</a>
+	<div class="h40px"></div>

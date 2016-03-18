@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * 店铺管理模型类
+ * @author jeson.Q 
+ * 
+ * @table content
+ */
+class MyStore extends SModels
+{
+	/**
+	 * 查询 当前用户下所有未评论商品-列表
+	 *
+	 * @param string $keyword
+	 * @param int $offset
+	 * @param int $limit
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getStoreInfo($uid)
+	{
+		$storeInfo = array();
+		$uid = (int)$uid;
+		
+		// 判断是否为用户
+		if ($uid)
+		{
+			// 组装sql 语句
+			$sql = "SELECT mer_name, store_name, store_avatar, store_tel, store_describe, store_address, store_environment, mer_card FROM user_merchant WHERE uid = {$uid}";
+			$storeInfo = $this->queryRow($sql);
+
+		}
+		return $storeInfo;
+	}
+
+	/**
+	 * 修改商家店铺数据
+	 *
+	 * @param int $uid
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function setStoreInfo(array $post , $uid)
+	{
+		$field = array();
+		if ($post && $uid)
+		{
+			// 组装数据
+			$field['store_name'] = trim($post['store_name']);
+			$field['store_avatar'] = isset($post['image_url']) ? $this->getPhotos(trim($post['image_url']) , 'mystore' , $uid) : '';
+				
+			$field['store_tel'] = trim($post['store_tel']);
+			$field['store_describe'] = trim($post['store_describe']);
+			$field['store_address'] = trim($post['store_address']);
+			//店铺环境图片集合
+			if(isset($post['img'])){
+				foreach ($post['img'] as $val){
+					$imgJson[] = !empty($val) ? $this->getPhotos(trim($val) , 'comment' , $uid) : '';
+				}
+				$imgStrJson = json_encode($imgJson);
+			}
+			$field['store_environment'] = isset($imgStrJson) ? $imgStrJson : '';
+			$flag = $this->update('user_merchant' , $field , " uid = {$uid}");
+			
+			return $flag;	
+		}else{
+			return false;
+		}
+	}
+}

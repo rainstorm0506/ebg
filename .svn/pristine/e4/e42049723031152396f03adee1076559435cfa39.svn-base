@@ -1,0 +1,112 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">黄页 - 加入黄页</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">yellowPage.create</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">谭甜</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>title</td>
+			<td>string</td>
+			<td>公司名称</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>gather</td>
+			<td>int</td>
+			<td>电脑城id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>address</td>
+			<td>string</td>
+			<td>公司地址</td>
+		</tr>
+        <tr>
+            <td>请求参数</td>
+            <td>content</td>
+            <td>string</td>
+            <td>详情</td>
+        </tr>
+        <tr>
+            <td>请求参数</td>
+            <td>phone</td>
+            <td>int</td>
+            <td>手机号码</td>
+        </tr>
+        <tr>
+            <td>请求参数</td>
+            <td>is_phone</td>
+            <td>int</td>
+            <td>是否显示手机号码（1=显示，2=不显示）</td>
+        </tr>
+		<tr>
+			<td>请求参数</td>
+			<td>landline</td>
+			<td>string</td>
+			<td>座机号码</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>is_landline</td>
+			<td>int</td>
+			<td>是否显示座机号码（1=显示，2=不显示）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>qq</td>
+			<td>int</td>
+			<td>QQ号码</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>is_qq</td>
+			<td>int</td>
+			<td>是否显示QQ号码（1=显示，2=不显示）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>weixin</td>
+			<td>string</td>
+			<td>微信</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>is_weixin</td>
+			<td>int</td>
+			<td>是否显示微信（1=显示，2=不显示）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>scope</td>
+			<td>Array</td>
+			<td>经营范围</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+	{
+	    "code": 0,
+	    "message": "添加成功",
+	    "data": ""
+	}
+</pre></td>
+		</tr>
+	</table>
+</div>

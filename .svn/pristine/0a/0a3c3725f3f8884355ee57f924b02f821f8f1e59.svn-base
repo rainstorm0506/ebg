@@ -1,0 +1,57 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心 /订单 </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">usercenter.getMyac</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>必</td>
+			<td>分页参数</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "c80c4a5094c23418b9815c1f0eb208f6",
+    "message": [],
+    "data": [
+        {
+            "id": "482",
+            "user_id": "98",                #当前用户的ID编号
+            "activities_id": "142",     
+            "send_time": "1457531702",      #发放时间
+            "use_time": "0",                #使用时间
+            "order_sn": "Z1459-3914-7320",  #订单
+            "type": "1",
+            "use_starttime": "1451404800",  #优惠券有效时间（开始时间）
+            "use_endtime": "1454083200",    #优惠券有效时间（结束时间）
+            "privilege_money": "222",       #优惠券金额
+            "is_used": "0"                  #是否已经发送：0不是1是
+        },
+        .......
+    ]
+}       
+</pre></td>
+		</tr>
+	</table>
+</div>

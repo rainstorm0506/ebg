@@ -1,0 +1,22 @@
+	<!---------- 添加收货地址 ---------->
+	<fieldset class="form-list">
+		<legend>添加收货地址</legend>
+		<form>
+			<ul>
+				<li><input type="text" class="tbox" placeholder="请填写收货人姓名"></li>
+				<li><input type="tel" class="tbox" placeholder="请填写联系电话"></li>
+				<li><input type="text" class="tbox" placeholder="请填写所在地区"></li>
+				<li><input type="text" class="tbox" placeholder="请填写详细地址"></li>
+			</ul>
+		</form>
+	</fieldset>
+	<div class="bottom-wrap">
+		<div class="checbox-wrap">
+			<label>
+				<b><i ng-show="check===true"></i></b><span>设为默认地址</span>
+				<input type="checkbox" ng-checked="check" ng-init="check = true" ng-model="check">
+			</label>
+		</div>
+		<a class="btn-1" href="javascript:;">保存</a>
+	</div>
+	<div class="h40px"></div>

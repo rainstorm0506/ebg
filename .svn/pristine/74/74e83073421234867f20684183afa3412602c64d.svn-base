@@ -1,0 +1,68 @@
+﻿// ======================================================================== unit
+//@px:0.1em;	// fonts-size:62.5%
+//@px:0.1rem; // fonts-size:62.5%
+@px:0.0625em;	// font-size:1em
+//@px:0.0625rem;   // font-size:1rem
+@x:-0.5;
+@m:18em;
+@n:20em;
+@a:22em;
+@b:24em;
+@c:26em;
+@d:28em;
+@e:30em;
+@f:32em;
+@g:34em;
+@k:36em;
+// =========================== clearfix
+
+// =========================== float
+
+// =========================== abs
+.abs_lt{.abs_lt}
+// =========================== rel
+.rel{.rel}
+.rel_m{.rel_m}
+// =========================== text-align
+.tc{.tc}
+// =========================== display
+.db{.db}
+.dn{.dn}
+// =========================== overflow
+
+// =========================== visible
+
+// =========================== vertical-align
+
+// =========================== width + height + line-height
+//.w{.w}
+.wh{.wh}
+.h20px{.h(@20px);}
+.h40px{.h(@40px);}
+// =========================== font-family
+
+// =========================== font-size
+.f22px{.fs(@22px)}
+// =========================== font-style
+
+// =========================== color
+@mc:#d32238;
+@nc:#ff8a00;
+// =========================== background
+.brn_bsc{.brn_bsc}
+// =========================== background-color
+.bc_fff{.bc_fff}
+// =========================== border-color
+// =========================== transition
+//.linear{.transition(all 0.5s linear);}
+//.ease{.transition(all 0.5s ease);}
+//.ease-in{.transition(all 0.5s ease-in);}
+//.ease-out{.transition(all 0.5s ease-out);}
+//.ease-in-out{.transition(all 0.5s ease-in-out);}
+// =========================== group
+
+// =========================== flexbox
+.flexbox{.flexbox}
+.flex-1{.flex(1)}
+// =========================== other
+.sm-mlr{.mlr(3%);}

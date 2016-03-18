@@ -7,7 +7,7 @@ return array
 	'language' => 'zh_cn',
 	
 	//预加载日志组件
-	#'preload' => array('log'),
+	'preload' => array('log'),
 
 	//预加载区域
 	'import' => array

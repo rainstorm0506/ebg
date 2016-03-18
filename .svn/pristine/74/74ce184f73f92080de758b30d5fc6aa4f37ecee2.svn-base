@@ -1,0 +1,11 @@
+	<!---------- header ---------->
+	<header class="header header-pic">
+		<a href="javascript:window.history.go(-1);"><s class="tr-l"><i></i><b></b></s></a>
+		<h1>1/1</h1>
+		<i class="ico-del"></i>
+	</header>
+	<!---------- main ---------->
+	<main>
+		<img ng-src="{{imgPath}}/temp/22.png">
+	</main>
+	<a class="upload-success" href="#">上传成功</a>

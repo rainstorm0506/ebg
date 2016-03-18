@@ -1,0 +1,6 @@
+﻿// ================================== 发送验证码按扭
+.btn-send:extend(.rel_m){.fs(24/@d);.bor_ccc;.hh(60/@b);.plr(10/@b);.m(62/@b*@x 20/@b 0);.border-radius(3);
+	b{.c_f00}
+	span{.c_ccc}
+	&.sending{.cd}
+}

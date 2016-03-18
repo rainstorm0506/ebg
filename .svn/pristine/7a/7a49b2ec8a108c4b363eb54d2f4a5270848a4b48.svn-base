@@ -1,0 +1,29 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心--升级为企业用户</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">usercenter.userToCompany</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">李启源</td>
+		</tr>
+		
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+	"code" : 0,
+	"message":"",
+	"data":""
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

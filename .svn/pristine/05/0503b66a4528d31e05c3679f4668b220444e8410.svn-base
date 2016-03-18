@@ -1,0 +1,38 @@
+	<!---------- main ---------->
+	<main>
+		<section class="my-wrap">
+			<figure><a ui-sref="account.account"><img ng-src="{{imgPath}}/temp/19.png"></a></figure>
+			<section>
+				<h3>王小丫</h3>
+				<h4>会员等级及积分: V1(积分:200)</h4>
+				<h5>我的分享码：123456</h5>
+				<dl><dd></dd></dl>
+				<h6>成长值：215</h6>
+			</section>
+		</section>
+		<menu class="my-collect">
+			<li><p>48</p><h6>商品收藏</h6><a ui-sref="goodsCollection"></a></li>
+			<li><p>56</p><h6>店铺收藏</h6><a ui-sref="storeCollection"></a></li>
+			<li><p>6</p><h6>我的优惠券</h6><a ui-sref="pcoupons"></a></li>
+		</menu>
+		<section class="my-order">
+			<header><h3>我的订单</h3><a ui-sref="order.all"><s class="tr-r"><i></i><b></b></s><span>查看全部订单</span></a></header>
+			<nav>
+				<a ui-sref="order.pay"><b><s class="ico-o-1"></s></b><span>待付款</span><i>4</i></a>
+				<a ui-sref="order.delivery"><b><s class="ico-o-2"></s></b><span>待发货</span></a>
+				<a ui-sref="order.goods"><b><s class="ico-o-3"></s></b><span>待收货</span></a>
+				<a ui-sref="order.commit"><b><s class="ico-o-4"></s></b><span>待评价</span></a>
+			</nav>
+		</section>
+		<ul class="my-list">
+			<li><i class="ico-p-1"></i><h6>升级为企业用户</h6><s class="tr-r"><i></i><b></b></s><a href="user.html#/comanyRregister"></a></li>
+			<li><i class="ico-p-2"></i><h6>推荐提成</h6><s class="tr-r"><i></i><b></b></s><a ui-sref="commission.commission"></a></li>
+			<li><i class="ico-p-3"></i><h6>我的兑换</h6><p>查看兑换的商品</p><s class="tr-r"><i></i><b></b></s><a ui-sref="exchange"></a></li>
+			<li><i class="ico-p-4"></i><h6>我的评价</h6><s class="tr-r"><i></i><b></b></s><a ui-sref="commitList"></a></li>
+			<li><i class="ico-p-5"></i><h6>收货地址</h6><s class="tr-r"><i></i><b></b></s><a ui-sref="address.address"></a></li>
+			<li><i class="ico-p-6"></i><h6>账号与安全</h6><s class="tr-r"><i></i><b></b></s><a ui-sref="account.account"></a></li>
+			<li><i class="ico-p-7"></i><h6>服务中心</h6><s class="tr-r"><i></i><b></b></s><a ui-sref="service"></a></li>
+		</ul>
+	</main>
+	<!---------- nav ---------->
+	<public-nav></public-nav>

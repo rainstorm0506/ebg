@@ -1,0 +1,93 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心模块 - 我的店铺</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">personal.shop</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">何铭</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "mInfo": {
+            "uid": "110",						#商家ID
+            "mer_no": "",						#商家编号
+            "mer_name": "鸣人",
+            "mer_card": "511622199303151125",
+            "mer_card_front": "/merchant/2016/02-25/17253928.5189.png",
+            "mer_card_back": "/merchant/2016/02-25/77299759238.jpg",
+            "mer_settle_day": "10",
+            "mer_ensure_money": "3412.00",
+            "mer_ensure_is_pay": "1",
+            "mer_take_point": "12.00",
+            "store_name": "好百年家具",					#店铺名称
+            "store_environment": "",					#店铺环境
+            "store_describe": "四川省成都市金堂县",			#店铺描述
+            "store_address": "四川省成都市金堂县",			#店铺地址
+            "store_avatar": "/merchant/2016/02-25/7.1739.png",		#店铺头像
+            "store_tel": "",						#店铺电话
+            scope": [
+                {
+                    "scope_id": "5",                                    #营业范围ID
+                    "scope_name": "手机"                                #营业范围ID对应的value值
+                },
+                {
+                    "scope_id": "6",
+                    "scope_name": "手机配件"
+                }
+            ],
+            "is_self": "0",
+            "gather_value": "[\"\",\"\",\"\"]",				#店铺电脑城位置
+            "gather_id": "0",						#电脑城ID
+            "store_join_qq": "1598363852",
+            "store_grade": "2",
+            "bus_start_year": "2010",
+            "id": "110",
+            "source": "2",
+            "user_type": "3",						#会员类型( 1=个人 , 2=企业 , 3=商家)
+            "phone": "18583985993",
+            "password": "a6fd3a910c548073784ecfe5b8ed1d5b98a3fd0a",
+            "user_code": "S18583985993",				#我的推荐码
+            "re_code": "",
+            "re_uid": "0",
+            "reg_time": "1455872841",
+            "last_time": "1456243285",
+            "status_id": "713",
+            "audit_time": "0",
+            "nickname": "谁说的",
+            "realname": "",
+            "face": "/merchant/2016/02-25/296717.1739.png",		#商家头像
+            "fraction": "25",
+            "exp": "5",
+            "money": "0.00",
+            "merchant_id": "0",
+            "remark": ""
+            "gather_title": "东华电脑城"                                #电脑城名字
+        },
+        "state": {
+            "merchant_title": "待审核"					#店铺状态
+        }
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

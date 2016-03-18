@@ -1,0 +1,305 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">订单管理模块 - 订单相关所有操作汇总调用</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">order.optionOrder</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">邱龙军</td>
+		</tr>
+	</table>
+	<table style="margin-top:50px">
+		<tr>
+			<td colspan="4" style="width:200px;padding:10px 5px;color:red">1、修改订单金额：</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>oid</td>
+			<td>string</td>
+			<td>订单号（订单列表里的'order_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>typename</td>
+			<td>string</td>
+			<td>操作类型名称: (edit_money) </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>order_money</td>
+			<td>int</td>
+			<td>订单金额修改值</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "flag": 1
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+	<table style="margin-top:10px">
+		<tr>
+			<td colspan="4" style="width:200px;padding:10px 5px;color:red">2、正常订单发货：</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>oid</td>
+			<td>string</td>
+			<td>订单号（订单列表里的'order_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>typename</td>
+			<td>string</td>
+			<td>操作类型名称: (send_goods) </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>express_id</td>
+			<td>int</td>
+			<td>选择物流公司ID </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>express_no</td>
+			<td>string</td>
+			<td>运单号 </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "flag": 1
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+	<table style="margin-top:10px">
+		<tr>
+			<td colspan="4" style="width:200px;padding:10px 5px;color:red">3、上门自提发货(发货到指定网点)：</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>oid</td>
+			<td>string</td>
+			<td>订单号（订单列表里的'order_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>typename</td>
+			<td>string</td>
+			<td>操作类型名称: (send_goods) </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "flag": 1
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+	
+	<table style="margin-top:10px">
+		<tr>
+			<td colspan="4" style="width:200px;padding:10px 5px;color:red">4、商家【同意】 用户取消订单申请：</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>oid</td>
+			<td>string</td>
+			<td>订单号（订单列表里的'order_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>typename</td>
+			<td>string</td>
+			<td>操作类型名称: (option_abolish_yes) </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "flag": 1
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+	
+	<table style="margin-top:10px">
+		<tr>
+			<td colspan="4" style="width:200px;padding:10px 5px;color:red">5、商家【拒绝】 用户取消订单申请：</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>oid</td>
+			<td>string</td>
+			<td>订单号（订单列表里的'order_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>typename</td>
+			<td>string</td>
+			<td>操作类型名称: (option_abolish_no) </td>
+		</tr>reason
+		<tr>
+			<td>请求参数</td>
+			<td>reason</td>
+			<td>string</td>
+			<td>拒绝原因 </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "flag": 1
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+	
+	
+	<table style="margin-top:10px">
+		<tr>
+			<td colspan="4" style="width:200px;padding:10px 5px;color:red">6、用户已收货/确认用户已收货：</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>oid</td>
+			<td>int</td>
+			<td>订单号（订单列表里的'order_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>typename</td>
+			<td>string</td>
+			<td>操作类型名称: (received_goods) </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "flag": 1
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+	<table style="margin-top:10px">
+		<tr>
+			<td colspan="4" style="width:200px;padding:10px 5px;color:red">7、删除订单：</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>oid</td>
+			<td>int</td>
+			<td>订单号（订单列表里的'order_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>typename</td>
+			<td>string</td>
+			<td>操作类型名称: (delete_orders) </td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "flag": 1
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>

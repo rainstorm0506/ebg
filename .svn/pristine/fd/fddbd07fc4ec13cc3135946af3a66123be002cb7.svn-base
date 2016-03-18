@@ -1,0 +1,61 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">订单管理模块 - 物流公司列表数据</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">order.expressList</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">邱龙军</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": [
+        {
+            "id": "2",								#物流公司ID
+            "firm_name": "成都东鼎泰和物流配送有限公司"	#物流公司名称
+        },
+        {
+            "id": "4",
+            "firm_name": "万维网11"
+        },
+        {
+            "id": "7",
+            "firm_name": "kc"
+        },
+        {
+            "id": "8",
+            "firm_name": "测试物流公司"
+        },
+        {
+            "id": "9",
+            "firm_name": "添加信息"
+        },
+        {
+            "id": "10",
+            "firm_name": "1234"
+        }
+    ]
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>

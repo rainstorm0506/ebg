@@ -1,0 +1,76 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心 /订单 </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">usercenter.getMyac</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>必</td>
+			<td>查看收藏的类型<b style="color:red">(1商品，2店铺)</b></td>
+		</tr>
+		<tr>
+			<td><b style="color: red;font-size: 14px">type=1时正常的返回值</b> </td>
+			<td colspan="4">
+                            <pre>
+{
+    "code": 0,
+    "x-token": "1e910216824488a66918e3923e3c0adb",
+    "message": [],
+    "data": [
+        {
+            "collect_time": "1456981211",                                                               #收藏时间
+            "cover": "/goods/2016/01-26/90/goodsCover/1841790.94bc2f4f2c3c499d9201be241826af54.jpg",    #产品图
+            "title": "安普华资 网线-五类(无氧铜) 适用路由器/交换机/集线器/电脑/电视",                   #商品主标题
+            "vice_title": "一圈300米长",                                                                #商品副标题
+            "base_price": "568.00",                                                                     #零售价
+            "retail_price": "568.00",                                                                   #基础售价
+            "collect": "1",                                                                             #收藏数量
+            "id": "1094"                                                                                #当前产品ID编号
+        },
+     .........
+    ]
+}     
+                        </pre>
+                    </td>
+		</tr>
+		<tr>
+			<td><b style="color: red;font-size: 14px">type=2时正常的返回值</b></td>
+			<td colspan="4">
+                            <pre>
+{
+    "code": 0,
+    "x-token": "c22d65cf754d5240348c62e08bfcdd65",
+    "message": [],
+    "data": [
+        {
+            "store_avatar": "/merchant/2016/01-14/36839550764320104011452739836.6035.jpg",  #店铺头像
+            "uid": "22",                                                                    #商家ID编号
+            "collect": "0"                                                                  #关注数
+        },
+        .........
+    ]
+}     
+                        </pre>
+                    </td>
+		</tr>                
+	</table>
+</div>

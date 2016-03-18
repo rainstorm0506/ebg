@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+
+.page{text-align:right;clear:both;margin:10px 0 0 0}
+.page input{width:30px; text-align:center}
+.page .link , .page .link li{display:inline-block;margin:0 1px}
+.page .link{margin:0 1em 0 0}
+.page .link li a{display:inline-block;text-align:center; padding:6px 8px; border:1px solid #CCC; color:#000}
+.page .link li.selected a{color:#F00; border:1px solid #F00}
+.page select{font-size:16px}
+.page .itemCount{margin:0 10px 0 0}
+.page .itemCount span{margin:0 2px}

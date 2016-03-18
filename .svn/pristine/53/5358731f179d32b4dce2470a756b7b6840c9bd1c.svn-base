@@ -1,0 +1,15 @@
+// ============================================================ 正在加载提示
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	angularAMD.directive('loading',function($sessionStorage,$timeout,$rootScope){
+		return {
+			restrict : 'E',
+			replace : true,
+			template : '<div class="loading-wrap" ng-if="loading"><p><i></i><span ng-bing="txt"></span></p></div>',
+			link : function(scope,elem,attr){
+				$rootScope.loading = false;
+				scope.txt = '正在登录中，请稍候...';
+			}
+		}
+	})
+})

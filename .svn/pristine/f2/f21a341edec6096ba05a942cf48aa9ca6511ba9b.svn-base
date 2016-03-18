@@ -1,0 +1,29 @@
+﻿define(['angularAMD'],function(angularAMD){
+	'use strict';
+	return function($scope,$rootScope,$ajax,$sessionStorage,API){
+		$rootScope.title = title + "登录";
+
+		$scope.submitForm = function(valid){
+			if($sessionStorage.isLogin === true){
+				$scope.promt('您已经登录!');
+			}
+			var data = {
+				'phone' : $scope.username,
+				'password' : $scope.password
+			}
+			if(valid){	// 验证失败
+				$ajax.post(API.login,data,function(data){
+					$scope.promt('恭喜登录成功!');
+				},function(){
+					$scope.promt('用户名或密码错误!');
+				})
+			}else{	// 验证成功
+				
+			}
+		}
+
+		
+		
+		//$http.post('',data).success(function(req){})
+	}
+})

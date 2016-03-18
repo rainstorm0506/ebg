@@ -1,0 +1,14 @@
+<?php
+class BackLog extends SModels
+{
+	public function getListCount()
+	{
+		$SQL='';
+		return $this->queryScalar("SELECT count(*) FROM back_log {$SQL}");
+	}
+	public function getList($offset , $rows , $total , array $schema = array())
+	{
+		$SQL='';
+		return $this->queryAll("SELECT * FROM back_log {$SQL} LIMIT {$offset},{$rows}");
+	}
+}

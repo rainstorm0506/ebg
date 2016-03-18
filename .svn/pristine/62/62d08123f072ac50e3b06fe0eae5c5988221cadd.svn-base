@@ -1,0 +1,10 @@
+	<!---------- 修改手机号码 ---------->
+	<fieldset class="form-list">
+		<legend>修改手机号码</legend>
+		<form name="aForm" ng-submit="submitForm(aForm.$valid)" novalidate>
+			<send-code></send-code>
+			<div class="wrap-btn"><input class="btn-1" type="submit" value="确定" ng-disabled="aForm.$invalid || isSubmit"></div>
+		</form>
+	</fieldset>
+	<div class="h40px"></div>
+	<promt></promt>

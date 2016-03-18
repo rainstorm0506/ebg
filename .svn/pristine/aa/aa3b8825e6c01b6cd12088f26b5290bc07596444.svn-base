@@ -1,0 +1,115 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">集采订单管理模块 - 订单列表(有分页)</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">purchase.purchaseList</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">邱龙军</td>
+		</tr>
+		<tr>
+			<td rowspan="4">请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td> APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>订单状态筛选值：例如（1-待报价，2-报价完成，3-我参与的）</td>
+		</tr>
+		<tr>
+			<td>pageNow</td>
+			<td>int</td>
+			<td>（选填）查询当前页 订单开始位置</td>
+		</tr>
+		<tr>
+			<td>pageSise</td>
+			<td>int</td>
+			<td>（选填）查询当前页 订单个数</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "orderList": [
+            {
+                "purchase_sn": "F9459-7688-6404",			#集采订单号
+                "create_time": "1456299218",				#创建时间
+                "price_endtime": "1466697600",				#报价截止时间
+                "is_closed": "1",							#订单状态：（0-未拆分上架，1-等待报价，2-正在报价，3-报价结束）
+                "file_data": "[\"\\\/purchase\\\/2016\\\/02-24\\\/24\\\/15518401161456299203.0277.png\"]",
+                "isPrice": 0,								#当前商家 是否完成了对该订单的商品报价（0-否，1-是）
+                "goods": [
+                    {
+                        "id": "13",
+                        "purchase_sn": "F9459-7688-6404",		#集采订单号
+                        "name": "\u4fa7\u62c9\u62c9",			#订单名称
+                        "class_one_id": "2",
+                        "class_two_id": "150",
+                        "class_three_id": "155",
+                        "num_min": "100",						#订单集采商品最小数量
+                        "num_max": "500",						#订单集采商品最大数量
+                        "descript": "\u4fa7\u62c9\u62c9\u4f01\u4e1a\u6c42\u8d2d",		#订单描述
+                        "price_min": "1000.00",
+                        "price_max": "1500.00",
+                        "params": "\u767d\u8272,\u6807\u51c6\u7248,Intel I5",
+                        "create_time": "1456299359",
+                        "recom": "0",
+                        "is_recom": "2",
+                        "offer_num": "0",
+                        "isPrice": ""
+                    }
+                ]
+            },
+            {
+                "purchase_sn": "N3459-7689-2385",
+                "create_time": "1456295079",
+                "price_endtime": "1456329600",
+                "is_closed": "2",
+                "file_data": "[\"\\\/purchase\\\/2016\\\/02-24\\\/24\\\/14821496521456295059.2606.png\"]",
+                "isPrice": 0,
+                "goods": [
+                    {
+                        "id": "12",
+                        "purchase_sn": "N3459-7689-2385",
+                        "name": "\u8bbe\u5907",
+                        "class_one_id": "2",
+                        "class_two_id": "150",
+                        "class_three_id": "155",
+                        "num_min": "100",
+                        "num_max": "100",
+                        "descript": "\u54c1\u724c\u8981\u6c42\u534e\u7855\u7684",
+                        "price_min": "2000.00",
+                        "price_max": "5000.00",
+                        "params": "Intel I5",
+                        "create_time": "1456295184",
+                        "recom": "0",
+                        "is_recom": "2",
+                        "offer_num": "0",
+                        "isPrice": ""
+                    }
+                ]
+            }
+        ],
+        "orderTotal": 14
+    }
+}
+</pre></td>
+		</tr>
+		<tr>
+			<td style="color:red">备注：</td>
+			<td colspan="3" style="color:red;text-decoration:underline">* 订单列表是按订单创建时间--倒叙--进行排序返回的，最新的订单反正最前！！</td>
+		</tr>
+	</table>
+</div>

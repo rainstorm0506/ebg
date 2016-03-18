@@ -1,0 +1,8 @@
+﻿// ================================== 排序导航
+.sort-nav:extend(.flexbox all,.bc_fff,.tc){.fs(@28px);.hh(74/@d);.bbor_ddd;
+	a{.plr(20/@d);
+		*{.dk}
+	}
+	span{.mr(10/@d);}
+	.current{.c(@mc);.bbor(@mc,2/@a);}
+}

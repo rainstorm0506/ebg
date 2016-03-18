@@ -1,0 +1,20 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main>
+		<nav class="order-nav">
+			<a ui-sref="order.all" ui-sref-active="current">全部</a>
+			<a ui-sref="order.pay" ui-sref-active="current">待付款</a>
+			<a ui-sref="order.delivery" ui-sref-active="current">待发货</a>
+			<a ui-sref="order.goods" ui-sref-active="current">待收货</a>
+			<a ui-sref="order.commit" ui-sref-active="current">待评价</a>
+		</nav>
+		<section class="order-null" ng-if="orderNum <=0">
+			<i></i>
+			<p>抱歉，没有找到相关订单</p>
+			<a class="btn-esc" href="#">随便逛逛</a>
+			<div class="h40px"></div>
+		</section>
+		
+		<div ui-view="viewOrder" class="animated fadeIn" ng-if="orderNum >0"></div>
+	</main>

@@ -5,7 +5,7 @@
  * @author Administrator
  */
 class CreatePurchaseForm extends WebApiForm{
-    public $link_man,$phone;
+    public $link_man,$phone,$is_tender_offer,$is_interview,$file_data;
     public function validateInfo()
     {
         $flag = true;
@@ -19,9 +19,9 @@ class CreatePurchaseForm extends WebApiForm{
         }
         return $flag;
     }
-    public function rules() {
-        return array(
-            array('is_tender_offer,is_interview,file_data','safe')
-        );
-    }
+//    public function rules() {
+//        return array(
+//            array('is_tender_offer,is_interview,file_data','safe')
+//        );
+//    }
 }

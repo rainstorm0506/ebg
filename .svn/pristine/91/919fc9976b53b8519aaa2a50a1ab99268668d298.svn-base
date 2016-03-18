@@ -1,0 +1,45 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">订单管理模块 - 订单列表总数（及按条件查询）</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">order.orderTotal</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">邱龙军</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>status</td>
+			<td>int</td>
+			<td>状态筛选值（101,102,103,104,105,106,107,108）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+	"code": 0,
+	"message": "",
+	"data": {
+		"totalNums": 2			#查询到的订单总数
+		"totalMoney" : 3000.00		#查询到的订单总金额
+	}
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>

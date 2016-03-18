@@ -1,0 +1,15 @@
+// ============================================================ 搜索模块指令
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	angularAMD.directive('headerSearch',function(){
+		return{
+			restrict : 'E',
+			replace : true,
+			template : '<header class="header"><div class="search-box"><input id="search" type="text" placeholder="您想购买什么呢？" ng-model="search"><i></i></div></header>',
+			link : function(scope,elem,attr){
+				
+			}
+		}
+	})
+})
+

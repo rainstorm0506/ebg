@@ -1,0 +1,103 @@
+//  ajax get与post请求
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	
+	angularAMD.service('$ajax',function($http,$timeout,$localStorage,$rootScope,$q){
+		// post 请求
+		
+		var setLocal = function(token,time,vers){
+			return $localStorage.$default({'x-token':token,'x-time':time,'x-vers':vers});
+		}
+		
+		//$localStorage.$reset();	// 重置本地存储
+		
+		//console.log($localStorage);
+		this.post =  function(url,data,callback){
+			$http({
+				method : 'POST',
+				url : url,
+				data : data,
+				headers : {'x-token':$localStorage['x-token'] , 'x-time':E.time(), 'x-vers':$localStorage['x-vers'] , 'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+			}).success(function(data,status,headers,config){
+				$localStorage['x-token'] = data['x-token'];
+				callback(data,data.code);
+				//$localStorage.$default({'x-token':data['x-token'],'x-time':data['x-time'],'x-vers':data['x-vers']});
+			}).error(function(data,status,headers,cofig){
+				console.log('请求错误：' + status);
+			})
+		}
+		
+		this.get = function(url){
+			return $http({ method:'GET', url:url})
+		}
+		
+		this.query = function(url,data,callback){
+			var deferred = $q.defer();  // 声明延后执行，即声明请求异步
+			var promise = deferred.promise;
+			$http({
+				method : 'POST',
+				url : url,
+				data : data,
+				headers : {'x-token':$localStorage['x-token'] , 'x-time':E.time(), 'x-vers':$localStorage['x-vers'] , 'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+			}).success(function(data,status,headers,config){
+				if(data.code === 0){
+					//callback(data.data);
+					deferred.resolve(data);  //声明执行成功，必须放success 里面
+				}else if(data.code === -1){
+					$rootScope.promt('请还未登录，请登录');
+					$localStorage.prevPage = window.location.href;
+					$timeout(function(){
+						window.location.href = 'user.html';
+					},2000)
+				}else{
+					$rootScope.promt('数据请求出错，请重试!');
+				}
+				$localStorage['x-token'] = data['x-token'];
+				
+			}).error(function(data,status,headers,config){
+				deferred.reject(data);      //声明执行失败
+				$rootScope.promt('无法请求服务器，请检查网络或重试!');
+			});
+			
+			promise.then(function(data){
+				if(data.code === 0){
+					callback(data.data);
+				}
+			},function(error){
+				
+			},function(value){
+				
+			}).catch(function(reason){
+				deferred.reject(reason)
+			})['finally'](function(){
+				
+			})
+						 
+			return promise; //返回承诺，返回获取数据的API
+		}
+
+		var path = 'http://192.168.0.240/webApp/api/';
+		this.api = {
+			        token : path + 'global.token', 			// token 首页请求
+		        // ========================= 登录注册API
+			        login : path + 'user.login',			// 登录
+                   msCode : path + 'global.sendSmsCode',	// 短信验证码
+                  imgCode : path + 'global.getImgCode',		// 图片验
+			viferyImgCode : path + 'global.viferyImgCode',  // 异步验证图片验证码
+	          sendSmsCode : path + 'global.sendSmsCode',	// 发送手机短信码
+	        viferySmsCode : path + 'global.viferySmsCode',	// 异步验证手机短信码
+	             register : path + 'user.sign',				// 注册
+              	// ========================= 商品API
+	           secondHand : path + 'used.list',				// 二手市场模块
+	     secondConditions : path + 'used.conditions',		// 二手商品筛选条件
+	           secondInfo : path + 'used.info',				// 二手商品详情
+	           // ========================= 积分商城API
+	          creditsList : path + 'credits.list',			// 积分商城
+	          creditsInfo : path + 'credits.info',			// 积分商城详情
+		}
+		
+		return this;
+	})
+})
+// API说明：http://192.168.0.240/doc/webApp.html
+// 线上测试地址：http://192.168.0.240/webApp/index.html

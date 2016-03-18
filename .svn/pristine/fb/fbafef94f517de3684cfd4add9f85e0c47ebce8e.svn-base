@@ -1,0 +1,558 @@
+<?php
+	/**
+	 * 采购管理模型
+	 *	 *
+	 * @author 刘军军
+	 */
+	class Purchase extends SModels {
+
+		/**
+		 * 根据关键字查询属性
+		 *
+		 * @param $keyword  string      查询关键字
+		 * @param $offset   int         偏移量
+		 * @param $row      int         每页记录数
+		 * @param $total    int         总记录数
+		 * @param $$is_split int        拆分
+		 * @return array|static[]
+		 */
+		public function searchAllByCondition(array $post, $offset = 0, $row, $total,$is_split) {
+			$purchaseList = array();$priceNum = $goodsNum = 0;
+			$sql = 'SELECT * FROM purchase_order where 1=1 AND system_delete = 0';
+			if (isset($post['start_time'])) {
+				$sql .= $post['start_time']?" and create_time>".strtotime($post['start_time']):'';
+			}
+			if (isset($post['end_time'])) {
+				$sql .= $post['end_time']?" and create_time<".strtotime($post['end_time']):'';
+			}
+			if (isset($post['keyword'])) {
+				$sql .= $post['keyword']?" and (purchase_sn='{$post['keyword']}' OR concat(title,phone,link_man) LIKE '%{$post['keyword']}%')":'';
+			}
+			if(isset($is_split)){
+				$sql .= " and is_split={$is_split}";
+			}
+			$sql .= " order by id desc LIMIT ".$offset.",".$row;
+			$purchaseList = $this -> queryAll($sql);
+			if(!empty($purchaseList)){
+				foreach ($purchaseList as $key => $val){
+					if($val['price_endtime'] < time()){
+						$purchaseList[$key]['status'] = 0;
+					}else{
+						$goodsList = $this->getPurchaseGoods($val['purchase_sn']);
+						if(!empty($goodsList)){
+							$goodsNum = count($goodsList);
+							foreach ($goodsList as $keys => $vals){
+								if($vals['isPrice'])$priceNum++;
+							}
+							if($priceNum == 0){
+								$purchaseList[$key]['status'] = 3;
+							}elseif($priceNum > 0 ){
+								$purchaseList[$key]['status'] = 2;
+							}
+						}else{
+							$purchaseList[$key]['status'] = 4;
+						}
+					}
+				}
+			}
+			return $purchaseList;
+		}
+
+		//查询当前采集订单下所有的商品
+		public function getPurchaseGoods($purchase_sn) {
+			$purchaseGoods = array();
+			// 判断是否为会员用户
+			if($purchase_sn){
+				$sql = "SELECT * FROM purchase_goods WHERE purchase_sn = '{$purchase_sn}' ";
+				$purchaseGoods = $this->queryAll($sql);
+				foreach ($purchaseGoods as $key => $val){
+					$purchaseGoods[$key]['isPrice'] = $this->getIsPurchase($val['id']);
+				}
+				return $purchaseGoods;
+			}
+			return null;
+		}
+		
+		//查询当前采集订单下单个商品是否报价
+		public function getIsPurchase($pid) {
+			$priceInfo = array();
+			$uid = (int)$this->getUid();
+			// 判断是否为会员用户
+			if($pid){
+				$sql = "SELECT price FROM purchase_price WHERE pg_id = {$pid}";
+				$priceInfo = $this->queryRow($sql);
+		
+				return isset($priceInfo) && $priceInfo ? $priceInfo['price'] : '';
+			}
+			return null;
+		}
+
+		/**
+		 * 得到统计记录数
+		 *
+		 * @param   $keyword    string      搜索关键字
+		 * @return  统计记录数
+		 */
+		public function getCount(array $post,$is_split) {
+			$sql = 'SELECT count(*) FROM purchase_order where 1=1';
+			if (isset($post['start_time'])) {
+				$sql .= $post['start_time']?" and create_time>".strtotime($post['start_time']):'';
+			}
+			if (isset($post['end_time'])) {
+				$sql .= $post['end_time']?" and create_time<".strtotime($post['end_time']):'';
+			}
+				
+			if (isset($post['keyword'])) {
+				$sql .= $post['keyword']?" and (purchase_sn='{$post['keyword']}' OR concat(title,phone,link_man) LIKE '%{$post['keyword']}%')":'';
+			}
+			if(isset($is_split)){
+				$sql .= " and is_split={$is_split}";
+			}
+			return (int)$this -> queryScalar($sql);
+		}
+		/**
+		 * 获得 单个采购订单的信息
+		 *
+		 * @param int $id
+		 */
+		public function getActiveInfo($purchase_sn) {
+			$info = array ();
+			if ($purchase_sn) {
+				$sql = "SELECT * FROM purchase_order WHERE purchase_sn='{$purchase_sn}'";
+				$info = $this->queryRow ($sql);
+				return $info;
+			} else {
+				return array ();
+			}
+		}
+		
+		public function create(array $post){
+			$field = array();
+			$field['phone'] = $post['phone']?$post['phone']:'';
+			$field['link_man'] = $post['link_man']?$post['link_man']:'';
+			$field['company_name'] = $post['company_name']?$post['company_name']:'';
+			$field['title'] = $post['title']?$post['title']:'';
+			$field['user_id'] = $post['merchant_id']?$post['merchant_id']:'';
+			$field['price_endtime'] = $post['price_endtime']?strtotime($post['price_endtime']):'';
+			$field['wish_receivingtime'] = $post['wish_receivingtime']?strtotime($post['wish_receivingtime']):'';
+			$field['price_require'] = $post['price_require']?$post['price_require']:'';
+			$field['dispatching'] = $post['dispatching']?$post['dispatching']:'';
+			$field['is_split'] = 0;
+			$field['purchase_sn'] = GlobalOrders::getOrderSN();
+			$field['file_data'] = '';
+			$field['is_closed'] = 0;
+			$field['is_replace'] = 1;
+			$field['is_tender_offer'] = $post['is_tender_offer']?(int)$post['is_tender_offer']:0;
+			$field['is_interview'] = $post['is_interview']?(int)$post['is_interview']:0;
+			$field['is_replace'] = 1;
+			$field['create_time'] = time();
+			$this->insert('purchase_order', $field);
+			return $this->getInsertId();
+		} 
+		
+		/**
+		 * 编辑采购单信息
+		 * @param	array	$post		post
+		 * @param	int		$id			ID
+		 */
+		public function modify(array $post, $id) {
+			$field = array();
+			if ($id) {
+				$db=Yii::app()->db;
+				$tran=$db->beginTransaction();
+				try{
+					$field['phone'] = $post['phone']?$post['phone']:'';
+					$field['link_man'] = $post['link_man']?$post['link_man']:'';
+					$field['company_name'] = $post['company_name']?$post['company_name']:'';
+					$field['title'] = $post['title']?$post['title']:'';
+					$field['price_endtime'] = $post['price_endtime']?strtotime($post['price_endtime']):'';
+					$field['wish_receivingtime'] = $post['wish_receivingtime']?strtotime($post['wish_receivingtime']):'';
+					$field['price_require'] = $post['price_require']?$post['price_require']:'';
+					$field['dispatching'] = $post['dispatching']?$post['dispatching']:'';
+					$field['is_tender_offer'] = $post['is_tender_offer']?(int)$post['is_tender_offer']:0;
+					$field['is_interview'] = $post['is_interview']?(int)$post['is_interview']:0;
+					$field['is_split'] = 1;
+					$field['is_closed'] = 1;
+					$this -> update('purchase_order', $field,"purchase_sn='{$id}'");
+					$this -> delete('purchase_goods',"purchase_sn='{$id}'");
+					if($post['goods']){
+						$goods = json_decode($post['goods']);
+						foreach ($goods as $key=>$row){ 
+							$good = array();
+							$good['purchase_sn'] = $id;
+							$good['class_one_id'] = $row->class_one_id?$row->class_one_id:'';
+							$good['class_two_id'] = $row->class_two_id?$row->class_two_id:'';
+							$good['class_three_id'] = $row->class_three_id?$row->class_three_id:'';
+							$good['name'] = $row->name?$row->name:'';
+							$good['num_max'] = $row->num_max?$row->num_max:'';
+							$good['descript'] = $row->descript?$row->descript:'';
+							$good['price_min'] = $row->price_min?$row->price_min:'';
+							$good['price_max'] = $row->price_max?$row->price_max:'';
+							$good['num_min'] = $row->num_min?$row->num_min:'';
+							$good['params'] = $row->params?$row->params:'';
+							$good['create_time'] = time();
+							$good['recom'] = '';
+							$good['is_recom'] = 0;
+							$this -> insert('purchase_goods',$good);
+						}
+					}
+ 					$tran->commit();
+ 				}catch(Exception $e){
+ 					$tran->rollback();
+ 				}
+			}
+		}
+
+		/**
+		 * 获得单个采购单信息
+		 * @param		int			$id			采购单ID
+		 */
+		public function getInfoActive($purchase_sn) {
+			$info = array();
+			if ($purchase_sn) {
+				$sql = "SELECT * FROM purchase_order WHERE purchase_sn='{$purchase_sn}'";
+				$info = $this->queryRow($sql);
+				$detail_sql = "SELECT * FROM purchase_goods WHERE purchase_sn='{$purchase_sn}'";
+				$info['goods'] = $this->queryAll($detail_sql);
+			}
+			return $info;
+		}
+
+		/**
+		 * 删除采购单
+		 * 
+		 */
+		public function deletes($purchase_sn) {
+			$db=Yii::app()->db;
+			$tran=$db->beginTransaction();
+			try{
+				//$this -> delete('purchase_goods', "purchase_sn='" . $purchase_sn . "'");
+				$this -> update('purchase_order', array('system_delete' => 1),"purchase_sn='" . $purchase_sn . "'");
+				$tran->commit();
+			}catch(Exception $e){
+				$tran->rollback();
+			}
+			
+		}
+		
+		/**
+		 * 手动关闭采购单
+		 */
+		public function closed($purchase_sn) {
+			if($purchase_sn){
+				$this->update('purchase_order', array('is_closed'=>3),"purchase_sn='{$purchase_sn}'");
+			}			
+		}
+		
+		/**
+		 * 确认采购单  上架   
+		 * param $id int 推荐id
+		 */
+		public function doRecom($purchase_sn) {
+			if($purchase_sn){
+				$db=Yii::app()->db;
+				$tran=$db->beginTransaction();
+				try{
+					$this->update('purchase_goods', array('is_recom'=>2),"purchase_sn='{$purchase_sn}'");
+					$this->update('purchase_order', array('is_split'=>2),"purchase_sn='{$purchase_sn}'");
+					$tran->commit();
+				}catch(Exception $e){
+					$tran->rollback();
+				}
+			}
+		}
+		
+		/**
+		 * 获得单个采购单商品信息
+		 * @param		int			$id			采购单ID
+		 */
+		public function getGoodsActive($id) {
+			$id = (int)$id;
+			$info = array();
+			if ($id) {
+				$sql = "SELECT * FROM purchase_goods WHERE id={$id}";
+				$info = $this->queryRow($sql);
+			}
+			return $info;
+		}
+		
+		/**
+		 * 获得 默认商品分类一级
+		 *
+		 * @param int $oneId
+		 */
+		public function getClassOne() {
+			$sql = "SELECT id FROM goods_class WHERE parent_id = 0 limit 1";
+			$result = $this->queryRow ($sql);
+			return isset($result['id'])?$result['id']:0;
+		}
+		
+		/**
+		 * 获得 默认商品分类一级
+		 * 设置推荐的商品
+		 * @param $id
+		 * @param $post
+		 */
+		
+		function addRecomGoods($post,$id)
+		{
+			if($id && $post){
+				$recomid = array();
+				foreach(json_decode($post) as $key => $value){
+					$recomid[] = $value;
+				}
+				$filed['recom'] = implode(",",$recomid);
+				$recomgoods = $this->findGoodrecom($id,$filed['recom']);
+				$db=Yii::app()->db;
+				$tran=$db->beginTransaction();
+					try{
+					$this->delete('purchase_price',"pg_id={$id} and type=1");
+					foreach ($recomgoods as $key=>$row){
+						$data = array();
+						$data['pg_id'] = $id;
+						$data['goods_id'] = $row['id'];
+						$data['title'] = $row['title'];
+						$data['content'] = $row['content'];
+						$data['price'] = $row['base_price'];
+						$data['brand'] = $row['brand'];
+						$data['merchant_id'] = $row['merchant_id'];
+						$data['mer_name'] = $row['mer_name'];
+						$data['rem_price'] = $row['base_price'];
+						$data['num'] = $row['stock'];
+						$data['create_time'] = time();
+						$data['type'] = 1;
+						$this->insert('purchase_price', $data);
+					}
+					$this->update('purchase_goods', array('is_recom'=>1),'id='.$id);
+					$tran->commit();
+				}catch(Exception $e){
+					$tran->rollback();
+				}
+			}else{
+				return false;
+			}
+		
+		}
+		function findGoodrecom($id,$ids)
+		{
+			$result = array();
+			$goods = $this->queryRow("select * from purchase_goods where id={$id}");
+			$sql = "SELECT * FROM goods where id in({$ids})";
+			$result = $this->queryAll($sql);
+			$merchant = array();
+			foreach ($result as $key=>$row){	
+				$result[$key]['brand'] = GlobalBrand::getBrandName($row['brand_id']);
+				$result[$key]['base_price'] = $this->getMinPrice($row,$goods);
+				$merchant[] = $row['merchant_id'];
+			}
+			$merchant_str = implode(",",$merchant);
+			$sql_mer = "select * from user_merchant where uid in({$merchant_str})";
+			$merres = $this->queryAll($sql_mer);
+			$config = array();
+			foreach ($merres as $key=>$row){
+				$config[$row['uid']] = $row['mer_name'];
+			}
+			foreach ($result as $k=>$row){
+				if(isset($config[$row['merchant_id']])){
+					$result[$k]['mer_name'] = $config[$row['merchant_id']];
+				}
+			}
+			return $result;
+		}
+		/******
+		 * 根据id或者商品名称或者品牌搜索相关推荐商品
+		 * @param  $id  当前分拆商品id
+		 * @param  $keyword 搜索关键词
+		 *  */
+		function findGoods($keyword,$id,$limit='limit 0,20',$pg_id)
+		{	
+			$result = array();
+			$goods = $this->queryRow("select * from purchase_goods where id={$pg_id}");
+			if($keyword){
+				$result =  $this->queryAll("SELECT * FROM goods  WHERE shelf_id = 410 AND delete_id != 419 AND concat(title) like '%{$keyword}%'  {$limit}");
+			}
+			if($id>0){
+				//附加属性匹配
+				$where = "where 1=1 and goods.shelf_id = 410 AND goods.delete_id != 419 ";
+				if($goods['class_one_id']){
+					$where .= " and class_one_id = {$goods['class_one_id']}";
+				}
+				if($goods['class_two_id']){
+					$where .= " and class_two_id = {$goods['class_two_id']}";
+				}
+				if($goods['class_three_id']){
+					$where .= " and class_three_id = {$goods['class_three_id']}";
+				}
+				if($goods['params']){
+					$where .= " and goods.id = goods_join_attrs.goods_id and ( instr('{$goods['params']}',attrs_1_value)>0 or instr('{$goods['params']}',attrs_2_value)>0 or instr('{$goods['params']}',attrs_3_value)>0)";				
+				}
+				$sql = "SELECT goods.*,goods_join_attrs.base_price as attrs_base_price FROM goods,goods_join_attrs {$where} group by goods.id {$limit} ";
+				$result = $this->queryAll($sql);
+			}
+			
+			$merchant = array();
+			foreach ($result as $key=>$row){
+				$result[$key]['zh_name'] = GlobalBrand::getBrandName($row['brand_id']);
+				$result[$key]['base_price'] = $this->getMinPrice($row,$goods);
+				// $result[$key]['base_price'] = 11;//$this->getMinPrice($row,$goods);
+				$merchant[] = $row['merchant_id'];
+			}
+		
+			$merres = array();
+			$merchant_str = implode(",",$merchant);
+			if($merchant_str){
+				$sql_mer = "select * from user_merchant where uid in({$merchant_str})";	
+				$merres = $this->queryAll($sql_mer);
+			}
+			$config = array();
+			foreach ($merres as $key=>$row){
+				$config[$row['uid']] = $row['mer_name'];
+			}
+			foreach ($result as $k=>$row){
+				if(isset($config[$row['merchant_id']])){
+					$result[$k]['mer_name'] = $config[$row['merchant_id']];
+				}else{
+					$result[$k]['mer_name'] ='';
+				}
+			}
+
+			return $result;
+		}
+		/**
+		 * 计算最低价格
+		 *  */
+		public function getMinPrice($good,$purchase_good){
+			$amount_price = json_decode($good['amount_ratio'],true);
+			$temp = '';
+			if((int)$good['base_price']==0){//有属性   goods_join_attrs表里查询
+				$sql ="select * from goods_join_attrs where goods_id={$good['id']} order by base_price asc limit 1";
+				$result = $this->queryRow($sql);
+				$good['base_price'] = $result['base_price'];
+				if(isset($amount_price['p'])){
+					foreach ($amount_price['p'] as $key=>$row){//数量最低折扣
+						if($purchase_good['num_min']>=$amount_price['s'][$key] && $purchase_good['num_min']<=$amount_price['e'][$key] || $purchase_good['num_max']>=$amount_price['s'][$key]&&$purchase_good['num_max']<=$amount_price['e'][$key]){
+							$price = round($good['base_price']*$amount_price['p'][$key]/100,2);
+							$temp .= "<p>数量：".$amount_price['s'][$key]."-".$amount_price['e'][$key].",价格为".$price."</p>";
+						}
+					}
+					if($temp == ''){
+						$price = round($good['base_price']*$amount_price['p'][count($amount_price['p'])-1]/100,2);
+						$temp .= "<p>数量：".$amount_price['s'][count($amount_price['p'])-1]."-".$amount_price['e'][count($amount_price['p'])-1].",价格为".$price."</p>";
+					}
+					return $temp ? $temp : '暂无推荐价';
+				}else{
+					return $result['base_price'];
+				}
+			}
+			else{
+				if(isset($amount_price['p'])){
+					foreach ($amount_price['p'] as $key=>$row){//数量最低折扣
+						//$temp .= $purchase_good['num_max'].':'.$amount_price['s'][$key].",";
+						if($purchase_good['num_min']>=$amount_price['s'][$key]&&$purchase_good['num_min']<=$amount_price['e'][$key]||$purchase_good['num_max']>=$amount_price['s'][$key]&&$purchase_good['num_max']<=$amount_price['e'][$key]){
+							$price = round($good['base_price']*$amount_price['p'][$key]/100,2);
+							$temp .= "<p>数量：".$amount_price['s'][$key]."-".$amount_price['e'][$key].",价格为".$price."</p>";
+						}
+					}
+					if($temp == ''){
+						$price = round($good['base_price']*$amount_price['p'][count($amount_price['p'])-1]/100,2);
+						$temp .= "<p>数量：".$amount_price['s'][count($amount_price['p'])-1]."-".$amount_price['e'][count($amount_price['p'])-1].",价格为".$price."</p>";
+					}
+					return $temp;
+				}else{
+					return $good['min_price']." - ".$good['max_price'];
+				}
+			}
+			
+		}
+		/****** 
+		 * 统计根据id或者商品名称或者品牌搜索相关推荐商品的总数
+		 * @param  $id  当前分拆商品id
+		 * @param  $keyword 搜索关键词
+		 *  */
+		function getTotalNumber($keyword,$id){
+			$keyword = $this->quoteLikeValue($keyword);
+			if($keyword){
+				return (int)$this->queryScalar("SELECT COUNT(*) FROM goods  WHERE concat(title) like {$keyword}");		
+			}elseif($id){
+				$result = $this->queryRow("select * from purchase_goods where id={$id}");
+				$where = "where 1=1";
+				if($goods['class_one_id']){
+					$where .= " and class_one_id = {$goods['class_one_id']}";
+				}
+				if($goods['class_two_id']){
+					$where .= " and class_two_id = {$goods['class_two_id']}";
+				}
+				if($goods['class_three_id']){
+					$where .= " and class_three_id = {$goods['class_three_id']}";
+				}
+				if($goods['params']){
+					$where .= "and goods.id = goods_join_attrs.goods_id and ( instr('{$goods['params']}',attrs_1_value)>0 or instr('{$goods['params']}',attrs_2_value)>0 or instr('{$goods['params']}',attrs_3_value)>0)";				
+				}
+				$sql = "select count(goods.id) FROM goods,goods_join_attrs {$where} group by goods.id";
+				return (int)$this->queryScalar($sql);
+			}else{
+				return 0;
+			}	
+		}
+		
+		
+		/**
+		 * 获得 平台推荐的商品
+		 * @param int $oneId
+		 * @param int $twoId
+		 * @param int $threeId
+		 */
+		public function getRecomGoods($oneId,$twoId,$threeId){
+			$where = "where 1=1";
+			if($oneId){
+				$where .= " and g.class_one_id = {$oneId}";
+			}
+			if($twoId){
+				$where .= " and g.class_two_id = {$twoId}";
+			}
+			if($threeId){
+				$where .= " and g.class_three_id = {$threeId}";
+			}
+			$sql = "select g.* from goods as g {$where} limit 20";
+			$result = $this->queryAll($sql);
+			foreach ($result as $key=>$row){
+				$result[$key]['zh_name'] = GlobalBrand::getBrandName($row['brand_id']);
+			}
+			return $result;
+		}
+		
+		/**
+		 * 获得 平台推荐的商品
+		 * @param int $id
+		 */
+		public function getRecomDetail($id,$type){
+			$where ='';
+			if($id){
+				$where .= " where pg_id={$id}";
+			}
+			if($type){
+				$where .= " and type={$type}";
+			}
+			
+			$sql = "select pp.*,pg.class_one_id,pg.class_two_id,pg.class_three_id from purchase_price pp LEFT JOIN purchase_goods pg ON pp.pg_id = pg.id $where";
+			$result = $this->queryAll($sql);
+			return $result;
+		}
+		
+		/**
+		 * 获得 商家会员等级
+		 * @param int $id
+		 */
+		public function getLevel($id){
+			return 10;
+			$sql = "select * from user where id={$id}";
+			$result = $this->queryRow($sql);
+			if($result){
+				return $result;
+				
+			}else{
+				return 0;
+			}
+			
+		}
+	}

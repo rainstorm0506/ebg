@@ -1,0 +1,149 @@
+﻿// 注册整个应用程序的各个模块，每个模块中定义各自的路由。
+// 定义应用的模块，加载模块。配置拦截机
+window.title = 'e办公移动平台——';
+define(['app/module/login/common'],function(angularAMD){
+	'use strict';
+	var cPath = 'app/module/login/controller/';
+	var app = angular.module('ebangong',angular.modules).config(function($stateProvider,$urlRouterProvider){
+		var str = 'e办公移动平台——';
+		$stateProvider.state('login',{ // 嵌套视图
+			templateUrl : 'view/common/header-public.html'
+		}).state('login.login',{
+			url :'/login',
+			templateUrl : 'view/login/login.html',
+			controller : function($scope,$rootScope,$localStorage,$ajax,$timeout){
+				$rootScope.title = title + "登录";
+				if($localStorage.isLogin === true){
+					window.location.href = 'index.html';
+					return false;
+				}
+				$scope.submitForm = function(valid){
+					var data = {
+						'phone' : $scope.username,
+						'password' : $scope.password
+					}
+					if(valid){	// 验证成功
+						$ajax.post($ajax.api.login,data,function(data,code){
+							if($localStorage.isLogin){
+								$scope.promt('您已经成功登录，无需再登录!');
+								return false;
+							}
+							//$rootScope.loading = true;
+							if(code === 0){
+								$localStorage.isLogin = true;		// 登录成功
+								//$rootScope.loading = false;
+								$scope.promt('恭喜登录成功!');
+								$timeout(function(){
+									window.location.href = $localStorage.prevPage;
+									$localStorage.prevPage = '';
+								},2000)
+							}else if(code === 100){
+								// 登录超时跳转到登录页面
+								/*
+									$timeout(function(){
+										top.location.href = 'login.html';
+									},3000)
+								*/
+							}else if(code === -1){ // 未登录
+								
+							}else{
+								
+							}
+
+							
+							if(code !== 0){
+								$scope.promt('用户名或密码错误!');
+								$rootScope.loading = false;
+							}
+						})
+					}else{	// 验证失败
+						$scope.promt('用户名或密码格式错误!');
+					}
+				}
+			}
+		}).state('login.findPwd',{
+			url : '/findPwd',
+			templateUrl : 'view/login/find-password.html',
+			controller :function($scope,$rootScope,$state){
+				$rootScope.title = title + '找回密码';
+				$scope.submit = function(){
+					$state.go('login.confirm')
+				}
+			}
+		}).state('login.confirm',{
+			url : '/confirm',
+			templateUrl : 'view/login/confirm.html',
+			controller :function($scope,$rootScope){
+				$rootScope.title = title + '确认修改';
+			}
+		})
+		// ==================================== 404
+		.state('register',{ // 嵌套视图
+			templateUrl : 'view/common/header-public.html'
+		}).state('register.register',{
+			url : '/register',
+			templateUrl : 'view/register/register.html',
+			controller :function($scope,$rootScope,$ajax){
+				$rootScope.title = title + '注册';
+				
+				$scope.submitForm = function(valid){
+					var data = {
+						      type : 1,
+						     phone : $scope.tel,
+						    vxCode : $scope.telImgCode,
+						   smsCode : $scope.telCode,
+						password_1 : $scope.apassword,
+						password_2 : $scope.bpassword,
+						    reCode : $scope.pcode,
+						     agree : $scope.check
+					}
+					console.log(data)
+					if(valid){	// 验证成功
+						$ajax.post($ajax.api.register,data,function(data){
+							console.log(data);
+							if(data.code === 0){
+								$scope.promt('注册成功!');
+							}else{
+								$scope.promt('注册失败!');
+							}
+						})
+					}else{	// 验证失败
+						$scope.promt('用户名或密码格式错误!');
+					}
+				}
+			}
+		}).state('register.comanyRregister',angularAMD.route({
+			url : '/comanyRregister',
+			templateUrl : 'view/register/companyInfo.html',
+			controllerUrl : cPath + 'comanyController'
+		})).state('register.comanyUpload',{
+			url : '/comanyUpload',
+			templateUrl : 'view/register/companyUpload.html',
+			controller :function($scope,$rootScope){
+				$rootScope.title = title + '企业用户信息填写';
+			}
+		})
+		// ==================================== 404
+		.state('404',{
+			url : '/404',
+			templateUrl : '404.html',
+			controller : function($rootScope){
+				$rootScope.title = "404";
+			}
+		})
+		$urlRouterProvider.otherwise('/login');
+		
+	}).config(function($httpProvider,publicProvider){
+		publicProvider.$get($httpProvider)
+	}).run(function(ePublic){
+		ePublic.run();
+	}).animation('.ng-animate',function(){	// 视图进出动画控制
+		return {
+			enter : function(elem){
+				elem.addClass('fadeIn animated');
+			}
+		}
+	});
+	
+	return angularAMD.bootstrap(app);	// angularAMD启动 angular
+})

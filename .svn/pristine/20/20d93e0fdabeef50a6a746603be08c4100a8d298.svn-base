@@ -1,0 +1,64 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main>
+		<ul class="order-list">
+			<li>
+				<header><h3>订单号：15454548</h3><span>待发货</span></header>
+				<div class="site-wrap site-wrap-a">
+					<i></i>
+					<div>
+						<p>【四川成都抚琴路营业部】的派件员【陈顺才】正在派件电话:18121964525/028-87779227</p>
+						<time>2015-11-23 18:40:44</time>
+					</div>
+					<s class="tr-r"><i></i><b></b></s>
+					<a ui-sref="logistics"></a>
+				</div>
+				<div class="site-wrap">
+					<i></i>
+					<div>
+						<header><h6>收货人：刘三姐</h6><span>13565656525</span></header>
+						<p>收货地址：四川省成都市武侯区丰德国际广场B1座16楼</p>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<ul class="order-list">
+			<li>
+				<header><h3><i></i><span>星辉数码专卖店 </span><b>&gt;</b></h3></header>
+				<section>
+					<figure><img ng-src="{{imgPath}}/temp/20.png"></figure>
+					<div>
+						<h4>华硕X552MJ2840华硕X552MJ2840</h4>
+						<p>规格：深灰色13寸</p>
+					</div>
+					<aside>
+						<p>￥1000.00</p>
+						<div>X2</div>
+					</aside>
+				</section>
+				<div class="box-1"><h6>运费</h6><p>￥10.00</p></div>
+				<div class="box-2"><h6>合计费（含运费）</h6><p>￥10000.00</p></div>
+			</li>
+		</ul>
+		<ul class="order-txt-list">
+			<li>下单时间：2015-03-25</li>
+			<li>支付方式：支付宝已付</li>
+			<li>订单状态：待发货</li>
+		</ul>
+		<div class="h40px"></div>
+	</main>
+	<nav class="center-bottom-nav">
+		<a class="btn-esc" href="#">取消订单</a>
+	</nav>
+	<nav class="center-bottom-nav">
+		<a class="btn-esc" href="#">查看物流</a>
+		<a class="btn-pay" href="#">确认收货</a>
+	</nav>
+	<nav class="center-bottom-nav">
+		<a class="btn-esc" href="#">删除订单</a>
+		<a class="btn-pay" href="#">去评价</a>
+	</nav>
+	<nav class="center-bottom-nav">
+		<a class="btn-esc" href="#">删除订单</a>
+	</nav>

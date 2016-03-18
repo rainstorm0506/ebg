@@ -1,0 +1,62 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+.b{padding:20px 0 5px 0}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">全局公共模块 - 上传图片</div>
+	<div class="a">注意 , 此接口不传递  <span class="red">系统参数</span> </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="2">
+				这是一个 <b class="red">特殊接口</b>
+				<div class="b">测试地址 http://192.168.0.240/assets/imgUpload.php</div>
+				<div class="b">线上地址 http://img.ebangon.com/imgUpload.php</div>
+			</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="2">涂先锋</td>
+		</tr>
+		<tr>
+			<td rowspan="4">请求参数</td>
+			<td>appFile[0]</td>
+			<td>图片1</td>
+		</tr>
+		<tr>
+			<td>appFile[1]</td>
+			<td>图片2</td>
+		</tr>
+		<tr>
+			<td>appFile[2]</td>
+			<td>图片3</td>
+		</tr>
+		<tr>
+			<td>appFile[n]</td>
+			<td>图片n</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="2"><pre>
+{
+    "code":0,					#状态
+    "message":"",				#错误信息
+    "data":					#返回的数据
+    [						#多张图片的返回结果
+        {
+            "key":0,				#上传的第几张图
+            "code":0,				#图的状态 , 0=正常 , !0 = 不正常 (1=不是图片文件 , 2=空地址 , 3=图片尺寸错误 , 4=获取不到图片数据或者不是一个图片)
+            "src":"xxxx.png"			#上传成功后返回的图片地址 (注意,这里的地址要在post中传递到服务端)
+        },
+        {"key":1,"code":1,"src":""},
+        {"key":2,"code":1,"src":""},
+        {"key":3,"code":1,"src":""},
+        {"key":n,"code":1,"src":""}
+    ]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

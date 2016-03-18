@@ -1,0 +1,62 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">商家信息 - 发送验证码</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">merchant.sendVcode</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">涂先锋</td>
+		</tr>
+		<tr>
+			<td rowspan="4">请求参数</td>
+			<td>phone</td>
+			<td>bigint(11)</td>
+			<td>手机号码</td>
+		</tr>
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>类型 , 1=注册 , 2=找回密码</td>
+		</tr>
+		<tr>
+			<td>test</td>
+			<td>int</td>
+			<td>测试 , 1=测试 (上线后,此功能将被删除)</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+--------------------- 正常 ------------------------------------------
+请注意 , 测试正常发送短信的功能时 , 请填写自己手机号 , 不要随意乱填号码.
+
+{
+	"code" : 0,
+	"message":"",
+	"data":null
+}
+
+
+--------------------- 测试 -----------------------------------------
+测试状态下 , 不给手机发送短信 , 验证码在vcode中传递回来. 上线后,此功能将被删除
+
+{
+	"code" : 0,
+	"message":"",
+	"data":{"vcode":123456}
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,26 @@
+<?php
+/**
+ * 默认控制器
+ * 
+ * @author simon
+ */
+class HomeController extends WebApiController
+{
+	public function actionIndex()
+	{
+
+	}
+	public function actionError()
+	{
+		$this->setPageSeo(GlobalSEO::getSeoInfo('error', 0));
+		
+		$app = Yii::app();
+		if($error = $app->errorHandler->getError())
+		{
+			if($app->request->isAjaxRequest)
+				echo $error['message'];
+			else
+				$this->renderPartial('error' , array('error'=>$error) , false , true);
+		}
+	}	
+}

@@ -1,0 +1,176 @@
+<style type="text/css">
+	.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+	table{width:100%;border-collapse:collapse}
+	td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">商品模块 - 筛选条件</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">goods.conditions</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">谭甜</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>class_id</td>
+			<td>分类id</td>
+			<td>必</td>
+			<td>选择的分类id（没有选择的时候传0，获取一级分类,只有传三级分类的时候才有属性）</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "2319594324004b25f29ac0e74f9cf57a",	# 随机码 , 在下一次请求中传递回来
+    "message": [],
+	"data": {
+		"brandList": {				#品牌列表
+			"40": "紫天章",
+			"52": "deli / 得力",
+			"74": "COMIX / 齐心"
+		},
+		"classList": {				#分类列表
+			"62": "本册纸品",
+			"63": "财务用品",
+			"64": "书写工具",
+			"65": "修正/胶粘",
+			"66": "展示培训用品",
+			"67": "文件管理存储",
+			"68": "桌面文具"
+		},
+		"price": [				#价格区间
+			{
+				"price_start": "1",			#开始价格
+				"price_end": "999"			#结束价格
+			},
+			{
+				"price_start": "1000",
+				"price_end": "2999"
+			},
+			{
+				"price_start": "3000",
+				"price_end": "5999"
+			}
+		],
+		"attr": {				#属性
+			"4643f64a8f53df5c14c05eee58e04a8f": {						#属性组
+			"unite_code": "4643f64a8f53df5c14c05eee58e04a8f",				#属性组code
+			"parent_unite_code": "",
+			"class_one_id": "1",								#一级分类id
+			"class_two_id": "64",								#二级分类id
+			"class_three_id": "103",							#三级分类id
+			"title": "颜色",								#属性组名称
+			"rank": "1",									#排序
+			"child": {
+				"bfa19b86e4996adf7c0dfbcd799d9830": {							#属性值
+					"unite_code": "bfa19b86e4996adf7c0dfbcd799d9830",				#属性值code
+					"parent_unite_code": "4643f64a8f53df5c14c05eee58e04a8f",			#属性组code
+					"class_one_id": "1",								#一级分类id
+					"class_two_id": "64",								#二级分类id
+					"class_three_id": "103",							#三级分类id
+					"title": "黑色",								#属性值名称
+					"rank": "1"									#排序
+				},
+				"470a6d8e9c4709f62882452d234e755e": {
+					"unite_code": "470a6d8e9c4709f62882452d234e755e",
+					"parent_unite_code": "4643f64a8f53df5c14c05eee58e04a8f",
+					"class_one_id": "1",
+					"class_two_id": "64",
+					"class_three_id": "103",
+					"title": "蓝色",
+					"rank": "2"
+				},
+				"fdf4602c8fb99c1e556533d2bd63afda": {
+					"unite_code": "fdf4602c8fb99c1e556533d2bd63afda",
+					"parent_unite_code": "4643f64a8f53df5c14c05eee58e04a8f",
+					"class_one_id": "1",
+					"class_two_id": "64",
+					"class_three_id": "103",
+					"title": "红色",
+					"rank": "3"
+				}
+			}
+		},
+		"5fb8cb7c1dd26794e7d052c86f92a7be": {
+			"unite_code": "5fb8cb7c1dd26794e7d052c86f92a7be",
+			"parent_unite_code": "",
+			"class_one_id": "1",
+			"class_two_id": "64",
+			"class_three_id": "103",
+			"title": "包装",
+			"rank": "2",
+			"child": {
+				"3fcb38b035ed2d9034a0a619b8e4e4f2": {
+					"unite_code": "3fcb38b035ed2d9034a0a619b8e4e4f2",
+					"parent_unite_code": "5fb8cb7c1dd26794e7d052c86f92a7be",
+					"class_one_id": "1",
+					"class_two_id": "64",
+					"class_three_id": "103",
+					"title": "单支装",
+					"rank": "1"
+				},
+				"14057b90eb5fd82732be7466eaba3900": {
+					"unite_code": "14057b90eb5fd82732be7466eaba3900",
+					"parent_unite_code": "5fb8cb7c1dd26794e7d052c86f92a7be",
+					"class_one_id": "1",
+					"class_two_id": "64",
+					"class_three_id": "103",
+					"title": "12支装",
+					"rank": "2"
+				},
+				"2520650dd9c6daf08bab369396b0c63c": {
+					"unite_code": "2520650dd9c6daf08bab369396b0c63c",
+					"parent_unite_code": "5fb8cb7c1dd26794e7d052c86f92a7be",
+					"class_one_id": "1",
+					"class_two_id": "64",
+					"class_three_id": "103",
+					"title": "20支装",
+					"rank": "3"
+				},
+				"80073c3eb0ad33f37286b0e9df8d6857": {
+					"unite_code": "80073c3eb0ad33f37286b0e9df8d6857",
+					"parent_unite_code": "5fb8cb7c1dd26794e7d052c86f92a7be",
+					"class_one_id": "1",
+					"class_two_id": "64",
+					"class_three_id": "103",
+					"title": "30支装",
+					"rank": "4"
+				},
+				"0f02ba26f68eea9d3c994ac98da9aba4": {
+					"unite_code": "0f02ba26f68eea9d3c994ac98da9aba4",
+					"parent_unite_code": "5fb8cb7c1dd26794e7d052c86f92a7be",
+					"class_one_id": "1",
+					"class_two_id": "64",
+					"class_three_id": "103",
+					"title": "36支装",
+					"rank": "5"
+				},
+				"e6485d92add21434b5fcb06837795b1d": {
+					"unite_code": "e6485d92add21434b5fcb06837795b1d",
+					"parent_unite_code": "5fb8cb7c1dd26794e7d052c86f92a7be",
+					"class_one_id": "1",
+					"class_two_id": "64",
+					"class_three_id": "103",
+					"title": "60支装",
+					"rank": "6"
+				}
+			}
+		}
+
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

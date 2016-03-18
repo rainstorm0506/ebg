@@ -1,0 +1,32 @@
+<?php
+class MyStoreForm extends WebForm
+{
+	public $store_name, $store_avatar, $store_tel, $store_describe, $store_address, $store_environment, $image_url;
+	
+	//基本验证
+	public function rules()
+	{
+		return array
+		(
+			array('store_name , image_url, store_tel, store_describe,store_address', 'required'),
+			array('store_tel', 'length', 'min'=>10, 'max'=>16),
+			array('store_describe', 'length', 'max'=>1000),
+		);
+	}
+	/**
+	 * 设置字段标签名称
+	 *
+	 * @return array
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'store_name' => '店铺名称' ,
+			'store_avatar' => '店铺头像' ,
+			'store_tel' => '店铺电话' ,
+			'store_describe' => '店铺描述',
+			'store_address' => '店铺地址' 
+		);
+	}
+	
+}

@@ -1,0 +1,52 @@
+<?php $this->renderPartial('navigation'); ?>
+<div class="public-wraper" style="margin-top:20px">
+	<table class="public-table">
+		<col width="90">
+		<col>
+		<col width="130">
+		<col width="400">
+		<col>
+		<col>
+		<col>
+		<col>
+		<col>
+		<col width="130">
+		<thead>
+			<tr>
+				<th>会员类型</th>
+				<th>等级名称</th>
+				<th>等级的成长值范围</th>
+				<th>描述</th>
+				<th>商品折扣率</th>
+				<th>积分的倍率</th>
+				<th>成长值的倍率</th>
+				<th>资金的倍率</th>
+				<th>订单满x元免运费</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($list as $val): ?>
+			<tr>
+				<td><?php echo isset($this->userType[$val['user_type']]) ? $this->userType[$val['user_type']] : ''; ?></td>
+				<td><?php echo $val['name']; ?></td>
+				<td><?php echo $val['start_exp'].' - '.$val['end_exp']; ?></td>
+				<td class="_tl"><?php echo $val['describe']; ?></td>
+				<td><?php echo $val['goods_rate'] * 100; ?>%</td>
+				<td><?php echo $val['fraction_rate'] * 100; ?>%</td>
+				<td><?php echo $val['exp_rate'] * 100; ?>%</td>
+				<td><?php echo $val['money_rate'] * 100; ?>%</td>
+				<td><?php echo $val['free_freight']; ?></td>
+				<td class="control-group">
+				<?php
+					echo CHtml::link('<i class="btn-mod"></i><span>编辑</span>' , $this->createUrl('userLayerSet/modify' , array('id'=>$val['id'])));
+					echo CHtml::link('<i class="btn-del"></i><span>删除</span>' , $this->createUrl('userLayerSet/delete' , array('id'=>$val['id'])) , array('class' => 'link-delete'));
+				?>
+				</td>
+			</tr>
+			<?php endforeach; if (!$list): ?>
+			<tr><td colspan="10" class="else">当前没有会员等级设定</td></tr>
+			<?php endif; ?>
+		</tbody>
+	</table>
+</div>

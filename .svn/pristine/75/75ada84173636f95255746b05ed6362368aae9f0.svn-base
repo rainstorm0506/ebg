@@ -1,0 +1,67 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心 /订单 </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">usercenter.myComments</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>必传</td>
+			<td>查看评价类型(1:代表已评价；2:代表待评价)</td>
+		</tr>
+		<tr>
+			<td>page</td>
+			<td>int</td>
+			<td>必传</td>
+			<td>分页参数</td>
+		</tr>                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "13dd85577fe98e87c2010b42124f8b21",
+    "message": [],
+    "data": [
+        {
+            "id": "1",
+            "order_sn": "C8459-9004-4472",
+            "goods_type": "2",
+            "goods_id": "1",
+            "goods_vers_num": "1455879488",
+            "num": "1",
+            "unit_price": "450.00",
+            "goods_cover": "/used_goods/2016/02-19/30/172539203620838068061455860816.8633.png",
+            "goods_title": "test 1 无属性",
+            "is_evaluate": "1",
+            "is_reply_evaluate": "0",
+            "return_sn": "",
+            "exchange_sn": "",
+            "reply_content": "",
+            "attrs": "颜色:红色;尺寸:5寸;内存:32G;"     #商品属性
+        },
+        ........
+    ]
+}       
+</pre></td>
+		</tr>
+	</table>
+</div>

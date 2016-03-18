@@ -1,0 +1,24 @@
+[
+	{"all":"全局说明"},
+	{
+		"0" : "全局公共模块",
+		"global.token" : "首次请求获得TOKEN",
+		"global.getImgCode" : "获得图片验证码",
+		"global.viferyImgCode" : "异步验证图片验证码",
+		"global.sendSmsCode" : "发送手机短信码",
+		"global.viferySmsCode" : "异步验证手机短信码",
+		"global.upload" : "上传图片"
+	},
+	{
+		"0" : "个人 / 企业模块",
+		"user.login" : "登录",
+		"user.sign" : "注册"
+	},
+	{
+		"0" : "个人中心",
+		"usercenter.userToCompany" : "会员升级为 企业用户",
+		"usercenter.userinfo" : "个人中心(基本信息)",
+		"usercenter.myComments" : "个人中心(我的评价)",
+		"usercenter.myAddress" : "个人中心(我的收货地址)"
+	}        
+]

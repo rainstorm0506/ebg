@@ -1,0 +1,244 @@
+<?php
+class Usercenter extends WebApiModels{
+    protected $uid ;
+    public function __construct() {
+        $this->uid = $this->getUid();
+    }
+    //用户 进入个人中心 展示的用户相关信息
+    public function getUserInfo()
+    {
+        $data['baseinfo'] = $this->getBaseInfo();   //个人基础信息
+        $data['col_store_num'] = $this->getColNum(2);   //店铺收藏
+        $data['col_goods_num'] = $this->getColNum(1);   //商品收藏
+        $data['wait_pay'] = $this->getOrdersNum(101);    //待付款的订单 数量
+        $data['wait_delivery'] = $this->getOrdersNum(103);    //待发货的订单 数量
+        $data['wait_goods'] = $this->getOrdersNum(106);    //待收货的订单 数量
+        $data['finish'] = $this->getOrdersNum(107);    //已完成的订单 数量
+        return $data;
+    }
+    //获取 用户的基本信息
+    private function getBaseInfo()
+    {
+        $sql = "SELECT
+                    u.phone,
+                    u.exp,
+                    u.money,
+                    u.status_id,
+                    u.user_code,
+                    u.nickname,
+                    u.face,
+                    u.fraction,
+                    uls.name,
+                    ij.user_code
+            FROM
+                    user AS u
+            LEFT JOIN user_layer_setting AS uls ON u.user_type = uls.user_type
+            LEFT JOIN import_json AS ij ON u.id = ij.uid
+            WHERE
+                    u.id ={$this->uid}
+            LIMIT 1 ";
+        return $this->queryRow($sql);
+    }
+    //获取当前 用户的 店铺收藏/商品收藏 数量
+    private function getColNum($type)
+    {
+        $sql = "SELECT count(collect_id) as col_store_num FROM user_collect WHERE user_id={$this->uid} AND type={$type} GROUP BY collect_id";
+        $res = $this->queryRow($sql);
+        return !empty($res) ? $res['col_store_num'] : 0;
+    }
+    //获取 当前 用户的各种订单类型的数量
+    private function getOrdersNum($status_id)
+    {
+        $sql = "SELECT count(id) as order_num FROM status WHERE type=1 AND id={$status_id} LIMIT 1";
+        $res = $this->queryRow($sql);
+        return !empty($res) ? $res['order_num'] : 0;
+    }
+    /*
+     * 升级 为企业用户
+     */
+    public function userToCom($form)
+    {
+        $transaction = Yii::app()->getDb()->beginTransaction();  
+        try
+        {
+            $insert_info = array(
+                'uid'=>  $this->uid,
+                'com_name'=>$form->com_name,
+                'dict_one_id'=>$form->dict_one_id,
+                'dict_two_id'=>$form->dict_two_id,
+                'dict_three_id'=>$form->dict_three_id,
+                'com_address'=>$form->com_address,
+                'com_num'=>$form->com_num,
+                'com_property'=>$form->com_property,
+                'com_license'=>$form->com_license,
+                'com_tax'=>$form->com_tax,
+                'com_org'=>$form->com_org,
+                'com_license_timeout'=>$form->com_license_timeout,
+            );
+                $this->insert('user_company' , $insert_info);
+                $transaction->commit();
+                return true;
+        }catch(Exception $e){
+                $transaction->rollBack();
+        }
+        return false;        
+    }
+    /*
+     * 个人中心==》我的订单
+     */
+    public function getOrderInfo(CPagination $page,$_p,$type)
+    {
+        if (!$page->getItemCount() || $page->getOffset()>$page->getItemCount() || $_p > $page->getPageCount())
+                return array();   
+        $SQL_TYPE = $type==0 ? "": "AND s.id={$type}";
+
+        $sql = "SELECT
+                    o.*, um.store_name,
+                    og.goods_cover,
+                    og.num,
+                    og.goods_attrs,
+                    g.title,
+                    g.retail_price,
+                    g.base_price,
+                    g.id as goods_id
+            FROM
+                    orders AS o
+            LEFT JOIN user_merchant AS um ON o.merchant_id = um.uid
+            LEFT JOIN status AS s ON o.order_status_id = s.id
+            LEFT JOIN order_goods AS og ON o.order_sn = og.order_sn
+            LEFT JOIN goods AS g ON og.goods_id = g.id
+            WHERE
+                    o.user_id ={$this->uid} {$SQL_TYPE} LIMIT {$page->getOffset()},{$page->getLimit()}";
+
+        $res = $this->queryAll($sql);
+        $res = $this->getAttrs($res);
+        return $res;
+    }
+    /*
+     * 获取 我的订单的 总的条数 用于分页
+     */
+    public function getAllNum()
+    {
+        $sql = "SELECT
+                        count(o.order_sn) as all_num
+                FROM
+                        orders AS o
+                LEFT JOIN user_merchant AS um ON o.merchant_id = um.uid
+                LEFT JOIN order_goods AS og ON o.order_sn = og.order_sn
+                LEFT JOIN goods AS g ON og.goods_id = g.id
+                WHERE
+                        o.user_id ={$this->uid}";
+        $res = $this->queryRow($sql);
+        return !empty($res) ? $res['all_num'] : 0;
+    }
+    /*
+     * 获取 个人中心=》我的评论
+     * type=1（已评价）；type=2（待评价）
+     */
+    public function getComments($type,$page,$_p)
+    {
+        if (!$page->getItemCount() || $page->getOffset()>$page->getItemCount() || $_p > $page->getPageCount())
+                return array();          
+        $is_evaluate = $type==1 ? "AND og.is_evaluate=1" : "AND og.is_evaluate=0";
+        
+        $sql = "SELECT og.*,IFNULL(om.reply_content,'') as reply_content FROM orders AS o "
+                . "LEFT JOIN order_goods AS og ON o.order_sn=og.order_sn "
+                . "LEFT JOIN order_comment AS om ON om.order_sn=og.order_sn "
+                . "WHERE o.user_id={$this->uid} {$is_evaluate} LIMIT {$page->getOffset()},{$page->getLimit()}";  //已完成 订单评论
+        $res = $this->queryAll($sql);
+        $res = $this->getAttrs($res);
+        return $res;
+    }
+    //处理 订单goods_attr转换成字符串attrs
+    private function getAttrs($res = array())
+    {
+        if(!empty($res)){
+            foreach ($res as &$row) {
+                $row['goods_attrs'] = (array)json_decode($row['goods_attrs']);
+                if(!empty($row['goods_attrs'])){
+                    $attr = "";
+                    foreach ($row['goods_attrs'] as $item) {
+                        $attr .= $item[1].":";
+                        $attr .= $item[2].";";
+                    }
+                    $row['attrs'] = $attr;                    
+                }else{
+                    $row['attrs'] = ""; 
+                }
+                unset($row['goods_attrs']);
+            }
+            return $res;
+        }else{
+            return false;
+        }          
+    }
+    /*
+     * 个人中心==》获取我的 收货地址
+     */
+    public function getMyAddress()
+    {
+        $sql = "SELECT * FROM user_address WHERE user_id={$this->uid}";
+        $res = $this->queryAll($sql);
+        if(!empty($res)){
+            //根据 地区ID编号 得到当前地区的名字
+            foreach ($res as &$row) {
+                $row['dict_on_name'] = $this->getDictName(1, $row['dict_one_id']);
+                $row['dict_two_name'] = $this->getDictName(2, $row['dict_two_id']);
+                $row['dict_three_name'] = $this->getDictName(3, $row['dict_three_id']);
+            }
+            return $res;
+        }else{
+            return false;
+        }
+    }
+    //根据 地区ID编号得到当前地区的 名字
+    private function getDictName($type,$id)
+    {
+        $key = "";
+        switch ($type) {
+            case 1:
+                $key = 'one_id';
+                break;
+            case 2:
+                $key = 'two_id';
+                break; 
+            case 3:
+                $key = 'three_id';
+                break;             
+        }
+        $sql = "SELECT name from dict WHERE {$key}={$id}";
+        $res = $this->queryRow($sql);
+        return !empty($res) ? $res['name'] : "";
+    }
+    /*
+     * 添加 收货地址
+     */
+    public function setAddress($form)
+    {
+        $transaction = Yii::app()->getDb()->beginTransaction();
+        try {
+            $data_info = array(
+                'user_id'=>  $this->uid,
+                'consignee'=>  $form->consignee,
+                'dict_one_id'=>  $form->dict_one_id,
+                'dict_two_id'=> $form->dict_two_id,
+                'dict_three_id'=>  $form->dict_three_id,
+                'address'=>  $form->address,
+                'phone'=>  $form->phone,
+                'is_default'=>  $form->is_default
+            );
+            $this->insert('user_address', $data_info);
+            $id = $this->getInsertId();
+            //如果 有 提交默认地址,应更新 当前user_id对应的其他 收货地址
+            if($form->is_default==1){
+                $sql = "update user_address set is_default=0 where id!={$id} and user_id={$this->uid}";
+                $res = $this->execute($sql);
+            }
+            $transaction->commit();
+            return true;
+        } catch (Exception $exc) {
+            $transaction->rollback();
+            return false;
+        }
+    }
+}

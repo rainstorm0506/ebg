@@ -1,0 +1,59 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心--我的兑换</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">usercenter.userInfo</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="5">李启源</td>
+		</tr>
+                <tr>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+                <tr>
+			<td>page</td>
+			<td>int</td>
+			<td>必</td>
+			<td>分页页码</td>
+		</tr>	                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "x-token": "e06dec256c9ff87623cb6db9e1cf55aa",
+    "message": [],
+    "data": [
+        {
+            "id": "15",
+            "user_id": "98",    #用户ID编号
+            "goods_id": "26",   #产品ID编号
+            "points": "50000",
+            "time": "1454324914",   #兑换时间
+            "delivery": "1",        #配送方式(2=上门自取，1=市内配送)
+            "status": "1",          #收货状态(1=已收货，2=未收货,3=未配送)
+            "accept_time": "1454494647",    #领取时间
+            "address": "五块石泰丰花苑",    #配送地址
+            "address_id": "14",
+            "describe": "红色 5寸 32G ",
+            "title": "地方郭德纲",          #产品你、名称
+            "cover": "/points/2016/01-27/0/111091061811711632391453896319.7068.png" #商品主图
+        },
+        ......
+      }
+    ]
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

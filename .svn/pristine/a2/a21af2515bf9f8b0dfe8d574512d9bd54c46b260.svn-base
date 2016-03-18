@@ -1,0 +1,232 @@
+<?php
+class UserAction
+{
+	/**
+	 * 用户的订单行为处理
+	 *
+	 * @param		int			$buyID			购买人ID
+	 * @param		int			$saleID			售出商家ID
+	 * @param		int			$recID			购买者的推荐人ID
+	 * @param		string		$orderSN		订单编号
+	 * @param		double		$orderMoney		订单金额
+	 * @param		bool		$coerce			即使改变的值为0 , 也强制写入日志
+	 */
+	public static function orderAction($buyID , $saleID , $recID , $orderSN , $orderMoney , $coerce = false)
+	{
+		$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+		
+		//购买 & 售出
+		if (($buy = self::getUserInfo($buyID , 'buySelf')) && ($sale = self::getUserInfo($saleID , 'sale')))
+		{
+			if ($buy['money_ratio'] == 1 && $buy['money'] > 0)
+			{
+				$buy['money']		= $orderMoney * 0.01 * $buy['money'];
+				$buy['order_sn']	= $orderSN;
+			}
+			
+			if ($sale['money_ratio'] == 1 && $sale['money'] > 0)
+			{
+				$sale['money']		= $orderMoney * 0.01 * $sale['money'];
+				$sale['order_sn']	= $orderSN;
+			}
+			
+			self::actionLog($buyID , $buy , $coerce);
+			self::actionLog($saleID , $sale , $coerce);
+		}
+		
+		$orders = array(
+			'buy_bonus'		=> empty($buy['money']) ? 0 : $buy['money'],
+			'sale_bonus'	=> empty($sale['money']) ? 0 : $sale['money'],
+		);
+		
+		//购买推荐人
+		if ($rec = self::getUserInfo($recID , 'buyRecer'))
+		{
+			if ($rec['money_ratio'] == 1 && $rec['money'] > 0)
+			{
+				//判断首笔订单
+				if ((int)$model->queryScalar("SELECT COUNT(*) FROM orders WHERE user_id={$buyID} AND order_status_id=107") > 1)
+				{
+					$rec['money']	= $orderMoney * 0.01 * $rec['money'];
+				}else{
+					//首笔订单
+					$rec['money']	= $orderMoney * 0.01 * 1 * $rec['money_rate'];
+				}
+				$rec['order_sn']	= $orderSN;
+			}
+			
+			self::actionLog($recID , $rec , $coerce);
+			
+			$orders['re_uid'] = $recID;
+			$orders['re_bonus'] = empty($rec['money']) ? 0 : $rec['money'];
+		}
+		
+		$model->update('orders' , $orders , "order_sn={$model->quoteValue($orderSN)}");
+	}
+	
+	/**
+	 * 用户的登录行为处理
+	 *
+	 * @param		int			$uid			用户ID
+	 * @param		int			$num			每天登录最多可获得 $num次
+	 * @param		bool		$coerce			即使改变的值为0 , 也强制写入日志
+	 */
+	public static function loginAction($uid , $num = 1 , $coerce = false)
+	{
+		if ($set = self::getUserInfo($uid , 'login'))
+		{
+			$toDay = strtotime(date('Y-m-d 0:0:0'));
+			# 每天登录最多可获得 $num次
+			$num = $num > 1 ? $num : 1;
+			$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+			if ((int)$model->queryScalar("SELECT COUNT(*) FROM user_action_log WHERE user_id={$uid} AND action_val={$set['actVal']} AND time>={$toDay}") >= $num)
+				return false;
+			
+			return self::actionLog($uid , self::getUserInfo($uid , 'login') , $coerce);
+		}
+		return false;
+	}
+	
+	/**
+	 * 用户的注册行为处理
+	 *
+	 * @param		int			$signID			注册用户ID
+	 * @param		int			$recID			推荐人ID
+	 * @param		bool		$coerce			即使改变的值为0 , 也强制写入日志
+	 */
+	public static function signAction($signID , $recID , $coerce = false)
+	{
+		self::actionLog($signID , self::getUserInfo($signID , 'register') , $coerce);
+		self::actionLog($recID , self::getUserInfo($recID , 'referrals') , $coerce);
+	}
+	
+	/**
+	 * 用户的评论行为处理
+	 *
+	 * @param		int			$buyID			购买人ID
+	 * @param		int			$saleID			售出商家ID
+	 * @param		bool		$coerce			即使改变的值为0 , 也强制写入日志
+	 */
+	public static function commentAction($buyID , $saleID , $coerce = false)
+	{
+		return self::actionLog($buyID , self::getUserInfo($buyID , 'comment') , $coerce);
+	}
+	
+	/**
+	 * 动作日志
+	 * @param		int			$uid			用户ID
+	 * @param		array		$user			用户设定
+	 * @param		bool		$coerce			即使改变的值为0 , 也强制写入日志
+	 * 
+	 * @return		boolean
+	 */
+	private static function actionLog($uid , array $user , $coerce = false)
+	{
+		if (!$uid || !$user)
+			return false;
+		
+		$fraction	= $user['fraction'];
+		$exp		= $user['exp'];
+		$money		= $user['money'];
+		$actVal		= $user['actVal'];
+		
+		if (!($coerce || $fraction>0 || $exp>0 || $money>0))
+			return false;
+		
+		try
+		{
+			$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+			$model->insert('user_action_log', array(
+				'user_id'		=> $uid,
+				'action_val'	=> $actVal,
+				'time'			=> time(),
+				'fraction'		=> $fraction,
+				'money'			=> $money,
+				'exp'			=> $exp,
+				'order_sn'		=> empty($user['order_sn']) ? '' : $user['order_sn'],
+			));
+			$model->execute("UPDATE user SET fraction=fraction+{$fraction},`money`=`money`+{$money},`exp`=`exp`+{$exp} WHERE id={$uid}");
+			return true;
+		}catch(Exception $e){
+			
+		}
+		return false;
+	}
+	
+	private static function getUserInfo($uid , $action)
+	{
+		static $_ux = array();
+		
+		$user = array();
+		if (empty($_ux[$uid]))
+		{
+			if ($uid < 1)
+				return false;
+			
+			$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+			if (!$user = $model->queryRow("SELECT id,phone,user_type,`exp` FROM user WHERE id={$uid}"))
+				return false;
+			
+			$_ux[$uid] = $user;
+		}else{
+			$user = $_ux[$uid];
+		}
+		
+		$userExp	= (int)$user['exp'];
+		$userType	= (int)$user['user_type'];
+		if (
+				!($actVal = self::getActionVal($action , $userType))
+				|| !($layer = GlobalUser::getUserLayer($userExp , $userType))
+				|| !($actSet = self::getActionSetting($actVal))
+		)
+			return false;
+		
+		return array(
+			'fraction'		=> $actSet['fraction'] * $layer['fraction_rate'],
+			'exp'			=> $actSet['exp'] * $layer['exp_rate'],
+			'money'			=> $actSet['money'] * $layer['money_rate'],
+			'money_rate'	=> $layer['money_rate'],
+			'money_ratio'	=> $actSet['money_ratio'],
+			'actVal'		=> $actVal,
+		);
+	}
+	
+	/**
+	 * 获得用户行为影响的设定
+	 * @param		int			$action			用户行为值
+	 * @param		bool		$update			更新缓存
+	 */
+	public static function getActionSetting($action , $update = false)
+	{
+		$mainName = 'userActionSetting';
+		$twoName = $action;
+		#self::flush();
+		if ($update)
+			CacheBase::clear($mainName);
+		
+		if ($action < 1)
+			return array();
+		
+		if (!($cache = CacheBase::get($mainName , $twoName)))
+		{
+			$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+			if ($cache = $model->queryRow("SELECT * FROM user_action_setting WHERE action_val={$action}"))
+				CacheBase::set($mainName , $cache , 86400 , $twoName);
+		}
+		return $cache;
+	}
+	
+	private static function getActionVal($action , $userType)
+	{
+		$tx = array(
+			'login'			=> array(1=>11 , 2=>21 , 3=>31),	# 登录
+			'buySelf'		=> array(1=>12 , 2=>22),			# 消费(自己)
+			'buyRecer'		=> array(1=>13 , 2=>23),			# 消费(推荐人)
+			'comment'		=> array(1=>14 , 2=>24),			# 评论
+			'referrals'		=> array(1=>15 , 2=>25 , 3=>33),	# 推荐
+			'register'		=> array(1=>16 , 2=>26),			# 注册(被推荐)
+			'sale'			=> array(3=>32),					# 售出
+		);
+		return empty($tx[$action][$userType]) ? 0 : $tx[$action][$userType];
+	}
+}

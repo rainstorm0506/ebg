@@ -1,0 +1,273 @@
+<?php
+class GlobalUser
+{
+	const CACHENAME = 'user';
+	
+	/**
+	 * 判断用户id是否是正确的商家id
+	 * @param 用户id $id
+	 */
+	public static function CheckUser($id)
+	{
+		$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+		return $model->queryRow("SELECT phone FROM user WHERE user_type=3 AND id={$id}");
+	}
+	
+	/**
+	 * 获得用户的经验值比例 0-100
+	 * @param		int		$userType		用户的类型
+	 * @param		int		$userExp		用户的经验值
+	 */
+	public static function getExpRatio($userType , $userExp)
+	{
+		if ($userType > 3 || $userType < 1 || $userExp <= 0)
+			return 0;
+		
+		if ($layer = self::getUserLayer($userExp, $userType))
+			return number_format(($userExp - $layer['start_exp']) / ($layer['end_exp'] - $layer['start_exp']) * 100 , 2);
+		
+		return 0;
+	}
+	
+	/**
+	 * 检查给定的密码是否正确
+	 * @param		string		$writePassword		密码(明文字符串)
+	 * @param		string		$dbPassword			数据库中存储加密后的密码值
+	 * @return		boolean
+	 */
+	public static function validatePassword($writePassword , $dbPassword)
+	{
+		return self::hashPassword($writePassword) === $dbPassword;
+		#return password_verify($writePassword , $dbPassword);
+	}
+	
+	/**
+	 * 生成的密码散列
+	 * @param		string		$password		密码(明文字符串)
+	 * @return		string
+	 */
+	public static function hashPassword($password)
+	{
+		return sha1(hash('ripemd160' , $password));
+		#return password_hash($password , PASSWORD_DEFAULT);
+	}
+	
+	/**
+	 * 得到一个推荐码 , 根据用户的ID 和时间戳
+	 * @param		int			$uid		用户ID
+	 * @param		int			$time		时间戳
+	 * 
+	 * @return		string
+	 */
+	public static function getReCode($uid , $time)
+	{
+		$range = array(0=>2 , 1=>4 , 2=>6 , 3=>1 , 4=>5 , 5=>9 , 6=>7 , 7=>3 , 8=>0 , 9=>8);
+		
+		$code = '';
+		foreach (str_split(substr($time , -2).$uid) as $k => $v)
+			$code .= $range[$v];
+		return $code;
+	}
+	
+	/**
+	 * 获得用户的注册来源
+	 * @param	int		$source		注册来源
+	 */
+	public static function getSource($source = 0)
+	{
+		$s = array(1=>'pc' , 2=>'app' , 3=>'webApp');
+		return empty($s[$source]) ? $s : $s[$source];
+	}
+	
+	/**
+	 * 得到推荐人的用户ID
+	 * @param		string		$reCode		推荐码
+	 * 
+	 * @return		int
+	 */
+	public static function getReUid($reCode)
+	{
+		if (empty($reCode))
+			return 0;
+		
+		$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+		return (int)$model->queryScalar("SELECT id FROM user WHERE user_code={$model->quoteValue($reCode)}");
+	}
+	
+	/**
+	 * 获得一组用户的基础信息
+	 * @param		array		$_uid		用户ID
+	 */
+	public static function getUserGroup(array $_uid , $privacy = false)
+	{
+		if (empty($_uid))
+			return array();
+		
+		$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+		$user = array();
+		foreach ($model->queryAll("SELECT * FROM user WHERE id IN (".join(',',$_uid).")") as $vs)
+		{
+			$vs['uname'] = $vs['nickname'] ? $vs['nickname'] : ($privacy ? String::privacyOut($vs['phone']) : $vs['phone']);
+			$user[$vs['id']] = $vs;
+		}
+		return $user;
+	}
+	
+	/**
+	 * 获得用户的等级
+	 * @param	int		$userExp		用户经验值
+	 * @param	int		$userType		用户类型 , 1=个人 , 2=企业 , 3=商家
+	 */
+	public static function getUserLayer($userExp , $userType)
+	{
+		if ($userType > 3 || $userType < 1)
+			return array();
+		
+		$key = $userExp.'--'.$userType;
+		static $group = array();
+		if (!empty($group[$key]))
+			return $group[$key];
+		
+		$group[$key] = array();
+		if ($list = self::getLayerList($userType))
+		{
+			foreach ($list as $val)
+			{
+				$group[$key] = $val;
+				if ($userExp >= $val['start_exp'] && $userExp < $val['end_exp'])
+					return $group[$key];
+			}
+		}
+		return $group[$key];
+	}
+	
+	/**
+	 * 获得用户等级ID
+	 * @param	int		$userExp		用户经验值
+	 * @param	int		$userType		用户类型 , 1=个人 , 2=企业 , 3=商家
+	 * @return	int
+	 */
+	public static function getUserLayerID($userExp , $userType)
+	{
+		$layer = self::getUserLayer($userExp, $userType);
+		return empty($layer['id']) ? 0 : (int)$layer['id'];
+	}
+	
+	/**
+	 * 获得用户等级名称
+	 * @param	int		$userExp		用户经验值
+	 * @param	int		$userType		用户类型 , 1=个人 , 2=企业 , 3=商家
+	 * @return	int
+	 */
+	public static function getUserLayerName($userExp , $userType)
+	{
+		$layer = self::getUserLayer($userExp, $userType);
+		return empty($layer['name']) ? "" : $layer['name'];
+	}
+	
+	/**
+	 * 获得用户的等级设定列表
+	 * @param	int		$userType		用户类型 , 1=个人 , 2=企业 , 3=商家 , 0=全部
+	 */
+	public static function getLayerList($userType , $update = false)
+	{
+		if ($userType > 3 || $userType < 0)
+			return array();
+		
+		$mainName = 'userLayer';
+		$twoName = 'user_layer_list' . $userType;
+		#self::flush();
+		if ($update)
+			CacheBase::clear($mainName);
+		
+		if (!($cache = CacheBase::get($mainName , $twoName)))
+		{
+			$model = ClassLoad::Only('ExtModels');/* @var $model ExtModels */
+			$SQL = $userType>0 ? "WHERE user_type={$userType}" : '';
+			if ($cache = $model->queryAll("SELECT * FROM user_layer_setting {$SQL} ORDER BY user_type,start_exp ASC"))
+				CacheBase::set($mainName , $cache , 86400 , $twoName);
+		}
+		return $cache;
+	}
+	
+	public static function getLayerListKVP($userType)
+	{
+		$tmp = array();
+		foreach (self::getLayerList($userType) as $val)
+			$tmp[$val['id']] = $val;
+		return $tmp;
+	}
+	
+	/**
+	 * 设置流水号格式
+	 */
+	public static function getCurrentSnum()
+	{
+		$number = rand(1, 9).time().rand(0, 9);
+		$snum = implode('-', str_split($number,4));
+		return $snum;
+	}
+	
+	/**
+	 * 清除 GlobalDict 所有的缓存
+	 */
+	public static function flush()
+	{
+		CacheBase::clear(self::CACHENAME);
+	}
+	
+	/**
+	 * 刷新当前登录用户缓存
+	 * 
+	 * @param		array		$user		用户信息
+	 * @param		int			$location	调用位置 , 1=e办公前端 , 2=e办公后台 , 3=商家端API , 4=webAPP api
+	 */
+	public static function setReflushUser(array $user , $location = 1)
+	{
+		$identity = null;
+		$ecode = 0;
+		
+		switch ($location)
+		{
+			# e办公前端
+			case 1 :
+				# class_exists('UserWebIdentity' , false) 这个函数在Yii框架中失效了.
+				$identity	= new UserWebIdentity($user['phone'] , '');
+				$ecode		= UserWebIdentity::ERROR_NONE;
+			break;
+			
+			# e办公后台
+			case 2 :
+				$identity	= new GovernorIdentity($user['phone'] , '');
+				$ecode		= GovernorIdentity::ERROR_NONE;
+			break;
+			
+			# 商家端API
+			case 3 :
+				$identity	= new LoginIdentity($user['phone'] , '');
+				$ecode		= LoginIdentity::ERROR_NONE;
+			break;
+			
+			# webAPP api
+			case 4 :
+				$identity	= new WebAppIdentity($user['phone'] , '');
+				$ecode		= WebAppIdentity::ERROR_NONE;
+			break;
+			
+			default: return false;
+		}
+		
+		$identity->type = $user['user_type'] == 3 ? 1 : 0;
+		$identity->authenticate(false);
+		
+		if($identity->errorCode === $ecode)
+		{
+			# public void login(IUserIdentity $identity, integer $duration=0)
+			# Yii的login没有返回值
+			Yii::app()->getUser()->login($identity , 0);
+			return true;
+		}
+		
+		return null;
+	}
+}

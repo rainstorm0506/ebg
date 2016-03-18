@@ -1,0 +1,23 @@
+<?php
+return array
+(
+	'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+	
+	//默认的控制器
+	'defaultController' => 'cell',
+	
+	//应用组件
+	'components' => array
+	(
+		//URL write
+		'urlManager'			=> array
+		(
+			'urlFormat'			=> 'path',
+			'showScriptName'	=> false,
+			'rules'				=> array('<controller:\w+>.<action:\w+>' => '<controller>/<action>'),
+		),
+	),
+	
+	// 扩展全局的参数. Yii::app()->params['paramName']
+	'params' => array(),
+);

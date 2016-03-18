@@ -1,0 +1,136 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">二手商品模块 - 发布二手商品</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">used.create</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="3">谭甜</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>title</td>
+			<td>string</td>
+			<td>商品名称</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>brand_id</td>
+			<td>int</td>
+			<td>品牌id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>goods_num</td>
+			<td>string</td>
+			<td>商品货号(选填，为空这系统自动生成货号)</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>lightspot</td>
+			<td>string</td>
+			<td>亮点</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>dict_one_id</td>
+			<td>int</td>
+			<td>一级地区id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>dict_two_id</td>
+			<td>int</td>
+			<td>二级地区id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>dict_three_id</td>
+			<td>int</td>
+			<td>三级地区id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>buy_price</td>
+			<td>double</td>
+			<td>原买价（没填就传0）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>sale_price</td>
+			<td>double</td>
+			<td>现售价</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>stock</td>
+			<td>int</td>
+			<td>库存</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>weight</td>
+			<td>double</td>
+			<td>重量</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>cover</td>
+			<td>string</td>
+			<td>主图</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>use_time</td>
+			<td>int</td>
+			<td>成色</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>class_one_id</td>
+			<td>int</td>
+			<td>一级分类id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>class_two_id</td>
+			<td>int</td>
+			<td>二级分类id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>class_three_id</td>
+			<td>int</td>
+			<td>三级分类id</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>img</td>
+			<td>array</td>
+			<td>图片组</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+	{
+	    "code": 0,
+	    "message": "添加成功",
+	    "data": ""
+	}
+</pre></td>
+		</tr>
+	</table>
+</div>

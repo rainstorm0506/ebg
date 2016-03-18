@@ -1,0 +1,206 @@
+@import url(public.css);
+.shop-empty, .shop-nav-1, .confirm-txt-list li, .shop-success nav, .pay-fault nav, .shop-tit, .shop-nav, .order-info > div, .order-info aside, .shop-success, .pay-fault { min-height: 1px; _min-height: 1px; zoom: 1; }
+.shop-empty:after, .shop-nav-1:after, .confirm-txt-list li:after, .shop-success nav:after, .pay-fault nav:after, .shop-tit:after, .shop-nav:after, .order-info > div:after, .order-info aside:after, .shop-success:after, .pay-fault:after { content: ""; display: block; height: 0; clear: both; visibility: hidden; }
+
+.shop-empty > *, .shop-nav-1 > *, .confirm-txt-list li > *, .shop-success nav > *, .pay-fault nav > *, .shop-tit h2, .order-wrap h3 strong, .order-info > div > div, .shop-success > i, .pay-fault > i { float: left; *display: inline; }
+
+.shop-tit aside, .shop-nav a, .order-wrap h3 span, .settlement-info li *, .order-info aside, .order-info aside a, .shop-success section, .pay-fault article { float: right; *display: inline; }
+
+.pay-fault-wrap > div i { position: absolute; z-index: 0; }
+
+.shop-nav-1 i { position: absolute; z-index: 0; right: 0; bottom: 0; }
+
+.shop-nav-1 a, .pay-fault-wrap > div { position: relative; z-index: 0; }
+
+.shop-tab, .shop-fav span, .shop-nav-1 a { text-align: center; }
+
+.shop-tab .total, .confirm-txt-list h6, .settlement-info { text-align: right; }
+
+.shop-tab .link, .shop-fav, .add-note { text-align: left; }
+
+.shop-nav-1 .current i { display: block; }
+
+.shop-tit aside > *, .shop-fav > * { display: inline-block; }
+
+.shop-nav-1 i, .order-info dl { display: none; }
+
+.confirm-txt-list h6 i { visibility: hidden; }
+
+.confirm-txt-list li, .settlement-info li { vertical-align: middle; }
+
+.shop-empty b { font-family: SimSun; }
+
+.shop-tab th, .order-wrap h3 span { font-weight: normal; font-style: normal; }
+
+.shop-tab .price, .order-wrap h3, .settlement-info p, .order-info aside p, .order-info h6, .pay-fault-wrap > div article h6 { font-weight: bold; }
+
+.shop-success > i { background-repeat: no-repeat; }
+
+.shrink-btn, .shrink-btn i, .shop-success a { -webkit-transition: all 0.5s linear; -moz-transition: all 0.5s linear; -ms-transition: all 0.5s linear; -o-transition: all 0.5s linear; transition: all 0.5s linear; }
+
+.shrink-btn i { display: inline-block; vertical-align: middle; }
+
+.shop-fav span, .add-note input, .add-note div, .confirm-txt-list p { font-size: 12px; }
+
+.shop-tit aside, .shop-tab, .order-wrap, .order-info, .shop-success, .pay-fault p, .pay-fault footer, .pay-fault-wrap > div article p, .pay-fault-wrap > nav { font-size: 14px; }
+
+.shop-empty p, .order-info aside p, .order-info h6, .pay-fault-wrap > div article h6 { font-size: 16px; }
+
+.pay-fault h6 { font-size: 18px; }
+
+.shop-tab .total strong, .shop-empty h5 { font-size: 20px; }
+
+.order-info aside b { font-size: 24px; }
+
+.shop-fav span, .shrink-btn { height: 20px; line-height: 20px; }
+
+.shop-tit aside, .shop-nav-1 a { height: 26px; line-height: 26px; }
+
+.confirm-txt-list li, .settlement-info li { height: 30px; line-height: 30px; }
+
+.shop-tab .tit td, .shop-tab tfoot td, .order-wrap h3 { height: 40px; line-height: 40px; }
+
+.shop-empty b, .shrink-btn i { margin-left: 5px; }
+
+.shop-fav span { margin-left: 10px; }
+
+.confirm-txt-list h6 { margin-right: 10px; }
+
+.pay-fault h6 { margin-bottom: 10px; }
+
+.shop-nav a, .shop-nav-1 a, .shop-success p span { margin-left: 15px; }
+
+.shop-tit aside strong { margin-right: 15px; }
+
+.shop-tit { margin-bottom: 15px; }
+
+.add-note input { margin-right: 20px; }
+
+.pay-wrap .bank-list, .order-info { margin-bottom: 20px; }
+
+.shop-tab tfoot .del { margin-left: 25px; }
+
+.shop-wrap, .pay-wrap, .pay-fault-wrap { margin-top: 30px; }
+
+.shop-success nav i { margin: 0 10px; }
+
+.order-info > div { padding-bottom: 10px; }
+
+.shop-tab .tit td, .shop-tab th { padding: 0 10px; }
+
+.confirm-txt-list li { padding: 10px 0; }
+
+.order-wrap h3, .shop-tab-wrap .tit td { padding: 0 20px; }
+
+.shop-nav-1, .shop-tab-wrap, .add-note { padding: 20px 0; }
+
+.shop-nav { padding: 30px 0; }
+
+.shop-fav span { color: #fff; }
+
+.shop-tit aside span, .shop-tab th, .shop-tab .del a, .shop-tab tfoot .del, .shop-tab .c-1, .shop-fav, .add-note div, .confirm-txt-list h6, .confirm-txt-list p, .settlement-info-1, .order-info dl, .shop-success p span, .shop-success p a, .shop-success nav { color: #999; }
+
+.shop-tit aside strong, .shop-tab .price, .shop-tab .total strong, .settlement-info .total, .order-info aside b, .pay-fault footer a { color: #d00f2b; }
+
+.order-wrap h3 span a { color: #d22238; }
+
+.shop-empty a { color: #247bd3; }
+
+.shrink-btn, .shop-success nav a { color: #2ea7e7; }
+
+.jc { color: #ed6a00; }
+
+.order-wrap h3, .order-info, .shop-success { background-color: #f2f2f2; }
+
+.shop-fav span { background-color: #d22238; }
+
+.shop-nav-1 a { border: 1px solid #ccc; }
+
+.shop-tab, .order-wrap, .shop-success { border: 1px solid #ddd; }
+
+.shop-tab th, .shop-tab .tit, .shop-tab tfoot td, .shop-tab .add-note, .order-wrap h3, .add-note, .confirm-txt-list li, .settlement-info-1, .order-info dl { border-top: 1px solid #ddd; }
+
+.shop-tab th, .shop-tab .tit, .order-wrap h3 { border-bottom: 1px solid #ddd; }
+
+.pay-fault footer a:hover { text-decoration: underline; }
+
+.shop-tab .del a:hover, .shop-tab tfoot .del:hover, .shop-nav-1 a:hover, .shrink-btn:hover { color: #d00f2b; }
+
+.shop-empty a:hover, .order-wrap h3 span a:hover, .shop-success a:hover, .pay-fault-wrap > nav a:hover { color: #d00f2b; text-decoration: underline; }
+
+.shop-empty a:active, .order-wrap h3 span a:active { text-decoration: none; }
+
+.shop-nav-1 a:hover { border-color: #d00f2b; }
+
+.shop-tit h2 { font: bold 16px/26px Microsoft YaHei; }
+
+.shop-tab th { background-color: #f1f1f1; height: 42px; line-height: 42px; }
+.shop-tab td { border-bottom: 1px dotted #ccc; }
+.shop-tab tbody { line-height: 22px; }
+.shop-tab tbody td { padding: 15px 10px; }
+.shop-tab .total { padding-right: 45px; }
+
+.shop-fav { padding-left: 18px; }
+.shop-fav span { width: 50px; }
+
+.shop-empty { line-height: 36px; padding: 100px 0; margin-left: 360px; }
+.shop-empty i { width: 122px; height: 87px; background: url(../images/shop-pbg-1.png) no-repeat; margin-right: 35px; }
+.shop-empty h5 { color: #000; }
+
+.shop-nav-1, .shop-tab-wrap, .add-note { margin: 0 26px; }
+
+.shop-nav-1 a { width: 100px; }
+.shop-nav-1 .current { border: 2px solid #d00f2b; width: 98px; height: 24px; line-height: 24px; }
+.shop-nav-1 i { width: 16px; height: 15px; background: url(../images/ico-2.png) no-repeat; }
+
+.shop-tab-wrap tbody td { padding-left: 20px; padding-right: 20px; }
+
+.add-note h6 { margin: 0 0 10px 25px; }
+.add-note div { margin-left: 63px; }
+
+.confirm-txt-list h6 { width: 80px; }
+.confirm-txt-list p { margin-left: 450px; }
+.confirm-txt-list select { width: 170px; }
+
+.settlement-info { padding: 15px 26px; }
+.settlement-info p { width: 140px; }
+
+.pay-wrap { border: 1px solid #dcdcdc; padding-bottom: 100px; }
+.pay-wrap .btn-4 { margin-left: 41px; }
+
+.order-info { line-height: 30px; padding: 20px 30px 0 30px; }
+.order-info dl { clear: both; padding: 10px 0 20px 0; }
+
+.shrink-btn i { border-top-color: #2ea7e7; }
+.shrink-btn:hover i { border-top-color: #d00f2b; }
+.shrink-btn.current i { border-bottom-style: solid; border-top-style: dashed; border-bottom-color: #2ea7e7; border-width: 0 6px 6px 6px; }
+.shrink-btn.current:hover i { border-bottom-color: #d00f2b; }
+
+.shop-success { padding: 28px 20px 30px 245px; }
+.shop-success > i { width: 50px; height: 50px; }
+.shop-success section { width: 855px; }
+.shop-success h6 { font: bold 16px/20px Microsoft YaHei; }
+.shop-success p { margin: 15px 0 20px 0; }
+
+.ico-7 { background-image: url(../images/ico-7.png); }
+
+.pay-fault { margin: 50px 40px 0; }
+.pay-fault > i { width: 54px; height: 54px; background: url(../images/ico-20.png) no-repeat; }
+.pay-fault article { width: 300px; }
+.pay-fault p { line-height: 22px; @incldue c_666; }
+.pay-fault nav { margin: 15px 0 20px 0; }
+
+.pay-fault-wrap > div { border: 1px solid #fedd98; background-color: #fffbe3; padding: 20px 30px; }
+.pay-fault-wrap > div i { width: 32px; height: 32px; background: url(../images/ico-fault.png) no-repeat; left: 30px; top: 20px; }
+.pay-fault-wrap > div article { margin-left: 60px; }
+.pay-fault-wrap > div article h6 { margin-bottom: 10px; }
+.pay-fault-wrap > nav { border: 1px solid #dcdcdc; height: 66px; line-height: 66px; padding-left: 90px; }
+.pay-fault-wrap > nav a { color: #0a6acc; }
+
+.shop-tab-wrap table, .shop-tab-wrap th, .shop-tab-wrap tbody td { border: 0; }
+
+.order-wrap h3:first-child { border-top: 0; }
+
+.shop-tab tbody tr:last-child td { border-bottom: 0; }
+
+.shop-nav-1 a:first-child { margin-left: 0; }

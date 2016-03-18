@@ -1,0 +1,65 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main>
+		<fieldset class="form-list">
+			<legend>发布采购单</legend>
+			<form>
+				<ul>
+					<li><input type="text" class="tbox" placeholder="请输入联系人姓名"></li>
+					<li><input type="tel" class="tbox" placeholder="请输入联系人手机号"></li>
+					<li><input type="text" class="tbox" placeholder="短信验证码"><a class="btn-send" href="javascript:;">发送验证码</a></li>
+				</ul>
+				<div class="checbox-wrap-wrap">
+					<div class="checbox-wrap">
+						<label>
+							<b><i ng-show="check===true"></i></b><span>是否招投标</span>
+							<input type="checkbox" ng-checked="check" ng-init="check = false" ng-model="check">
+						</label>
+					</div>
+					<div class="checbox-wrap">
+						<label>
+							<b><i ng-show="isTalk===true"></i></b><span>是否面谈</span>
+							<input type="checkbox" ng-checked="isTalk" ng-init="isTalk = false" ng-model="isTalk">
+						</label>
+					</div>
+				</div>
+				<a class="btn-upload" href="javascript:;">上传文件</a>
+				<div class="sm-mlr">
+					<p class="txt-1"><i>*</i>上传文档或图片文件，文件不得超过5M</p>
+					<dl class="control-upload">
+						<dd>
+							<i class="ico-yes"></i>
+							<span>
+								办公PC耗材硬件…
+								<em>doc<i>（405KB）</i></em>
+								<a href="#">删除</a>
+							</span>
+						</dd>
+						<dd>
+							<i class="ico-no"></i>
+							<span>
+								办公耗材硬件…
+								<em>doc<i>（100KB）</i></em>
+								<a class="mc" href="#">格式错误</a>
+								<a href="#">重新上传</a>
+								<a href="#">删除</a>
+							</span>
+						</dd>
+					</dl>
+				</div>
+			</form>
+		</fieldset>
+	</main>
+	<a class="btn-1" href="javascript:;" ng-click="publish()">发布采购单</a>
+	
+	<!-- 弹窗 -->
+	<section class="pop-wrap animated fadeIn" id="popWrap" ng-if="pop === true">
+		<div class="publish-wrap animated flip">
+			<h3><i></i><span>发布成功</span></h3>
+			<section>
+				<p>您好，您的采购单已成功发布，我们将通过短信或电话通知您。</p>
+				<div>您的联系手机号：132***1234</div>
+			</section>
+		</div>
+	</section>

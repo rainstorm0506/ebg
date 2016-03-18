@@ -1,0 +1,186 @@
+<style>
+.btn-1{float:left;margin-left:25px;}
+.goods_base li{ display:block;margin-left:20px;padding:0px;height:40px;font-size:14px;}
+.goods_base li span{width:120px;display:block;float:left;text-align:right;height:40px;}
+.controla a{color:white;margin-top:5px;width:70px;height:25px;line-height:25px;display:block;border-radius:4px; border-shadow: 5px #888888;float:left;background:#21b0eb}
+.button-detail{width:60px;height:25px;display:block;float:left;}
+</style>
+<?php $this->renderPartial('navigation'); ?>
+<div class="public-wraper" style="margin-top:20px">
+	<div><h1 class='title'>采购详情：</title>
+		<ul class='goods_base'>
+			<li><span>标题  ：</span><?php echo $goodinfo['title']?$goodinfo['title']:'';?></li>
+			<li><span>联系人  ：</span><?php echo $goodinfo['link_man']?$goodinfo['link_man']:'';?></li>
+			<li><span>公司名称  ：</span><?php echo $goodinfo['company_name']?$goodinfo['company_name']:'';?></li>
+			<li><span>报价结束时间  ：</span><?php echo $goodinfo['price_endtime']?date('Y-m-d H:i:s',$goodinfo['price_endtime']):'';?></li>
+			<li><span>期望收货时间  ：</span><?php echo $goodinfo['wish_receivingtime']?date('Y-m-d H:i:s',$goodinfo['wish_receivingtime']):'';?></li>
+			<li><span>配送方式  ：</span><?php if($goodinfo['dispatching']==0){echo '上门自提';}else{echo '市内配送';}?></li>
+			<li><span>报价需求  ：</span><?php if($goodinfo['price_require']==0){echo '不含税价';}else{echo '包含税价';}?></li>
+			<li><span>相关文件  ：</span>
+			<?php 	if($goodinfo['is_img']==0){
+						echo "暂无文件上传";
+					}else{
+						if($goodinfo['is_img']==1){
+						echo CHtml::link('图片预览', '#', array(  
+							'class'=>"btn-1 additem",
+							'onclick'=>'$("#mydialog").dialog("open"); return false;',//点击打开弹窗  
+							'style'=>';background:#21b0eb;height:30px;line-height:30px;width:100px;text-align:center;display:block;float:left;margin-top:5px;'
+						)); 
+						}
+						if(isset($goodinfo['file_down'])){
+								foreach ($goodinfo['file_down'] as $key=>$row){
+								echo CHtml::link('下载文件'.($key+1), $this -> createUrl("/purchase.download?src=".$row), array(
+										'class'=>"additem btn-1",
+										'style'=>'background:#21b0eb;height:30px;line-height:30px;width:100px;text-align:center;display:block;float:left;margin-top:5px;margin-left:15px;',
+										'target'=>'_self'
+								));
+							}
+						}
+					}
+			
+			?></li>
+			<li style="text-align: left">采购商品详情  ：</li>
+		</ul>
+	</div>
+	<table class="public-table">
+		<col>
+		<col>
+		<col>
+		<col>
+		<col>
+		<col>
+		<col width="200">
+		<thead>
+			<tr>
+				<th>商品名称</th>
+				<th>商品分类</th>
+				<th>数量</th>
+				<th>价格</th>
+				<th>商品属性</th>
+				<th>报价状况</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($goodinfo['goods'] as $key=>$row){ ?>
+			<tr>
+				<td><?php echo $row['name']?$row['name']:'';?></td>
+				<td>
+					<?php 
+						if($row['class_one_id']) echo isset($tree[$row['class_one_id']][0]) ? $tree[$row['class_one_id']][0] : '';
+						if($row['class_two_id']) echo "--".(isset($tree[$row['class_one_id']]['child'][$row['class_two_id']][0]) ? $tree[$row['class_one_id']]['child'][$row['class_two_id']][0] : '');
+						if($row['class_three_id']) echo "--".(isset($tree[$row['class_one_id']]['child'][$row['class_two_id']]['child'][$row['class_three_id']][0]) ? $tree[$row['class_one_id']]['child'][$row['class_two_id']]['child'][$row['class_three_id']][0] : '');
+					?>
+				</td>
+				<td><?php echo $row['num_min']?$row['num_min']:'';?><?php echo $row['num_max']?"--".$row['num_max']:'';?></td>
+				<td><?php echo $row['price_min']?$row['price_min']:'';?><?php echo $row['price_max']?"--".$row['price_max']:'';?></td>
+				<td><?php echo $row['params']?$row['params']:'';?></td>
+				<td><?php echo $row['offer_num']>0?"<span style='color:#69ad00'>".$row['offer_num']."家</span>":"<span style='color:#69ad00'>".'暂未报价'."</span>";?></td>
+				<td style="align: center;" class="controla control-group">
+				<?php
+					if($row['is_recom']==0){
+						echo CHtml::link('推荐' , $this->createUrl('purchase/crecom' , array('id'=>$row['id'],'purchase_sn'=>$row['purchase_sn'])));
+					}elseif($row['is_recom']==1){
+						echo CHtml::link('重新推荐' , $this->createUrl('purchase/crecom' , array('id'=>$row['id'],'purchase_sn'=>$row['purchase_sn'])));
+// 						echo CHtml::link('上架' , $this->createUrl('purchase/dorecom' , array('id'=>$row['id'],'purchase_sn'=>$row['purchase_sn'])));
+						echo CHtml::link ('推荐详情', null, array (		
+								'class' => "popen",
+								'id' => $row['id']
+						), array (
+								'target' => '' 
+						) );
+						
+					}else{
+						echo CHtml::link ( '推荐详情', null, array (
+								'class' => "popen",
+								'id' => $row['id']
+						), array (
+								'target' => ''
+						) );
+					}
+					if($row['offer_num']>0){
+						echo CHtml::link ( '报价详情', null, array (
+								'class' => "popen2",
+								'id' => $row['id']
+						), array (
+								'target' => ''
+						) );
+					}
+				?>
+				</td>
+			</tr>
+			
+			<?php }?>
+			<tr><td colspan="8">	<?php echo CHtml::link('返回' ,$this -> createUrl("/purchase.list"), array('class'=>'btn-1','style'=>'margin-left:550px;')); ?></td></tr>
+		</tbody>
+	</table>
+</div>
+
+
+<?php 
+$this->beginWidget('zii.widgets.jui.CJuiDialog', array(  
+		'id'=>'mydialog',//弹窗ID  
+		// additional javascript options for the dialog plugin  
+		'options'=>array(//传递给JUI插件的参数  
+			'title'=>'图片预览',
+			'autoOpen'=>false,//是否自动打开  
+			'width'=>'680',//宽度  
+			'height'=>'680',//高度  
+			'buttons'=>array(  
+		),
+	),
+));  
+?>
+<div style="width:670px;text-align:center;height:670px">
+	<?php 
+	if(isset($goodinfo['file_img'])){
+		if($goodinfo['file_img']){
+			echo "<ul>";
+			foreach ($goodinfo['file_img'] as $key=>$row){	
+				echo '<li><img src="'.Views::imgShow($row).'"/></li>';
+			}
+			echo "</ul>";
+		}
+	}
+	?>
+</div>
+<?php 
+	$this->endWidget('zii.widgets.jui.CJuiDialog');  
+?>
+<script>
+$(function(){
+		$('a.popen').click(function(){
+			var e = $(this);
+			var url = "purchase/recomDetail?id="+e.attr('id');
+			window.top.layerIndexs = getLayer().open({
+				'type'			: 2,
+				'title'			: e.text(),
+				'shadeClose'	: true,
+				'shade'			: 0.4,
+				'area'			: ['95%', '90%'],
+				'content'		: url,
+				'end'			: function(){window.location.reload();}
+			});
+			return false;
+		});
+
+		$('a.popen2').click(function(){
+			var e = $(this);
+			var url = "purchase/offerMerchant?id="+e.attr('id');
+			window.top.layerIndexs = getLayer().open({
+				'type'			: 2,
+				'title'			: e.text(),
+				'shadeClose'	: true,
+				'shade'			: 0.4,
+				'area'			: ['95%', '90%'],
+				'content'		: url,
+				'end'			: function(){window.location.reload();}
+			});
+			return false;
+		});
+	//点击返回
+		$('.goback').click(function(){
+			window.location.href = '/purchase.list';
+		});
+});
+</script>

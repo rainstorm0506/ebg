@@ -1,0 +1,42 @@
+	<!-- 商品列表 -->
+	<ul class="goods-list goods-list-1" ng-if="isGoodsListAll === true">
+		<li>
+			<figure><a ui-sref="detail"><img ng-src="{{imgPath}}/temp/09.png"></a><i>自营</i></figure>
+			<h6><a ui-sref="detail">2015 Apple/12 英MacBook</a></h6>
+			<p><span>¥ 2788.00</span></p>
+			<footer>
+				<a href="javascript:;">赞11</a>
+				<a class="share-small" href="javascript:;"><i></i><span>分享</span></a>
+			</footer>
+		</li>
+	</ul>
+	<!-- 积分列表 -->
+	<ul class="goods-list" ng-if="isIntegral === true">
+		<li>
+			<figure><a ui-sref="integralDetail"><img ng-src="{{imgPath}}/temp/09.png"></a></figure>
+			<h6><a ui-sref="integralDetail">2015 Apple/12 英MacBook</a></h6>
+			<p class="txt-1">100人已兑换</p>
+			<div class="txt-2">200积分 企业用户兑换</div>
+		</li>
+	</ul>
+	
+	<!-- 二手商品列表 -->
+	<ul class="goods-list" ng-if="isGoodsList === true">
+		<li>
+			<figure><a ui-sref="secondDetail"><img ng-src="{{imgPath}}/temp/09.png"></a><i>二手</i></figure>
+			<h6><a ui-sref="secondDetail">2015 Apple/12 英MacBook</a></h6>
+			<p><span>¥ 2788.00</span><em>30人收藏</em></p>
+		</li>
+	</ul>
+	
+	<!-- 店铺商品 -->
+	<ul class="goods-list" ng-if="isStoreList === true">
+		<li>
+			<figure><a href="index.html#/detail"><img ng-src="{{imgPath}}/temp/09.png"></a><i>自营</i></figure>
+			<h6><a href="index.html#/detail">2015 Apple/12 英MacBook</a></h6>
+			<p><span>¥ 2788.00</span><em>销量30件</em></p>
+		</li>
+	</ul>
+	
+	<a class="refresh css3" href="javascript:;"><span>点击刷新</span><i></i></a>
+	<div class="h40px"></div>

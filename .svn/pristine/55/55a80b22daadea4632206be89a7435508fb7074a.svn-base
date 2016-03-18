@@ -1,0 +1,124 @@
+<?php
+class UsercenterController extends WebApiController{
+    //个人中心==》首页展示数据
+    public function actionUserInfo()
+    {
+        $apt = (int)$this->getPost('apt', 0);
+        $usercenter_model = ClassLoad::Only('Usercenter');   /* @var $usercenter_model Usercenter */
+        //$res = $usercenter_model->getUserInfo();
+        if($info = $usercenter_model->getUserInfo()){
+            $this->jsonOutput(0, $info);
+        }else{
+            $this->jsonOutput(2, "未找到数据");
+        }        
+    }
+    /*
+     * 升级为 企业用户
+     */
+    public function actionUserToCompany()
+    {
+        $form = ClassLoad::Only("userToCompanyForm");/* @var $form userToCompanyForm */
+        $form->apt = (int)  $this->getPost('apt');
+        $form->dict_one_id = (int)  $this->getPost('dict_one_id');
+        $form->dict_two_id = (int)  $this->getPost('dict_two_id');
+        $form->dict_three_id = (int)  $this->getPost('dict_three_id');
+        $form->com_num = (int)  $this->getPost('com_num');
+        $form->com_license_timeout = (int)  $this->getPost('com_license_timeout');
+        
+        $form->com_name = trim((string)  $this->getPost('com_name'));
+        $form->com_address = trim((string)  $this->getPost('com_address'));
+        $form->com_property = trim((string)  $this->getPost('com_property'));
+        $form->com_license = trim((string)  $this->getPost('com_license'));
+        $form->com_tax = trim((string)  $this->getPost('com_tax'));
+        $form->com_org = trim((string)  $this->getPost('com_org'));
+        if($form->valiadteCom()){
+            $model = ClassLoad::Only("Usercenter");
+            if($info = $model->userToCom($form)){
+                $this->jsonOutput(0, $info);
+            }else{
+                $this->jsonOutput(2, "插入数据有误");
+            }
+        }else{
+            $this->jsonOutput(1, $this->getFormError($form));
+        }
+    }
+    /*
+     * 我的 订单列表
+     */
+    public function actionMyOrders()
+    {
+        $_p = (int)$this->getPost('page', 1);
+        $type = (int)$this->getPost('type', 0); //101:待付款；106:待收货；103：代发货；107:已完成；
+
+        $usercenter_model = ClassLoad::Only('Usercenter');/* @var $usercenter_model Usercenter */
+        $page = ClassLoad::only('CPagination'); /* @var $page CPagination */
+        $page->pageSize = 6;
+        $page->setCurrentPage($_p > 0 ? ($_p - 1) : 0);
+        $page->setItemCount($usercenter_model->getAllNum());
+        
+        if($info = $usercenter_model->getOrderInfo($page,$_p,$type)){
+            $this->jsonOutput(0, $info);
+        }else{
+            $this->jsonOutput(2, "未找到数据");
+        }         
+    }
+    /*
+     * 个人中心=》我的评论
+     */
+    public function actionMyComments()
+    {
+        $type = (int)$this->getPost('type',2);  //默认为2(待评价)
+        $_p = (int)$this->getPost('page', 1);
+
+        $usercenter_model = ClassLoad::Only('Usercenter');/* @var $usercenter_model Usercenter */
+        $page = ClassLoad::only('CPagination'); /* @var $page CPagination */
+        $page->pageSize = 2;
+        $page->setCurrentPage($_p > 0 ? ($_p - 1) : 0);
+        $page->setItemCount($usercenter_model->getAllNum());        
+        $usercenter_model = ClassLoad::Only('Usercenter');/* @var $usercenter_model Usercenter */
+
+        if($info = $usercenter_model->getComments($type,$page,$_p)){
+            $this->jsonOutput(0, $info);
+        }else{
+            $this->jsonOutput(2, '未找到数据');
+        }
+    }
+    /*
+     * 个人中心==>我的 收货 地址
+     */
+    public function actionMyAddress()
+    {
+        $usercenter_model = ClassLoad::Only('Usercenter');/* @var $usercenter_model Usercenter */
+        if($info = $usercenter_model->getMyAddress()){
+            $this->jsonOutput(0, $info);
+        }else{
+            $this->jsonOutput(2, "未找到数据");
+        }
+    }
+    /*
+     * 个人中心==》添加我的收货地址
+     */
+    public function actionAddAddress()
+    {
+        $address_form_model = ClassLoad::Only('AddAddressForm');    /* @var $address_form_model addAddressForm */
+        $address_form_model->consignee = trim((string)  $this->getPost('consignee'));
+        $address_form_model->address = trim((string)  $this->getPost('address'));
+        $address_form_model->phone = trim((string)  $this->getPost('phone'));
+        $address_form_model->dict_one_id = (int)(string)  $this->getPost('dict_one_id');
+        $address_form_model->dict_two_id = (int)(string)  $this->getPost('dict_two_id');
+        $address_form_model->dict_three_id = (int)(string)  $this->getPost('dict_three_id');
+        $address_form_model->is_default = (int)(string)  $this->getPost('is_default');
+        
+        if($address_form_model->validateAddress()){   //表单验证通过的时候
+            $address_model = ClassLoad::Only('Usercenter'); /* @var $usercenter_model Usercenter */
+            if($info = $address_model->setAddress($address_form_model)){
+                $this->jsonOutput(0, $info);
+            }else{
+                $this->jsonOutput(2, "地址添加失败");
+            }
+        }else{
+            $this->jsonOutput(1, $this->getFormError($address_form_model));
+        }
+    }
+   
+}

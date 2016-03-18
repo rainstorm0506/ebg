@@ -1,0 +1,83 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">集采订单管理模块 - 订单详情页数据</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">purchase.showDetail</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">邱龙军</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>pid</td>
+			<td>int</td>
+			<td>订单号（订单列表里的'purchase_sn'字段）</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "purchase_sn": "N2459-7467-8134",       			#集采订单号
+        "title": "大单子",						#集采单名称
+        "link_man": "三方",						#联系人
+	"company_name": "",						#企业名称
+        "wish_receivingtime": "1456127113",				#期望报价时间
+        "file_data": [							#文件下载或附件
+            "/purchase/2016/02-22/22/12291557821456126930.4575.docx",
+            "/purchase/2016/02-22/22/11460718611456126930.5814.png"
+        ],
+	"create_time": 1456126472		#订单创建时间
+        "over_time": 751292,			#剩下时间（秒）
+	"price_endtime": 1456156800,		#报价截止时间
+        "price_require": "1",		#报价需求：0不要要报含税价  1需要报含税价
+        "is_tender_offer": "1",		#是否招投标：1是，0否
+        "is_interview": "1",		#是否面谈：1是，0否
+        "memo": "",			#报价要求或备注
+        "is_closed": "3",		#订单目前状态：1.等待报价，2.正在报价 3.结束报价
+        "goods": [
+            {
+                "id": "4",
+                "purchase_sn": "N2459-7467-8134",   			#集采订单号
+                "name": "办公设备",					#商品名称
+                "params": "黑色,Intel I5",				#商品规格，参数
+                "offer_num": "0",					#已报价数量
+		"num_min": 200, 					#报价商品要求最小数量
+		"num_max": 300,						#报价商品要求最大数量
+                "isPrice": ""						#当前商家是否已报价 
+            },
+            {
+                "id": "5",
+                "purchase_sn": "N2459-7467-8134",
+                "name": "办公文具",
+                "params": "白色",
+                "offer_num": "0",
+		"num_min": 200, 					#报价商品要求最小数量
+		"num_max": 300,						#报价商品要求最大数量
+                "isPrice": ""
+            }
+        ],
+        "status": 0
+    }
+}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>

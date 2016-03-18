@@ -1,0 +1,17 @@
+﻿// ====================================== 导航
+define(['angularAMD'],function(AngularAMD){
+	AngularAMD.directive('publicNav',function(){
+		return {
+			restrict : 'E',
+			replace : true,
+			template : '<nav class="home-nav">\
+							<a ui-sref="/" ui-sref-active="current"><i class="ico-n-1"></i><span>首页</span></a>\
+							<a href="procurement.html"><i class="ico-n-2"></i><span>集采</span></a>\
+							<a href="store.html#/floor"><i class="ico-n-3"></i><span>逛一逛</span></a>\
+							<a ui-sref="cart" ui-sref-active="current"><i class="ico-n-4"></i><span>购物车</span></a>\
+							<a href="person.html"><i class="ico-n-5"></i><span>我的</span></a>\
+						</nav>',
+			link : function(){}
+		}
+	})
+})

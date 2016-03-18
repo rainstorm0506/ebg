@@ -1,0 +1,95 @@
+<?php
+/**
+ * 二手商品  - 控制器
+ */
+class UsedController extends WebApiController
+{
+	/**
+	 * 二手列表
+	 */
+	public function actionList()
+	{
+		$apt=(int)$this->getPost('apt');
+		$search = array (
+			'keyword'		=> trim((string)$this->getPost('w')),
+			'order'			=> (string)$this->getPost('o'),
+			'by'			=> (string)$this->getPost('by'),
+			'brand_id'		=> (int)$this->getPost('b'),
+			'priceStart'	=> $this->getPost('ps'),
+			'priceEnd'		=> $this->getPost('pe'),
+			'self'			=> (int)$this->getPost('self'),
+			'classOne'		=> (int)$this->getPost('classOne'),
+			'classTwo'		=> (int)$this->getPost('classTwo'),
+			'classThree'	=> (int)$this->getPost('classThree')
+		);
+		$pageNow=$this->getPost('pageNow');
+		$pageSize=$this->getPost('pageSize');
+		$model=ClassLoad::only('Used');/* @var $model used */
+		if($row=$model->getList($search , empty($pageNow)?1: $pageNow , empty($pageSize)?6:$pageSize))
+		{
+			$this->jsonOutput(0,$row);
+		}else{
+			$this->jsonOutput(2,'没有符合条件的二手商品');
+		}
+	}
+	/**
+	 * 筛选条件数据
+	 */
+	public function actionConditions(){
+		$apt=(int)$this->getPost('apt');
+		$classId=(int)$this->getPost('class_id');
+		$classList=array();
+		if(!$classId)
+			$classList=GlobalUsedClass::getUnidList();
+
+		$brandList=array();
+		$price=array();
+		$model=ClassLoad::Only('Used');/* @var $model used */
+		if($row=$model->getClassInfo($classId))
+		{
+			if($row['tier']==1){
+				$classOne=$classId;
+				$classTwo=0;
+				$classThree=0;
+				$classList=GlobalUsedClass::getUnidList($classId , $classId);
+			}
+			if($row['tier']==2){
+				$classOne=$row['root_id'];
+				$classTwo=$classId;
+				$classThree=0;
+				$classList=GlobalUsedClass::getUnidList($classOne , $classTwo);
+			}
+			if($row['tier']==3){
+				$classOne=$row['root_id'];
+				$classTwo=$row['parent_id'];
+				$classThree=$classId;
+			}
+			$brandList=GlobalBrand::getBrand(2 , $classOne , $classTwo , $classThree);
+			$price=GlobalUsedClass::getClassPriceGroup($classId);
+		}
+		$data=array(
+			'brandList'	=>	$brandList,
+			'classList'	=>	$classList,
+			'price'		=>	$price
+		);
+		$this->jsonOutput(0,$data);
+	}
+	/**
+	 * 二手商品详情
+	 */
+	public function actionInfo()
+	{
+		if(!$id=(int)$this->getPost('id'))
+			$this->jsonOutput(2,'错误的操作');
+
+		$model=ClassLoad::Only('Used');/* @var $model used */
+		if($row=$model->getInfo($id))
+		{
+			$this->jsonOutput(0,$row);
+		}
+		else
+		{
+			$this->jsonOutput(2,'没有该商品信息');
+		}
+	}
+}

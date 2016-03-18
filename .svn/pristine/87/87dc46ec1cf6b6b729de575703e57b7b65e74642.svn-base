@@ -1,0 +1,70 @@
+/* ============================================== selectbox  ============================================== */
+.sbox24,.sbox26,.sbox28,.sbox30,.sbox32,.sbox34,.sbox36,.sbox38,.sbox40{width:150px;
+	font-size:12px;font-family:Microsoft YaHei;color:#333;border:1px solid #ccc;
+	padding-left:5px;
+}
+.sbox24{height:24px;padding:2px 2px\0;}
+.sbox26{height:26px;padding:3px 3px\0;}
+.sbox28{height:28px;padding:4px 4px\0;}
+.sbox30{height:30px;padding:5px 5px\0;}
+.sbox32{height:32px;padding:6px 5px\0;}
+.sbox34{height:34px;padding:7px 5px\0;}
+.sbox36{height:36px;padding:8px 5px\0;}
+.sbox38{height:38px;padding:9px 5px\0;}
+.sbox40{height:40px;padding:10px 5px\0;}
+.sbox24,.sbox26,.sbox28,.sbox30,.sbox32,.sbox34,.sbox36,.sbox38,.sbox40{height:auto\9;}
+/* =============== ie8 hack =============== */
+@media \0 screen {
+	.sbox24{padding-top:2px;padding-bottom:2px;}
+	.sbox26{padding-top:3px;padding-bottom:2px;}
+	.sbox28{padding-top:4px;padding-bottom:3px;}
+	.sbox30{padding-top:5px;padding-bottom:4px;}
+	.sbox32{padding-top:6px;padding-bottom:5px;}
+	.sbox34{padding-top:7px;padding-bottom:6px;}
+	.sbox36{padding-top:8px;padding-bottom:7px;}
+	.sbox38{padding-top:9px;padding-bottom:8px;}
+	.sbox40{padding-top:10px;padding-bottom:9px;}
+}
+/* ============================================== textbox ============================================== */
+.tbox22,.tbox24,.tbox26,.tbox28,.tbox30,.tbox32,.tbox34,.tbox36,.tbox38,.tbox40{width:330px;border:1px solid #ccc;font:12px/18px Microsoft YaHei;padding:0 5px;color:#666;}
+.tbox22{height:22px;line-height:22px \9;}
+.tbox24{height:24px;line-height:24px \9;}
+.tbox26{height:26px;line-height:26px \9;}
+.tbox28{height:28px;line-height:28px \9;}
+.tbox30{height:30px;line-height:30px \9;}
+.tbox32{height:32px;line-height:32px \9;}
+.tbox34{height:34px;line-height:34px \9;}
+.tbox34-2{width:137px}
+.tbox34-3{width:70px}
+.tbox34-4{width:110px}
+.tbox34-5{width:220px}
+.tbox36{height:36px;line-height:36px \9;}
+.tbox38{height:38px;line-height:38px \9;}
+.tbox38-1{width:180px}
+.tbox40{height:40px;line-height:40px \9;}
+/* ============================================== IE6 hack ============================================== */
+*html{zoom:'expression(function(ele){ele.style.zoom="1";document.execCommand("BackgroundImageCache",false,true);}(this))';}
+/* ========================================================== Safari hack ========================================================== */
+/* ============================================== selectbox ============================================== */
+.sbox24{[;margin-top:0;}
+.sbox26{margin-top:2px;}
+.sbox28{margin-top:2px;}
+.sbox30{margin-top:4px;}
+.sbox32{margin-top:5px;}
+.sbox34{margin-top:6px;}
+.sbox36{margin-top:7px;}
+.sbox38{margin-top:8px;}
+.sbox40{margin-top:9px;}
+/* ============================================== textbox  ============================================== */
+.tbox22,.tbox24,.tbox26,.tbox28,.tbox30,.tbox32,.tbox34,.tbox36,.tbox38,.tbox40{line-height:0;}
+/* ===============IE6、IE7 hack =============== */
+.tbox22{*line-height:22px;}
+.tbox24{*line-height:24px;}
+.tbox26{*line-height:26px;}
+.tbox28{*line-height:28px;}
+.tbox30{*line-height:30px;}
+.tbox32{*line-height:32px;}
+.tbox34{*line-height:34px;}
+.tbox36{*line-height:36px;}
+.tbox38{*line-height:38px;}
+.tbox40{*line-height:40px;}

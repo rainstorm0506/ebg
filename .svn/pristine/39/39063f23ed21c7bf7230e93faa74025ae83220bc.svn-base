@@ -1,0 +1,83 @@
+<style type="text/css">
+    .a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+    table{width:100%;border-collapse:collapse}
+    td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+    <div class="title">个人中心模块 - 我的兑换</div>
+    <table>
+        <tr>
+            <td style="width:200px;padding:10px 5px">请求位置</td>
+            <td colspan="3">personal.convert</td>
+        </tr>
+        <tr>
+            <td style="width:200px;padding:10px 5px">实现人</td>
+            <td colspan="3">何铭</td>
+        </tr>
+        <tr>
+            <td>请求参数</td>
+            <td>apt</td>
+            <td>int</td>
+            <td>APP抛数据的时间</td>
+        </tr>
+        <tr>
+            <td>正常的返回值 </td>
+            <td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "list": [
+            {
+                "id": 11,           #一级 兑换的ID编号
+                "title": "xxxxxxx", #一级 兑换商品名称
+                "child": [
+                    {
+                        "title": "xxxxxxx",
+                        "time": "1456308482",   #二级 兑换时间
+                        "points": "20000",      #二级 花费积分
+                        "status": "3",          #状态(1=已收货;2=未收货;3=未配送)
+                        "goods_id": "11"
+                    },
+                    {
+                        "title": "xxxxxxx",
+                        "time": "1456475986",
+                        "points": "1500",
+                        "status": "3",
+                        "goods_id": "11"
+                    }
+                ]
+            },
+            {
+                "id": 54,
+                "title": "vvvreregrg",
+                "child": [
+                    {
+                        "title": "vvvreregrg",
+                        "time": "1456475988",
+                        "points": "3800",
+                        "status": "1",
+                        "goods_id": "54"
+                    }
+                ]
+            }
+        ]
+    }
+}
+                </pre></td>
+        </tr>
+    </table>
+<!--{
+    "code": 0,
+    "message": "",
+    "data": [
+        {
+            "title": "ewrw",		兑换商品名称
+            "time": "1456305493",	#兑换时间
+            "points": "20000",		#花费积分
+            "status": "3",		#状态(1=已收货;2=未收货;3=未配送)
+            "goods_id": "10"		#兑换商品ID
+        }
+    ]
+}    -->
+</div>

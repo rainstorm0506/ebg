@@ -1,0 +1,14 @@
+	<fieldset class="form-list">
+		<legend>提现</legend>
+		<form>
+			<ul>
+				<li><h6>银行卡号</h6><input type="number" class="tbox" placeholder="请输入卡号"></li>
+				<li><h6>开户行</h6><input type="text" class="tbox" placeholder="请输入开户行，如：成都东大街支行"></li>
+				<li><h6>金额</h6><input type="number" class="tbox" placeholder="转出金额"></li>
+			</ul>
+		</form>
+	</fieldset>
+	<a class="btn-1 sm-mlr" href="#">提现</a>
+	<p class="w-txt">可提现金额：20.20元</p>
+	<div class="h40px"></div>
+	<p class="w-promt dn">温馨提示：未满100元，不给于提取</p>

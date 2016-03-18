@@ -1,0 +1,77 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">通讯录 - 通讯录列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求调用方式</td>
+			<td colspan="3">contactsBook.list</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">谭甜</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>type</td>
+			<td>int</td>
+			<td>关注类型 (1=我的关注，2=关注我的)</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>pageNow</td>
+			<td>int</td>
+			<td>查询当前页（开始位置（默认为第1页开始））</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>pageSize</td>
+			<td>int</td>
+			<td>查询当前页（查询个数（选填，默认为6个））</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3">
+				<pre>
+	{
+	    "code": 0,
+	    "message": "",
+	    "data": [
+			{
+				"merchant_id": "106",					#商家id
+				"attention_id": "86",					#被关注的商家id
+				"attention_side": "2",					#是否已相互关注（1=已相互关注，2=对方未关注）
+				"time": "1456390481",					#关注时间
+				"store_name": "测试的的观点非官方大哥梵蒂冈的",		#商家名称
+				"mer_no": "A113",					#店铺编号
+				"scope": "手机",					#经营范围
+				"store_address": "四川省成都市金牛区",			#商家地址
+				"store_tel": "13888888888"				#商家电话
+			},
+			{
+				"merchant_id": "106",
+				"attention_id": "109",
+				"attention_side": "1",
+				"time": "0",
+				"store_name": "苹果代工厂",
+				"mer_no": "M003",
+				"scope": "电脑",
+				"store_address": "四川省成都市金牛区",
+				"store_tel": "13999999999"
+			}
+	    ]
+	}
+				</pre>
+			</td>
+		</tr>
+	</table>
+</div>

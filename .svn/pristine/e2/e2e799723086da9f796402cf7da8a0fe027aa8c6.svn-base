@@ -1,0 +1,405 @@
+<?php
+Views::js(array('jquery-tabPlugin'));
+Views::js(array('jquery.validate' , 'jquery.sendVerification','jquery-placeholderPlug','jquery-popClose'));
+Yii::app()->clientScript->registerCoreScript('webUploader');
+Yii::app()->getClientScript()->registerCss('default' , '.errorMessage{color:red}');
+?>
+	<!-- main -->
+	<main>
+		<section class="merchant-content merchant-content-b" id="merchant">
+			<!-- 导航 -->
+			<nav class="merchant-nav" id="merchantNav">
+				<a class="current" href="javascript:;">基本设置</a>
+				<a href="javascript:;">企业认证</a>
+				<a href="merchant/editPassword">修改登录密码</a>
+			</nav>
+			<div class="clear"></div>
+			<fieldset class="form-list form-list-36 add-goods-form js-box">
+				<legend>基本设置</legend>
+				<?php $active = $this->beginWidget('CActiveForm',array('id'=>'formBox','htmlOptions'=>array('onsubmit'=>'return checkSubmit();'))); ?>
+					<ul>
+						<li>
+							<h6>店铺名称：</h6>
+							<?php
+								$form->store_name = $form->store_name ? $form->store_name : (isset ( $info ['store_name'] ) ? $info ['store_name'] : '');								
+								echo $active->textField($form , 'store_name' , array('id' => 'store_name','class' => 'tbox34 tbox34-4' , 'placeholder'=>"输入店铺名称"));
+								echo $active->error($form , 'store_name');
+							?>
+							<div class="errorMessage" style="display:none">店铺名称 不可为空白.</div>
+						</li>
+						<li class="imgx">
+							<h6>店铺头像：</h6>
+							
+							<aside class="goods-pic">
+								<div id="image_url" class="_web_uploader" name="MyStoreForm[image_url]"></div>
+							</aside>
+							<div class="errorMessage" style="display:none">店铺头像 不可为空白.</div>
+						</li>
+						
+						<li><h6>手机号：</h6>
+							<?php
+								$form->store_tel = $form->store_tel ? $form->store_tel : (isset ( $info ['store_tel'] ) ? $info ['store_tel'] : '');
+								echo $active->textField($form , 'store_tel' , array('id' => 'store_tel','class' => 'tbox34 tbox34-4' , 'placeholder'=>"输入手机号"));
+								echo $active->error($form , 'store_tel');
+							?>
+							<div class="errorMessage" style="display:none">手机号 不可为空白.</div>
+						</li>
+						<li class="">
+							<h6>店铺环境：</h6>
+							<div class=" imgx">
+								<aside class="goods-pic goods-img" style="width:750px">
+									<div name="MyStoreForm[img][]"></div>
+									<div name="MyStoreForm[img][]"></div>
+									<div name="MyStoreForm[img][]"></div>
+									<div name="MyStoreForm[img][]"></div>
+									<div name="MyStoreForm[img][]"></div>
+								</aside>
+							</div>
+						</li>
+						<li><h6>店铺介绍：</h6>
+							<?php
+								$form->store_describe = $form->store_describe ? $form->store_describe : (isset ( $info ['store_describe'] ) ? $info ['store_describe'] : '');
+								echo $active->textArea($form , 'store_describe' , array('class'=>'areabox-1', 'style'=>'width:65%;height:160px;'));
+								echo $active->error($form , 'store_describe');
+							?>
+						</li>
+						<li><h6>店铺地址：</h6>
+							<?php
+								$form->store_address = $form->store_address ? $form->store_address : (isset ( $info ['store_address'] ) ? $info ['store_address'] : '');
+								echo $active->textField($form , 'store_address' , array('id' => 'store_address','class' => 'tbox34 tbox34-5' , 'style'=>'width:65%;', 'placeholder'=>"输入店铺地址"));
+								echo $active->error($form , 'store_address');
+							?>
+						</li>
+						<li><h6>&nbsp;</h6>
+							<?php echo CHtml::submitButton('保存' , array('class'=>'btn-1 btn-1-3','id'=>'submits')); ?>
+						</li>
+					</ul>
+				<?php $this->endWidget(); ?>
+			</fieldset>
+			<section class="cer-wrap js-box dn">
+				<div class="cer-has-wrap">
+					<i></i>
+					<section>
+						<h6>亲爱的<?php echo isset ( $info ['store_name'] ) ? $info ['store_name'] : '';?>，您的身份</h6>
+						<h5>已通过认证</h5>
+						<p>根据《网络交易管理办法》的规定，e办公将定期或不定期复核您的身份信息。</p>
+						<p>请确保您账号绑定的身份信息真实有效，并确保账号为本人使用，请勿向他人转让、出租或借用账号。</p>
+					</section>
+				</div>
+				<dl class="cer-info-list">
+					<dt>上次认证信息：</dt>
+					<dd>姓名： <?php echo isset ( $info ['mer_name'] ) ? $info ['mer_name'] : '';?></dd>
+					<dd>电话： <?php echo str_replace(substr($users['phone'], 4,4), '****', $users['phone']);?></dd>
+					<dd>地址： <?php echo isset ( $info ['store_address'] ) ? $info ['store_address'] : '';?></dd>
+					<dd>证件号码： <?php echo str_replace(substr($info['mer_card'], 1,strlen($info['mer_card'])-2), '****************', $info['mer_card']);?></dd>
+					<dd>认证通过时间：<?php echo isset ( $users ['audit_time'] ) ? date('Y-m-d H:i:s', $users ['audit_time']) : '';?></dd>
+				</dl>
+			</section>
+		</section>
+	</main>
+	
+
+<script>
+	// ================================== 选项卡
+	$(document).ready(function(){
+		$('#merchantNav a').click(function(){
+			$(this).addClass('current').siblings().removeClass('current');
+			$('.js-box:eq('+$(this).index()+')').show().siblings('.js-box').hide();
+		});
+		//上传头像
+		__web_uploader(comPicJSON);
+		__web_uploaders(true , imgJsons , '.goods-img>div[name="MyStoreForm[img][]"]');
+		//图片关闭
+		$('.imgx').on('click' , 'a.preview-close' , function(){
+			var container = $(this).parent();
+			container.children(':hidden').remove();
+			container.children('b').remove();
+			container.children('img').remove();
+			container.children('div[class="preview-set"]').remove();
+			container.children('a[class="preview-close"]').remove();
+		});
+
+	});
+	//保存信息判断提示
+	function checkSubmit(){
+		var storeName = $('#store_name').val();
+		var phone = $('#store_tel').val();
+		var imgUrl = $("input[name='MyStoreForm[image_url]']").val();
+		if(storeName == ''){
+			$('#store_name').next().show();
+			$('#store_name').focus();
+			return false;
+		}else if(imgUrl == ''){
+			$("input[name='MyStoreForm[image_url]']").next().show();
+			$("input[name='MyStoreForm[image_url]'']").focus();
+			return false;
+		}else if(imgUrl == ''){
+			$('#store_tel').next().show();
+			$('#store_tel').focus();
+			return false;
+		}
+		alert('提交成功！');
+		return true;
+	}
+	
+	var comPicJSON = <?php echo json_encode(array('image_url' => isset($info['store_avatar'])?$info['store_avatar']:'')); ?>;
+	var imgJsons = <?php echo !empty($info['store_environment'])?$info['store_environment']:"[]"; ?>;
+	
+	var imgDomain		= '<?php echo Yii::app()->params['imgDomain']; ?>';
+	
+	function __web_uploader(imgJson)
+	{
+		var config = {
+				pick: {id: 'div._web_uploader[name]',label: '<i>+</i><p>点击上传图片</p>'},
+				swf: 'Uploader.swf',
+				chunked: false,
+				chunkSize: 512 * 1024,
+				formData:{'width':0 , 'height':0},
+				accept: {title: 'Images',extensions: 'gif,jpg,jpeg,bmp,png',mimeTypes: 'image/*'},
+				server: '<?php echo Yii::app()->params['imgUploadSrc']; ?>',
+				preview : '<?php echo Yii::app()->params['imgPreviewSrc']; ?>',
+				disableGlobalDnd: true,
+				chunkSize:true,
+				fileSizeLimit: 5 * 1024 * 1024,			//验证文件总大小是否超出限制
+				fileSingleSizeLimit: 5 * 1024 * 1024	//验证单个文件大小是否超出限制
+		};
+		//判断浏览器是否支持图片的base64
+		var isSupportBase64 = (function()
+		{
+			var data = new Image() , support = true;
+			data.onload = data.onerror = function()
+			{
+				if (this.width != 1 || this.height != 1)
+					support = false;
+			}
+			data.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+			return support;
+		})();
+	
+		//-------------------------------事件绑定说明----------------------------------
+		//	http://fex.baidu.com/webuploader/doc/index.html#WebUploader_Uploader_events
+		var uploader = WebUploader.create(config);
+	
+		uploader
+		//当验证不通过时触发
+		.on('error', function(error)
+		{
+			var code = '上传错误';
+			switch (error)
+			{
+				case 'Q_TYPE_DENIED'		: code = '文件类型不匹配'; break;
+				case 'Q_EXCEED_NUM_LIMIT'	:
+				case 'Q_EXCEED_SIZE_LIMIT'	: code = '只能上传'+config.fileNumLimit+'个文件'; break;
+				case 'F_EXCEED_SIZE'		: code = '只能上传5M以内的图片'; break;
+				case 'F_DUPLICATE'			: code = '此文件已上传'; break;
+			}
+			alert(code);
+		})
+		//当文件被加入队列以后触发 , 预览并上传
+		.on('fileQueued', function(file)
+		{
+			var div = $('#rt_' + file.source.ruid);
+			div.nextAll().remove();
+			div.after('<b class="uploading">正在上传中...</b>');
+	
+			uploader.option('formData' , {'width':$('#sizeWidth').val() , 'height':$('#sizeHeight').val()});
+			uploader.upload();
+		})
+		//当文件上传成功时触发
+		.on('uploadSuccess' , function(file , json)
+		{
+			var container = $('#rt_' + file.source.ruid).parent() , code = '' , name = container.attr('name');
+			container.children(':hidden').remove();
+			container.children('b').remove();
+			container.children('img').remove();
+			container.children('div[class="preview-set"]').remove();
+			container.children('a[class="preview-close"]').remove();
+	
+			if (json.error != 0)
+			{
+				uploader.removeFile(file);
+				alert(json.message);
+				return false;
+			}
+	
+			code = '<input type="hidden" name="'+name+'" value="'+json.src+'">';
+			uploader.makeThumb(file, function(error , ret)
+			{
+				if (error)
+				{
+					code += '<b>预览错误</b>';
+					container.prepend(code);
+				}else{
+					if (isSupportBase64)
+					{
+						code += '<img src="'+ret+'"><a class="preview-close"></a>';
+						container.prepend(code);
+	
+						container.children('a.preview-close').click(function(){
+							uploader.removeFile(file);
+						});
+					}else{
+						$.ajax(config.preview , {method: 'POST', data: ret, dataType:'json'}).done(function(response)
+						{
+							if (response.result)
+							{
+								code += '<img src="'+response.result+'"><a class="preview-close"></a>';
+								container.prepend(code);
+	
+								container.children('a.preview-close').click(function(){
+									uploader.removeFile(file);
+								});
+							}else{
+								code += '<b>预览出错</b>';
+								container.prepend(code);
+							}
+						});
+					}
+				}
+			});
+		});
+	
+		if (!$.isEmptyObject(imgJson))
+		{
+			var i , _code = _name = '' , obj;
+			for (key in imgJson)
+			{
+				if (imgJson[key])
+				{
+					obj = $('#' + key);
+					_name = obj.attr('name')||'';
+					obj.prepend('<input type="hidden" value="'+imgJson[key]+'" name="'+_name+'">' +
+						'<img src="'+imgDomain+imgJson[key]+'"><a class="preview-close"></a>');
+				}
+			}
+		}
+	}
+	
+//店铺风景图批量上传
+	var __web_uploaders = function(setMinPic , imgJsons , imgSelect)
+{
+	var config = {
+		pick: {id:(imgSelect||'.goods-img>div[class!="webuploader-container"]') , label:'<i>+</i><p>点击上传图片</p>'},
+		swf: 'Uploader.swf',
+		chunked: false,
+		chunkSize: 512 * 1024,
+		accept: {title: 'Images',extensions: 'gif,jpg,jpeg,bmp,png',mimeTypes: 'image/*'},
+		server: '<?php echo Yii::app()->params['imgUploadSrc']; ?>',
+		preview : '<?php echo Yii::app()->params['imgPreviewSrc']; ?>',
+		disableGlobalDnd: true,
+		fileSizeLimit: 5 * 1024 * 1024,			//验证文件总大小是否超出限制
+		fileSingleSizeLimit: 5 * 1024 * 1024	//验证单个文件大小是否超出限制
+	};
+
+	//判断浏览器是否支持图片的base64
+	var isSupportBase64 = (function()
+	{
+		var data = new Image() , support = true;
+		data.onload = data.onerror = function()
+		{
+			if (this.width != 1 || this.height != 1)
+				support = false;
+		}
+		data.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+		return support;
+	})();
+
+	//-------------------------------事件绑定说明----------------------------------
+	//	http://fex.baidu.com/webuploader/doc/index.html#WebUploader_Uploader_events
+	var uploader = WebUploader.create(config);
+
+	uploader
+	//当验证不通过时触发
+	.on('error', function(error)
+	{
+		var code = '上传错误';
+		switch (error)
+		{
+			case 'Q_TYPE_DENIED'		: code = '文件类型不匹配'; break;
+			case 'Q_EXCEED_NUM_LIMIT'	:
+			case 'Q_EXCEED_SIZE_LIMIT'	: code = '只能上传'+config.fileNumLimit+'个文件'; break;
+			case 'F_EXCEED_SIZE'		: code = '只能上传5M以内的图片'; break;
+			case 'F_DUPLICATE'			: code = '此文件已上传'; break;
+		}
+		alert(code);
+	})
+	//当文件被加入队列以后触发 , 预览并上传
+	.on('fileQueued', function(file)
+	{
+		var div = $('#rt_' + file.source.ruid);
+		div.nextAll().remove();
+		div.after('<b class="uploading">正在上传中...</b>');
+
+		uploader.upload();
+	})
+	//当文件上传成功时触发
+	.on('uploadSuccess' , function(file , json)
+	{
+		var container = $('#rt_' + file.source.ruid).parent() , code = '' , name = container.attr('name');
+		container.children(':hidden').remove();
+		container.children('b').remove();
+		container.children('img').remove();
+		container.children('div[class="preview-set"]').remove();
+		container.children('a[class="preview-close"]').remove();
+
+		if (json.error != 0)
+		{
+			alert(json.message);
+			return false;
+		}
+
+		code = '<input type="hidden" name="'+name+'" value="'+json.src+'">';
+		uploader.makeThumb(file, function(error , ret)
+		{
+			if (error)
+			{
+				code += '<b>预览错误</b>';
+				container.prepend(code);
+			}else{
+				if (isSupportBase64)
+				{
+					code += '<img src="'+ret+'"><a class="preview-close"></a>';
+					//code += setMinPic ? '<div class="preview-set"><span></span><a>设为主图</a></div>' : '';
+					container.prepend(code);
+
+					container.children('a.preview-close').click(function(){
+						uploader.removeFile(file);
+					});
+				}else{
+					$.ajax(config.preview , {method: 'POST', data: ret, dataType:'json'}).done(function(response)
+					{
+						if (response.result)
+						{
+							code += '<img src="'+response.result+'"><a class="preview-close">x</a>';
+							container.prepend(code);
+
+							container.children('a.preview-close').click(function(){
+								uploader.removeFile(file);
+							});
+						}else{
+							code += '<b>预览出错</b>';
+							container.prepend(code);
+						}
+					});
+				}
+			}
+		});
+	});
+
+	if (!$.isEmptyObject(imgJsons))
+	{
+		var i = 0 , _code ='' , name = $(imgSelect).attr('name') , cover = $('#goods_cover').val();
+		for (; i < 5 ; i++)
+		{
+			if (imgJsons[i])
+			{
+				_code = (cover == imgJsons[i]) ? '<a class="this">主图</a>' : '<a>设为主图</a>';
+				$(imgSelect).eq(i).prepend('<input type="hidden" value="'+imgJsons[i]+'" name="'+name+'">' +
+					//(setMinPic?('<div class="preview-set"><span></span>'+_code+'</div>'):'') +
+					'<img src="'+imgDomain+imgJsons[i]+'"><a class="preview-close">x</a>');
+			}
+		}
+	}
+
+};
+</script>

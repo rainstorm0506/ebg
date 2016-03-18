@@ -1,0 +1,64 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心模块 - 电脑城列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="3">personal.yellowInfo</td>
+		</tr>
+			<tr>
+			<td style="width:200px;padding:10px 5px">实现人</td>
+			<td colspan="3">李启源</td>
+		</tr>
+		<tr>
+			<td>请求参数</td>
+			<td>apt</td>
+			<td>int</td>
+			<td>APP抛数据的时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="3"><pre>
+{
+    "code": 0,
+    "message": "",
+    "data": {
+        "id": "0",              #黄页ID编号
+        "mer_id": "105",        #商户ID号
+        "title": "测试黄页",    #公司名称
+        "scope": [              #经营范围
+            "23",               #经营范围的ID编号
+            "13"
+        ],     
+        "gather": "3",                      #所属电脑城ID
+        "address": "成都市武侯区",          #公司地址
+        "content": "测试详情",              #黄页详情描述
+        "phone": "18650215426",             #商户手机号
+        "landline": "3372197",              #商户座机号
+        "qq": "657405368",                  #商户QQ号
+        "weixin": "月半小夜曲"              #商户微信号
+        "is_phone": "0",                    #号码是否显示(0:不显示;1:显示)
+        "is_landline": "0",                 #座机是否显示(0:不显示;1:显示)
+        "is_qq": "0",                       #qq是否显示(0:不显示;1:显示)
+        "is_weixin": "0"                    #微信是否显示(0:不显示;1:显示)
+        "gather_val": "东华电脑城"          #所属电脑城ID对应的value
+        "lists": [              
+            {
+                "scope_id": 12,             #经营范围ID编号
+                "scope_value": "办公耗材"   #经营范围的value
+            },
+            {
+                "scope_id": 13,
+                "scope_value": "测试"
+            }
+        ]
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>
