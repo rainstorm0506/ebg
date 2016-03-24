@@ -1,0 +1,177 @@
+<?php
+/**
+ * 购物车
+ */
+class CartController extends WebApiController
+{
+	const CARTKEY = 'cart';
+	//我的购物车
+	public function actionIndex()
+	{
+		if(!$apt=$this->getPost('apt'))
+			$this->jsonOutput(2,'错误的操作');
+
+		$cartData = empty(Yii::app()->session[self::CARTKEY]) ? array() : Yii::app()->session[self::CARTKEY];
+		$model = ClassLoad::Only('Cart');/* @var $model Cart */
+		$goods = $model->getCartList($cartData);
+		if($goods)
+		{
+			$this->jsonOutput(0,$goods);
+		}
+		else
+		{
+			$this->jsonOutput(2,'购物车没有商品');
+		}
+	}
+	/**
+	 * 商品页 - 加入购物车
+	 *
+	 * @param	GET		int			amount					数量
+	 * @param	GET		int			type					商品类型 , 1=新品 , 2=二手商品
+	 * @param	GET		int			gid						商品ID
+	 * @param	GET		string		attrs_1_unite_code		商品1属性ID
+	 * @param	GET		string		attrs_2_unite_code		商品2属性ID
+	 * @param	GET		string		attrs_3_unite_code		商品3属性ID
+	 */
+	public function actionJoin()
+	{
+		$count = $this->_cartJoin(false);
+		$this->jsonOutput(0 , array('total'=>$count));
+	}
+
+	private function _cartJoin($select = true)
+	{
+		if (($user = $this->getUser()) && !empty($user['user_type']))
+		{
+			if ($user['user_type'] >=1 || $user['user_type'] <=3);
+			if ($user['user_type'] === 3)
+				$this->jsonOutput(2 , '商家会员不能购买商品!');
+			if ($user['user_type'] < 1 || $user['user_type'] > 2)
+				$this->jsonOutput(3 , '会员类型不正确!');
+		}
+		else
+		{
+			$this->jsonOutput(1 , '请登录后在购买!');
+		}
+
+		$type = (int)$this->getPost('type');
+		if ($type < 1 || $type > 2)
+			$this->jsonOutput(4 , '商品类型错误');
+
+		if (($gid = (int)$this->getPost('gid')) <= 0)
+			$this->jsonOutput(5 , '商品ID错误');
+
+		if (($amount = (int)$this->getPost('amount')) < 1)
+			$this->jsonOutput(6 , '商品数量错误');
+
+		$pars = array(
+			'amount'				=> $amount,
+			'type'					=> $type,
+			'gid'					=> $gid,
+			'attrs_1_unite_code'	=> (string)$this->getQuery('attrs_1_unite_code'),
+			'attrs_2_unite_code'	=> (string)$this->getQuery('attrs_2_unite_code'),
+			'attrs_3_unite_code'	=> (string)$this->getQuery('attrs_3_unite_code'),
+		);
+
+		$mid = 0;
+		if ($type == 1)
+		{
+			//全新商品
+			$model = ClassLoad::Only('Cart');/* @var $model Cart */
+			if (!$goods = $model->getGoodsList(array($gid)))
+				$this->jsonOutput(7 , '商品不存在,或者商品状态异常');
+
+			if (empty($goods[$gid]['merchant_id']) || ($mid = $goods[$gid]['merchant_id']) < 0)
+				$this->jsonOutput(8 , '商品数据有误!');
+		}else{
+			//二手商品
+			$model = ClassLoad::Only('Used'); /* @var $model Used */
+			if(!$intro = $model->intro($gid , false))
+				$this->jsonOutput(9 , '商品不存在,或者商品状态异常');
+
+			if (empty($intro['merchant_id']) || ($mid = $intro['merchant_id']) < 0)
+				$this->jsonOutput(10 , '商品数据有误!');
+		}
+
+		$seArray = array('cartNum' => 0);
+		$session = Yii::app()->session;
+		if (isset($session[self::CARTKEY]))
+		{
+			$seArray = new ArrayObject($session[self::CARTKEY]);
+			$seArray = $seArray->getArrayCopy();
+			$seArray['cartNum'] = isset($seArray['cartNum']) ? $seArray['cartNum'] : 0;
+		}
+
+		$key = md5(serialize(array_slice($pars , 1)));
+		//购物车数量
+		$seArray['cartNum'] += isset($seArray['goods'][$mid][$key]) ? 0 : 1;
+		$seArray['goods'][$mid][$key] = $pars;
+		if ($select)
+		{
+			$seArray['select'] = array();
+			$seArray['select'][$key] = 1;
+		}
+
+		$session[self::CARTKEY] = $seArray;
+		return $seArray['cartNum'];
+	}
+	/**
+	 * 删除购物车商品
+	 */
+	public function actionClear()
+	{
+		$key = (array)$this->getPost('key');
+		if (!$key)
+			$this->error('key 错误!');
+
+		$goods=array();
+		if (isset(Yii::app()->session[self::CARTKEY]['goods']))
+		{
+			$seArray = new ArrayObject(Yii::app()->session[self::CARTKEY]);
+			$seArray = $seArray->getArrayCopy();
+			if ($key)
+			{
+				foreach($key as $v)
+				{
+					$goods[$v] = 1;
+				}
+			}
+
+			foreach ($seArray['goods'] as $mid => $merVal)
+			{
+				foreach ($goods as $k => $v)
+				{
+					if (isset($merVal[$k]))
+					{
+						$seArray['cartNum']--;
+						unset($seArray['goods'][$mid][$k]);
+
+						if (empty($seArray['goods'][$mid]))
+							unset($seArray['goods'][$mid]);
+					}
+				}
+			}
+			Yii::app()->session[self::CARTKEY] = $seArray;
+		}
+		$this->jsonOutput(0,array('result'=>'删除成功'));
+	}
+	/**
+	 * 购物车商品总数量
+	 */
+	public function actionCartNum()
+	{
+		if(!$apt=$this->getPost('apt'))
+			$this->jsonOutput(2,'错误的操作');
+
+		$cartData = empty(Yii::app()->session[self::CARTKEY]) ? array() : Yii::app()->session[self::CARTKEY];
+		$num = $cartData['cartNum'];
+		if($num)
+		{
+			$this->jsonOutput(0,array('number'=>$num));
+		}
+		else
+		{
+			$this->jsonOutput(2,'购物车没有商品');
+		}
+	}
+}

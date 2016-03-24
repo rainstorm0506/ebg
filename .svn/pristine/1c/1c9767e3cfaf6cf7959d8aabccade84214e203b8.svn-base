@@ -1,0 +1,53 @@
+	<nav class="bot-nav">
+		<a class="owner-btn" href="#"><i></i><span>店主</span></a>
+		<a class="buy-btn-1 flex-1 rel" href="javascript:;">立即购买<label class="ng-label"><input type="checkbox" ng-model="isBuy"></label></a>
+		<a class="buy-btn-2 flex-1 rel" href="javascript:;">加入购物车<label class="ng-label"><input type="checkbox" ng-model="isBuy"></label></a>
+	</nav>
+	<!---- 回到顶部 ---->
+	<go-top></go-top>
+	<!---- 立即购买 ---->
+	<section class="shadow-wrap shadow-wrap-second" ng-class="{current:isBuy === true}">
+		<div class="buy-wrap">
+			<section>
+				<div class="buy-goods">
+					<figure><img ng-src="{{imgPath}}/temp/14.png"></figure>
+					<section>
+						<h3>华硕X552MJ2840</h3>
+						<p>￥5899-￥6899</p>
+						<div>库存50台</div>
+					</section>
+				</div>
+				<h3 class="buy-tit">数量及价格</h3>
+				<menu class="choice-menu">
+					<li class="current"><p>1-10</p><div>￥6800</div></li>
+					<li><p>20-50</p><div>￥6800</div></li>
+					<li><p>50-100</p><div>￥6800</div></li>
+				</menu>
+				<h3 class="buy-tit">尺寸</h3>
+				<menu class="choice-menu choice-menu-size">
+					<li>不限</li>
+					<li class="current">13.5</li>
+					<li>13.5</li>
+					<li>15</li>
+					<li>15.5</li>
+					<li>21</li>
+					<li>24</li>
+					<li>27.5</li>
+				</menu>
+				<div class="calculate-wrap">
+					<h3 class="buy-tit">购买数量</h3>
+					<aside class="calculate" ng-init="calNum=1" calculate="1000">
+						<a href="javascript:;" class="disabled" ng-click="reduction()">-</a>
+						<input type="number" ng-bind="calNum" ng-model="calNum" ng-change="inputKeyUp()" ng-blur="inputBlur()">
+						<a href="javascript:;"ng-click="add()">+</a>
+					</aside>
+				</div>
+			</section>
+			<div class="h40px"></div>
+			<nav class="bot-nav">
+				<a class="buy-btn-1 flex-1" href="#">立即购买</a>
+				<a class="buy-btn-2 flex-1" href="javascript:;" ng-click="addToCart()">加入购物车</a>
+			</nav>
+			<a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isBuy"></label></a>
+		</div>
+	</section>

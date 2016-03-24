@@ -1,0 +1,93 @@
+<?php
+class ActGoods extends SModels
+{
+	/**
+	 * 得到列表的总数
+	 */
+	public function getGoodsCount(array $search)
+	{
+		$SQL = $this->_getListSQL($search , 'count');
+		return $SQL ? (int)$this->queryScalar($SQL) : 0;
+	}
+
+	/**
+	 * 列表
+	 * @param		int			$offset		偏移量
+	 * @param		int			$rows		读取条数
+	 * @param		int			$total		总行数
+	 * @return		array
+	 */
+	public function getList(array $search , $offset , $rows , $total)
+	{
+		if (!$total || $offset>=$total)
+			return array();
+
+		if ($SQL = $this->_getListSQL($search , 'list'))
+			return $this->queryAll($SQL . " ORDER BY g.rank DESC LIMIT {$offset},{$rows}");
+		else
+			return array();
+	}
+
+	private function _getListSQL(array $search , $type)
+	{
+		static $returned = array();
+		if (isset($returned[$type]))
+			return $returned[$type];
+
+		$keyword = $search['keyword'];
+		unset($search['keyword']);
+
+		$field = array(
+			'id' , 'merchant_id' , 'brand_id' , 'title' ,
+			'shelf_id' , 'goods_num' , 'cover' , 'class_one_id' , 'class_two_id' , 'class_three_id'
+		);
+		$field = 'g.' . join(',g.', $field);
+
+		$SQL = '';
+		$wp = ' WHERE ';
+		if ($search['shelf'])
+		{
+			$SQL .= $wp . "`shelf_id`={$search['shelf']}";
+			$wp = ' AND ';
+		}
+
+		if ($keyword && !is_numeric($keyword))
+		{
+			$keyword = $this->quoteLikeValue($keyword);
+
+			$SQL .= $wp . " (g.title LIKE {$keyword} OR g.goods_num LIKE {$keyword})";
+
+			$returned['count']	= "
+				SELECT COUNT(*)
+				FROM act_goods AS g
+				LEFT JOIN user_merchant AS m ON m.uid=g.merchant_id AND (m.mer_name LIKE {$keyword} OR m.store_name LIKE {$keyword})
+				{$SQL}";
+			$returned['list']	= "
+				SELECT {$field},m.store_name
+				FROM act_goods AS g
+				LEFT JOIN user_merchant AS m ON m.uid=g.merchant_id AND (m.mer_name LIKE {$keyword} OR m.store_name LIKE {$keyword})
+				{$SQL}";
+		}else{
+			if ($keyword && is_numeric($keyword) && $keyword > 0)
+			{
+				$keyword = (int)$keyword;
+				$SQL .= $wp . "g.id={$keyword}";
+			}
+
+			$returned['count']	= "SELECT COUNT(*) FROM act_goods AS g {$SQL}";
+			$returned['list']	= "SELECT {$field},m.store_name
+									FROM act_goods AS g
+									LEFT JOIN user_merchant AS m ON m.uid=g.merchant_id
+									{$SQL}";
+		}
+
+		return isset($returned[$type]) ? $returned[$type] : '';
+	}
+	/**
+	 * 添加
+	 */
+	public function create()
+	{
+
+	}
+}

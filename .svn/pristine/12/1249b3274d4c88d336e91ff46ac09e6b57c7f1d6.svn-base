@@ -1,0 +1,63 @@
+<?php
+class ActGoodsController extends SController
+{
+	/**
+	 * 商品列表
+	 */
+	public function actionList()
+	{
+		$this->checkUserPurview('ag.lt');
+
+		$search=array(
+			'keyword'	=> trim((string)$this->getQuery('keyword')),
+			'shelf'		=> (int)$this->getQuery('shelf')
+		);
+		$shelfStatus=array(0=>'未启用' , 1=>'已启用' );
+		$model = ClassLoad::Only('ActGoods');/* @var $model ActGoods */
+		$page = ClassLoad::Only('CPagination');/* @var $page CPagination */
+		$page->pageVar = 'p';
+		$page->setItemCount($model->getGoodsCount($search));
+		$page->pageSize = 20;
+		$this->render('list' , array(
+			'page'			=> $page,
+			'shelfStatus'	=> $shelfStatus,
+			'list'			=> $model->getList($search , $page->getOffset() , $page->getLimit() , $page->getItemCount())
+		));
+	}
+	/**
+	 * 添加活动商品
+	 */
+	public function actionCreate()
+	{
+		$this->checkUserPurview('ag.cr');
+		$form = ClassLoad::Only('ActGoodsForm');/* @var $form ActGoodsForm */
+		$post = isset($_POST['ActGoodsForm']) ? $_POST['ActGoodsForm'] : array();
+		$form->img		= isset($post['img']) ? $post['img'] : array();
+		$this->exitAjaxPost($form , 'formWrap');
+
+		$class=GlobalGoodsClass::getTree();
+		$brand=ClassLoad::Only('GoodsBrand')->getSelectList();
+		$formError = array();
+		if($this->isPost() && $post)
+		{
+			$form->attributes = $post;
+			if($form->validate())
+			{
+				$model = ClassLoad::Only('ActGoods');/* @var $model ActGoods */
+				$model->create($post);
+				$this->redirect(array('list'));
+			}else{
+				$formError = $form->getErrors();
+				foreach ($formError as &$v)
+					$v = array_unique($v);
+				$form->clearErrors();
+			}
+		}
+		$this->render('create' , array(
+			'formError'	=> $formError,
+			'form'		=> $form,
+			'class'		=> $class,
+			'brand'		=> $brand
+		));
+	}
+}

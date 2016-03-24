@@ -1,0 +1,53 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">购物车列表==》异步请求改变商品数量</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">order.changeAmount</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>key</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>(<b style="color:red;font-weight: bold;">当前产品的key值);</b>)</td>
+		</tr>
+		<tr>
+			<td>amount</td>
+			<td>int</td>
+			<td>必</td>
+			<td>(<b style="color:red;font-weight: bold;">当前产品改变后的数量);</b>)</td>
+		</tr>		                                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "d697e61a346cfbd6ab0e88ef9d4735e5",
+    "message": [],
+    "data": {
+        "final_price": 0.01,            #产品单价
+        "final_total": 0.04,            #改变数量后的当前商品的总价
+        "final_stock": 89,              #改变数量后的当前商品的最终库存
+        "final_weight": "0.20"          #总量
+    }
+}      
+</pre></td>
+		</tr>
+	</table>
+</div>

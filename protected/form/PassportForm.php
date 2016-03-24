@@ -1,0 +1,64 @@
+<?php
+/**
+ * 第三方账号验证
+ * 
+ * @author root
+ *
+ */
+class PassportForm extends WebForm
+{
+	public $utype;			// 用户类型（1个人、2企业）
+	public $ptype;			// 第三方账号类型（1微博、2微信、3QQ）
+	public $code;			// 第三方平台返回的凭证
+	public $access_token;	// 调用用户资料的凭证	
+	public $id;				// 第三方账号ID
+	public $phone;
+	public $vxcode;
+	public $smscode;
+	public $agree = 1;
+	public $recode;
+	public $ruleType;
+	
+	/**
+	 * 数据验证
+	 * 
+	 * @see CModel::rules()
+	 */
+	public function rules()
+	{
+		$base = array(
+			array('utype, ptype, code', 'required'),
+			array('utype', 'in', 'range' => array(1, 2)),
+			array('ptype', 'in', 'range' => array(1, 2, 3)),
+		);
+
+		switch ($this->ruleType) {
+			case 'callback':
+				$ext = array();
+				break;
+			case 'register':
+				$ext = array(
+					array('phone, vxcode, smscode, agree, access_token, id', 'required'),
+				);
+				break;
+		}
+		
+		return array_merge($base, $ext);
+	}
+	
+// 	public function verifyCaptcha()
+// 	{
+		
+// 	}
+	
+// 	public function verifysms()
+// 	{
+// 		$signForm = ClassLoad::Only('SignForm');
+		
+// 		if (($res = $signForm->verifySmsCode($this->phone, $this->smscode)) !== true) {
+// 			$this->addError('phone' , $res[1]);		
+// 		}
+// 	}
+	
+	
+}

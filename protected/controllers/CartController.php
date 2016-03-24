@@ -34,20 +34,22 @@ class CartController extends WebController
 		//选中商品
 		if ($goods = (array)$this->getPost('goods'))
 		{
-			$seArray = array();
 			if (empty(Yii::app()->session[self::CARTKEY]))
 			{
 				$this->redirect($this->createUrl('cart/index'));
 			}else{
+				$seArray = array();
 				$seArray = new ArrayObject(Yii::app()->session[self::CARTKEY]);
 				$seArray = $seArray->getArrayCopy();
-			}
 				
-			$seArray['select'] = array();
-			foreach ($goods as $k => $v)
-				$seArray['select'][$k] = 1;
-			Yii::app()->session[self::CARTKEY] = $seArray;
-			$this->redirect($this->createUrl('cart/closing'));
+				$seArray['select'] = array();
+				foreach ($goods as $k => $v)
+					$seArray['select'][$k] = 1;
+				
+				Yii::app()->session[self::CARTKEY] = $seArray;
+				
+				$this->redirect($this->createUrl('cart/closing'));
+			}
 		}else{
 			$this->error('请选择商品后在结算!');
 		}
@@ -60,6 +62,7 @@ class CartController extends WebController
 		
 		$form		= ClassLoad::Only('CartForm');/* @var $form CartForm */
 		$cartData	= empty(Yii::app()->session[self::CARTKEY]) ? array() : Yii::app()->session[self::CARTKEY];
+
 		$select		= empty($cartData['select']) ? array() : $cartData['select'];	# 选中的商品
 		$carts		= empty($cartData['goods']) ? array() : $cartData['goods'];		# 购物车主数据
 		
@@ -87,7 +90,6 @@ class CartController extends WebController
 		if($this->isPost() && isset($_POST['CartForm']))
 		{
 			$form->attributes = $_POST['CartForm'];
-			
 			//商品已改变
 			if ($changeLock != $form->changeLock)
 				$this->redirect('cart/closing');
@@ -351,7 +353,7 @@ class CartController extends WebController
 		
 		$seArray = array('cartNum' => 0);
 		$session = Yii::app()->session;
-		if ($session[self::CARTKEY])
+		if (isset($session[self::CARTKEY]))
 		{
 			$seArray = new ArrayObject($session[self::CARTKEY]);
 			$seArray = $seArray->getArrayCopy();
@@ -362,6 +364,8 @@ class CartController extends WebController
 		//购物车数量
 		$seArray['cartNum'] += isset($seArray['goods'][$mid][$key]) ? 0 : 1;
 		$seArray['goods'][$mid][$key] = $pars;
+		
+		//立即购买
 		if ($select)
 		{
 			$seArray['select'] = array();

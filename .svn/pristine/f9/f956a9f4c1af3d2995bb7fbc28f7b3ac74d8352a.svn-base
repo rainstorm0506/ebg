@@ -1,0 +1,125 @@
+<?php
+	Views::css(array('merchant'));
+	Views::js(array('jquery.validate','jquery-placeholderPlug','jquery.sendVerification'));
+?>
+<style>
+#promt{
+	margin-left: 260px;
+	top: -30px;
+	min-width: 255px;
+	border-color: #d00f2b;
+	padding-left: 25px;
+	color:red;
+	background: url(../images/ico-err.png) #f7ebeb 5px center no-repeat;
+	height: 23px;
+	line-height: 23px;
+	display:none
+}
+.errorMessage{color:red}
+</style>
+	<!-- main -->
+	<main>
+		<section class="company-content">
+			<header class="company-tit">个人信息
+				<nav>
+					<?php
+						echo CHtml::link('设置新密码' , $this->createUrl('personInfo/showVerity'),array('class'=>'current'));
+						echo CHtml::link('基本资料' , $this->createUrl('index'));
+					?>
+				</nav>
+			</header>
+			<!-- 流程 -->
+			<ul class="shop-process shop-process-1">
+				<li class="current first"><b></b><em>1</em><i></i><p>验证身份</p></li>
+				<li><b></b><em>2</em><i></i><p>修改登录密码</p></li>
+				<li><b></b><em>3</em><i></i><p>完成</p></li>
+			</ul>
+			<fieldset class="form-list crbox18-group set-password-form">
+				<legend>设置登录密码</legend>
+				<?php $active = $this->beginWidget('CActiveForm',array('id'=>'formBox')); ?>
+				
+					<ul>
+						<li style="margin-bottom:5px;">
+							<div class="promt error msg" id="promt" ></div>
+						</li>
+						<li><h6>已验证手机号：</h6><span id="tel" phone="<?php echo $personData['phone'];?>"><?php echo str_replace(substr($personData['phone'], 4,4), '****', $personData['phone']);?></span></li>
+						<li class="code-verify">
+						<h6>图形验证码：</h6>
+						<?php
+							echo $active->textField($form , 'vxcode' , array('ags'=>'vmember','class'=>'tbox38 tbox38-2','placeholder'=>'请输入图形验证码','maxlength'=>6,'style'=>'height:40px'));
+							echo '<img ags="vmember" class="svcode">';
+						?>
+						</li>
+						<li>
+							<h6>请填写手机校验码：</h6><input type="hidden" name="type" value="vmember"/>
+							<?php echo $active->textField($form,'codeNum',array('id'=>'codeNums','class'=>'tbox38 tbox38-2','placeholder'=>'短信验证码','autocomplete'=>'off'));?>
+							<a class="btn-2 member-send" id="sendBtn" href="javascript:;">获取短信验证码</a>
+							<?php echo $active->error( $form, 'codeNum' );?>
+						</li>
+						<li><h6>&nbsp;</h6><input id="submitRegisterBtn2"  class="btn-1 btn-1-1" type="submit" value="提交"></li>
+					</ul>
+				<?php $this->endWidget(); ?>
+			</fieldset>
+		</section>
+	</main>
+	
+	<script>
+	var _send_permissions = {'find':true} , _code_permissions = {'find':null};
+	$(document).ready(function() {
+		//图形验证码
+		$('.svcode').click(function(){
+			$(this).attr('src' , '<?php echo $this->createFrontUrl('asyn/getVcdoe'); ?>?type=vmember&_x='+Math.random());
+		}).click();
+
+		//验证码
+		$('.code-verify>:text[ags]')
+		.change(function(){
+			var ex = this , _v = $(ex).val();
+			$(ex).nextAll('span,q').remove();
+			if ($.trim(_v) == '')
+			{
+				$(ex).next().after('<q class="promt error msg no-sms">请输入验证码</q>');
+			}else{
+				$.getJSON('<?php echo $this->createFrontUrl('asyn/verifyVcode'); ?>' , {'code':_v,'ags':'vmember'} , function(json){
+					if (json.code !== 0)
+					{
+						_code_permissions.find = false;
+						$('#promt').stop(true,false).fadeIn().text(json.message);
+					}else{
+						_code_permissions.find = true;
+						$('#promt').fadeOut();
+						$(ex).next().after('<q class="success"></q>');
+					}
+				});
+			}
+		});
+		//验证短信 - 个人
+		$('#sendBtn').sendVerification({tel:'#tel' , 'stype':'find', site:'one','callback':function(self){
+			var phone = $('#tel').attr('phone')||'';
+			$(self).nextAll('span,q').remove();
+			if (!(/^(13\d|18\d|14[57]|15[012356789]|17[0678])\d{8}$/.test(phone)))
+			{
+				$(self).after('<q class="promt error msg no-sms">手机号码不合法</q>');
+				return false;
+			}
+			//send sms
+			$.getJSON('<?php echo $this->createFrontUrl('asyn/sendSmsCode'); ?>' , {'phone':phone , 'type':'vmember'} , function(json){
+			});
+		}});
+	});
+	$(function($){
+		// ================================== 焦点特效
+		var $form = $('#formBox');
+		$form.validate({
+			rule : {
+				codeNums : {
+					required : '手机验证码不能为空',
+				},
+			},
+			site : 'one',
+			 way : 'one',
+		   focus : true
+		});
+	});
+	</script>
+

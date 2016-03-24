@@ -1,0 +1,43 @@
+<style type="text/css">
+	.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+	table{width:100%;border-collapse:collapse}
+	td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">逛一逛模块</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">guide.site</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">袁聪</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>store</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>楼层（1:一楼; 2:二楼; 3:三楼）</td>
+		</tr>
+		<tr>
+			<td>proviso</td>
+			<td>int</td>
+			<td>选填</td>
+			<td>条件（1:电子; 2:文具; 3:手机; 4:安防）</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+			预留接口
+</pre></td>
+		</tr>
+	</table>
+</div>

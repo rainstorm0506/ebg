@@ -1,0 +1,73 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心 /订单 </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">credits.convert</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="7">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>id</td>
+			<td>int</td>
+			<td>必选项</td>
+			<td>兑换商品的ID编号</td>
+		</tr>
+		<tr>
+			<td>class_one_id</td>
+			<td>int</td>
+			<td>必选</td>
+			<td>商品一级分类ID</td>
+		</tr>
+		<tr>
+			<td>class_two_id</td>
+			<td>int</td>
+			<td>必选</td>
+			<td>商品二级分类ID</td>
+		</tr>    
+		<tr>
+			<td>class_three_id</td>
+			<td>int</td>
+			<td>必选</td>
+			<td>商品三级分类ID</td>
+		</tr>    
+                <tr>
+			<td>address_id</td>
+			<td>int</td>
+			<td>必选</td>
+			<td>收货地址ID编号</td>
+		</tr>                
+		<tr>
+			<td>delivery</td>
+			<td>int</td>
+			<td>必选</td>
+			<td>配送方式(2=上门自取，1=市内配送)</td>
+		</tr>                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "59fc1b2da52b45a43983b6abe43fcaa6",
+    "message": [],
+    "data": []
+}
+      
+</pre></td>
+		</tr>
+	</table>
+</div>

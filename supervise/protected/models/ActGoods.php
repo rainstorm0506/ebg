@@ -1,0 +1,341 @@
+<?php
+class ActGoods extends SModels
+{
+	/**
+	 * 检查商品名称
+	 * @param		string		$title		商品名称
+	 * @param		int			$id			商品ID
+	 */
+	public function checkTitle($title , $id)
+	{
+		$SQL = $id>0 ? " AND id!={$id}" : '';
+		return $title && (boolean)$this->queryRow("SELECT id FROM act_goods WHERE `title`={$this->quoteValue($title)} {$SQL}");
+	}
+	/**
+	 * 得到列表的总数
+	 */
+	public function getGoodsCount(array $search)
+	{
+		$SQL = $this->_getListSQL($search , 'count');
+		return $SQL ? (int)$this->queryScalar($SQL) : 0;
+	}
+
+	/**
+	 * 列表
+	 * @param		int			$offset		偏移量
+	 * @param		int			$rows		读取条数
+	 * @param		int			$total		总行数
+	 * @return		array
+	 */
+	public function getList(array $search , $offset , $rows , $total)
+	{
+		if (!$total || $offset>=$total)
+			return array();
+
+		if ($SQL = $this->_getListSQL($search , 'list'))
+			return $this->queryAll($SQL . " ORDER BY g.rank DESC LIMIT {$offset},{$rows}");
+		else
+			return array();
+	}
+
+	private function _getListSQL(array $search , $type)
+	{
+		static $returned = array();
+		if (isset($returned[$type]))
+			return $returned[$type];
+
+		$keyword = $search['keyword'];
+		unset($search['keyword']);
+
+		$field = array(
+			'id' , 'merchant_id' , 'brand_id' , 'title' ,
+			'shelf_id' , 'goods_num' , 'cover' , 'class_one_id' , 'class_two_id' , 'class_three_id'
+		);
+		$field = 'g.' . join(',g.', $field);
+
+		$SQL = '';
+		$wp = ' WHERE ';
+		if ($search['shelf'])
+		{
+			$SQL .= $wp . "`shelf_id`={$search['shelf']}";
+			$wp = ' AND ';
+		}
+
+		if ($keyword && !is_numeric($keyword))
+		{
+			$keyword = $this->quoteLikeValue($keyword);
+
+			$SQL .= $wp . " (g.title LIKE {$keyword} OR g.goods_num LIKE {$keyword})";
+
+			$returned['count']	= "
+				SELECT COUNT(*)
+				FROM act_goods AS g
+				LEFT JOIN user_merchant AS m ON m.uid=g.merchant_id AND (m.mer_name LIKE {$keyword} OR m.store_name LIKE {$keyword})
+				{$SQL}";
+			$returned['list']	= "
+				SELECT {$field},m.store_name
+				FROM act_goods AS g
+				LEFT JOIN user_merchant AS m ON m.uid=g.merchant_id AND (m.mer_name LIKE {$keyword} OR m.store_name LIKE {$keyword})
+				{$SQL}";
+		}else{
+			if ($keyword && is_numeric($keyword) && $keyword > 0)
+			{
+				$keyword = (int)$keyword;
+				$SQL .= $wp . "g.id={$keyword}";
+			}
+
+			$returned['count']	= "SELECT COUNT(*) FROM act_goods AS g {$SQL}";
+			$returned['list']	= "SELECT {$field},m.store_name
+									FROM act_goods AS g
+									LEFT JOIN user_merchant AS m ON m.uid=g.merchant_id
+									{$SQL}";
+		}
+
+		return isset($returned[$type]) ? $returned[$type] : '';
+	}
+	/**
+	 * 获得默认的产品编号
+	 */
+	public function getDefaultNum()
+	{
+		return GlobalGoods::getDefaultNum();
+	}
+	/**
+	 * 添加
+	 */
+	public function create($post)
+	{
+		$classOneID		= (int)$post['class_one_id'];
+		$classTwoID		= (int)$post['class_two_id'];
+		$classThreeID	= (int)$post['class_three_id'];
+		$merchantID		= (int)$post['merchant_id'];
+		$brandID		= (int)$post['brand_id'];
+
+		$goodsNum = trim($post['goods_num']);
+		$goodsNum = $goodsNum ? $goodsNum : $this->getDefaultNum();
+		$time = time();
+
+		$attrs = array(
+			'attrs'		=> !empty($post['attrs']) && is_array($post['attrs']) ? $post['attrs'] : array(),
+			'attrVal'	=> !empty($post['attrVal']) && is_array($post['attrVal']) ? $post['attrVal'] : array(),
+		);
+		$goods = array(
+			'title'				=> trim($post['title']),
+			'vice_title'		=> trim($post['vice_title']),
+			'goods_num'			=> $goodsNum,
+			'merchant_id'		=> $merchantID,
+			'brand_id'			=> $brandID,
+			'class_one_id'		=> $classOneID,
+			'class_two_id'		=> $classTwoID,
+			'class_three_id'	=> $classThreeID,
+			'weight'			=> 0,
+			'stock'				=> 0,
+			'content'			=> trim($post['content']),
+			'args'				=> json_encode(!empty($post['args'])&&is_array($post['args'])?$post['args']:array()),
+			'attrs'				=> json_encode($attrs),
+			'cover'				=> $this->getPhotos($post['cover'] , 'goods' , $merchantID),
+			'rank'				=> $post['rank']
+		);
+		if (empty($post['attrVal']))
+		{
+			$goods['original_price']	= (double)$post['original_price'];
+			$goods['weight']			= (double)$post['weight'];
+			if ((int)$post['attrInStock'] === 1)
+			{
+				$goods['stock']		= -999;
+			}else{
+				$goods['stock']		= (int)$post['stock'];
+			}
+		}
+		$img=array();
+		if(isset($post['img'])&&is_array($post['img']))
+		{
+			foreach ($post['img'] as $v)
+			{
+				$img[] = $this->getPhotos($v , 'goods' , $merchantID);
+			}
+		}
+		$goods['photo'] = json_encode($img);
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			//商品
+			$this->insert('act_goods' , $goods);
+			$gid = $this->getInsertId();
+
+			//属性
+			$goodsAttrs = $this->_set_attrs($gid , $classOneID , $classTwoID , $classThreeID , (isset($post['attrVal'])&&is_array($post['attrVal']) ? $post['attrVal'] : array()));
+			foreach ($goodsAttrs as $v)
+			{
+				$this->insert('act_goods_attrs' , $v);
+			}
+
+			//商品版本
+			$this->insert('act_goods_versions' , array(
+				'goods_id'		=> $gid,
+				'vers_num'		=> $time,
+				'vers_text'		=> serialize(array(
+					'goods'			=> $goods,
+					'goodsAttrs'	=> $goodsAttrs
+				))
+			));
+
+			$transaction->commit();
+			return true;
+		}catch(Exception $e){
+			$transaction->rollBack();
+		}
+		return false;
+	}
+	/**
+	 * 设定 商品属性
+	 * @param		int			$gid				商品ID
+	 * @param		int			$classOneID			第一层分类ID
+	 * @param		int			$classTwoID			第二层分类ID
+	 * @param		int			$classThreeID		第三层分类ID
+	 * @param		array		$attrVal			商品属性
+	 */
+	private function _set_attrs($gid , $classOneID , $classTwoID , $classThreeID , array $attrVal)
+	{
+		if (!$gid)
+			return array();
+
+		$this->delete('goods_join_attrs' , "goods_id={$gid}");
+
+		$model = ClassLoad::Only('GoodsAttrs');/* @var $model GoodsAttrs */
+		if (!$classAttrs = $model->getAttrsKeyValue($classOneID , $classTwoID , $classThreeID))
+			return array();
+
+		$price		= !empty($attrVal['original_price']) && is_array($attrVal['original_price']) ? $attrVal['original_price'] : array();
+		$inStock	= !empty($attrVal['inStock']) && is_array($attrVal['inStock']) ? $attrVal['inStock'] : array();
+		$stock		= !empty($attrVal['stock']) && is_array($attrVal['stock']) ? $attrVal['stock'] : array();
+		$weight		= !empty($attrVal['weight']) && is_array($attrVal['weight']) ? $attrVal['weight'] : array();
+
+		$attrs = array();
+		foreach ($price as $ak => $av)
+		{
+			if (!empty($av) && is_array($av))
+			{
+				foreach ($av as $bk => $bv)
+				{
+					if (!empty($bv) && is_array($bv))
+					{
+						foreach ($bv as $ck => $cv)
+						{
+							//三层结构
+							$_is = empty($inStock[$ak][$bk][$ck]) ? 0 : (int)$inStock[$ak][$bk][$ck];
+							$_p = (double)$cv;
+							$_w = empty($weight[$ak][$bk][$ck]) ? 0 : $weight[$ak][$bk][$ck];
+							$_s = ($_is>0 || $_is === -999) ? -999 : (empty($stock[$ak][$bk][$ck]) ? 0 : (int)$stock[$ak][$bk][$ck]);
+							$v1 = empty($classAttrs[$ak]) ? '' : $classAttrs[$ak];
+							$v2 = empty($classAttrs[$bk]) ? '' : $classAttrs[$bk];
+							$v3 = empty($classAttrs[$ck]) ? '' : $classAttrs[$ck];
+
+							if (!$_p || !$_s || !$_w || !$v1 || !$v2 || !$v3)
+								continue;
+
+							$attrs[] = array(
+								'key_code'				=> md5($gid.$ak.$bk.$ck),
+								'goods_id'				=> $gid,
+								'attrs_1_unite_code'	=> $ak,
+								'attrs_2_unite_code'	=> $bk,
+								'attrs_3_unite_code'	=> $ck,
+								'attrs_1_value'			=> $v1,
+								'attrs_2_value'			=> $v2,
+								'attrs_3_value'			=> $v3,
+								'original_price'		=> $_p,
+								'stock'					=> $_s,
+								'weight'				=> $_w,
+							);
+						}
+					}else{
+						//二层结构
+						$_is = empty($inStock[$ak][$bk]) ? 0 : (int)$inStock[$ak][$bk];
+						$_p = (double)$bv;
+						$_w = empty($weight[$ak][$bk]) ? 0 : $weight[$ak][$bk];
+						$_s = ($_is>0 || $_is === -999) ? -999 : (empty($stock[$ak][$bk]) ? 0 : (int)$stock[$ak][$bk]);
+						$v1 = empty($classAttrs[$ak]) ? '' : $classAttrs[$ak];
+						$v2 = empty($classAttrs[$bk]) ? '' : $classAttrs[$bk];
+
+						if (!$_p || !$_s || !$_w || !$v1 || !$v2)
+							continue;
+
+						$attrs[] = array(
+							'key_code'				=> md5($gid.$ak.$bk),
+							'goods_id'				=> $gid,
+							'attrs_1_unite_code'	=> $ak,
+							'attrs_2_unite_code'	=> $bk,
+							'attrs_3_unite_code'	=> '',
+							'attrs_1_value'			=> $v1,
+							'attrs_2_value'			=> $v2,
+							'attrs_3_value'			=> '',
+							'original_price'		=> $_p,
+							'stock'					=> $_s,
+							'weight'				=> $_w,
+						);
+					}
+				}
+			}else{
+				//一层结构
+				$_is = empty($inStock[$ak]) ? 0 : (int)$inStock[$ak];
+				$_p = (double)$av;
+				$_w = empty($weight[$ak]) ? 0 : $weight[$ak];
+				$_s = ($_is>0 || $_is === -999) ? -999 : (empty($stock[$ak]) ? 0 : (int)$stock[$ak]);
+				$v1 = empty($classAttrs[$ak]) ? '' : $classAttrs[$ak];
+
+				if (!$_p || !$_s || !$_w || !$v1)
+					continue;
+
+				$attrs[] = array(
+					'key_code'				=> md5($gid.$ak),
+					'goods_id'				=> $gid,
+					'attrs_1_unite_code'	=> $ak,
+					'attrs_2_unite_code'	=> '',
+					'attrs_3_unite_code'	=> '',
+					'attrs_1_value'			=> $v1,
+					'attrs_2_value'			=> '',
+					'attrs_3_value'			=> '',
+					'original_price'		=> $_p,
+					'stock'					=> $_s,
+					'weight'				=> $_w,
+				);
+			}
+		}
+		return $attrs;
+	}
+
+	public function clear($id)
+	{
+
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			//删除商品
+			$this->delete('act_goods' , 'id='.$id);
+
+			//删除属性
+			$this->delete('act_goods_attrs' , 'goods_id='.$id);
+
+			//删除商品活动关联详情
+			$this->delete('act_goodsbyactive' , 'gid='.$id);
+
+			$transaction->commit();
+			return true;
+		}catch(Exception $e){
+			$transaction->rollBack();
+		}
+	}
+	/**
+	 * 活动商品详情
+	 */
+	public function getGoodsInfo($id)
+	{
+		if ($row = $this->queryRow("SELECT * FROM act_goods WHERE id={$id}"))
+		{
+			$row['photo']= json_decode($row['photo']);
+			$row['attr'] = $this->queryAll("SELECT * FROM act_goods_attrs WHERE goods_id={$id}");
+			$row['attrs']=$this->jsonDnCode($row['attrs']);
+		}
+		return $row;
+	}
+}

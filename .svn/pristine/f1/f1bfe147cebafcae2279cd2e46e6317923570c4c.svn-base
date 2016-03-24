@@ -1,0 +1,71 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">确认订单信息</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">order.submitOrder</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="6">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>userAddressID</td>
+			<td>int</td>
+			<td>必</td>
+			<td>购物者选择的收货地址</td>
+		</tr>
+		<tr>
+			<td>payType</td>
+			<td>int</td>
+			<td>必</td>
+			<td>支付方式：1- 线上支付，2-货到付款</td>
+		</tr>   
+		<tr>
+			<td>deliveryWay</td>
+			<td>int</td>
+			<td>必</td>
+			<td>配送方式 , 1=市内配送 , 2=上门自提</td>
+		</tr>
+		<tr>
+			<td>changeLock</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>购物车商品是否改变的判断标志(6d0647529e4a71f317fe0d1f0ca7aa14)</td>
+		</tr>                 
+		<tr>
+			<td>remark</td>
+			<td>array</td>
+			<td>必</td>
+			<td>买家留言《remark[k]：k=>当前需要留言商家的ID编号 》</td>
+		</tr> 
+		                                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "5dd964cc5762992c255fab54f69cdda2",
+    "message": [
+        "osn": "W3459-0308-7145",              #订单提交成功,开始支生成的订单号
+        "url": "pay.checkOsn",                 #订单提交成功,开始支付
+        "pay":"选择的支付方式!"                #目前只有(alipay：支付宝，tenpay：财付通)       
+    ],
+    "data": []
+}       
+</pre></td>
+		</tr>
+	</table>
+</div>

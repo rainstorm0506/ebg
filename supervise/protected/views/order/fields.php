@@ -1,0 +1,80 @@
+<style type="text/css">
+body{min-width:auto;min-height:auto;}
+.selects div{padding:5px 0 0 0;border-bottom:1px solid #CCC;}
+.selects span{font-size:16px;background-color:#000;color:#FFF;padding:2px 5px}
+.selects dl{clear:both;margin:15px 10px 10px 0}
+.selects dt{font-size:12px;font-weight:300;display:block}
+.selects dt b{background-color:#000;color:#FFF;padding:2px 5px}
+.selects dt a{font-weight:300;font-size:12px; margin:0 0 0 15px; color:#00F; cursor:pointer;}
+.selects dd{display:inline-block;margin:0 0 0 35px}
+.selects dd input{height:auto;margin:5px 0}
+.selects dd label{margin:0}
+</style>
+<fieldset class="public-wraper">
+	<legend>注意：默认为下面字段全部导出</legend>
+	<span>注意：默认为下面字段全部导出</span>
+		<form id="fields">
+			<input type='hidden' name="start_time" value="<?php echo $post['start_time']?>"/>
+			<input type='hidden' name="end_time" value="<?php echo $post['end_time']?>"/>
+			<input type='hidden' name="key" value="<?php echo $post['key']?>"/>
+			<input type='hidden' name="is_self" value="<?php echo $post['is_self']?>"/>
+			<input type='hidden' name="uid" value="<?php echo $post['uid']?>"/>
+		</form>
+				<div class="selects">
+					<dl>
+						<dd><input type="checkbox" name="fields" value="o.order_sn" />订单号</dd>
+						<dd><input type="checkbox" name="fields" value="o.create_time"/>下单时间</dd>
+						<dd><input type="checkbox" name="fields" value="s.back_title"/>订单状态</dd>
+						<dd><input type="checkbox" name="fields" value="opl.pay_port"/>订单支付方式</dd>
+					</dl>
+					<dl>
+						<dd><input type="checkbox" name="fields" value="o.order_money"/>订单总金额</dd>
+						<dd><input type="checkbox" name="fields" value="um.store_name"/>商家</dd>
+						<dd><input type="checkbox" name="fields" value="um.mer_name"/>商家联系人</dd>
+						<dd><input type="checkbox" name="fields" value="u.phone"/>商家联系方式</dd>
+					</dl>
+					<dl>
+						<dd><input type="checkbox" name="fields" value="g.goods_num"/>商品编号</dd>
+						<dd><input type="checkbox" name="fields" value="og.goods_title"/>商品名称</dd>	
+						<dd><input type="checkbox" name="fields" value="og.num"/>商品数量</dd>
+						<dd><input type="checkbox" name="fields" value="og.goods_weight"/>商品重量</dd>
+					</dl>
+					<dl>
+						<dd><input type="checkbox" name="fields" value="og.unit_price"/>商品价格</dd>
+						<dd><input type="checkbox" name="fields" value="o.freight_money"/>客户所付运费</dd>
+						<dd><input type="checkbox" name="fields" value="o.merchant_money"/>商家所付运费</dd>
+						<dd><input type="checkbox" name="fields" value="oe.cons_name"/>收货人</dd>
+					</dl>
+					<dl>
+						<dd><input type="checkbox" name="fields" value="oe.cons_phone"/>收货人联系方式</dd>
+						<dd><input type="checkbox" name="fields" value="oe.cons_address"/>收货地址</dd>
+						<dd><input type="checkbox" name="fields" value="oe.user_remark"/>用户备注</dd>
+						<dd><input type="checkbox" name="fields" value="oe.system_remark"/>系统备注</dd>
+					</dl>
+				</div>
+				<table class="tab-list-1 mb30px">
+					<tr style='margin:5px 0;border:none'>
+						<td><button id="out" class='btn-1' style='margin-left:82px'>导出</button></td><td><button id="close" class="btn-1" style="background-color:#d22238;color:white">关闭</button></td>
+					</tr>
+				</table>
+</fieldset>
+
+<script>
+
+$(function($){
+	$("#out").click(function(){
+		var result = new Array();
+        $("[name = fields]:checkbox").each(function () {
+            if ($(this).is(":checked")) {
+                result.push($(this).attr("value"));
+            }
+        });
+        var fields = result.join(",");
+        var url = "<?php echo $this->createUrl('order/OutExcel');?>"+"?"+$('#fields').serialize()+"&fields="+fields;
+        window.location.href=url;
+	})
+	$("#close").click(function(){
+        getLayer().close(window.top.layerIndexs);
+	})
+});
+</script>

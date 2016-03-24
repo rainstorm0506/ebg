@@ -1,0 +1,48 @@
+<style type="text/css">
+	.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+	table{width:100%;border-collapse:collapse}
+	td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">积分商城模块 - 列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">collect.create</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">谭甜</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>收藏对象类型（1(全新商品)，2（店铺），3（二手商品））</td>
+		</tr>
+		<tr>
+			<td>collect_id</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>收藏对象id</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "2319594324004b25f29ac0e74f9cf57a",	# 随机码 , 在下一次请求中传递回来
+    "message": [],
+	"data": []
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

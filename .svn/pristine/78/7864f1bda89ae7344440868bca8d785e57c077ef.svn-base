@@ -1,0 +1,101 @@
+<style type="text/css">
+	.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+	table{width:100%;border-collapse:collapse}
+	td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">积分商城模块 - 列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">cart.index</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">谭甜</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>时间</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "2319594324004b25f29ac0e74f9cf57a",	# 随机码 , 在下一次请求中传递回来
+    "message": [],
+	"data": {
+		"15": {
+			"37655f9ffd3d86eafb6f2115b8620e87": {
+				"id": "60",									#商品id
+				"class_one_id": "4",								#一级分类id
+				"class_two_id": "7",								#二级分类id
+				"class_three_id": "8",								#三级分类id
+				"merchant_id": "15",								#商家id
+				"title": "大华DH-IPC-HFW4305B-V2-0600B 300万网络摄像机",			#商品名称
+				"cover": "/goods/2016/01-14/15/273727433318889160691452757993.2538.jpg",	#商品主图
+				"base_price": "210.00",								#价格
+				"stock": "-999",								#库存（-999表示无限库存）
+				"weight": "1.00",								#重量
+				"min_price": "0.00",								#最低价格
+				"max_price": "0.00",								#最高价
+				"user_layer_ratio": {								#会员等级价格
+					"3": "100",								#会员等级id：价格折扣率
+					"4": "100",
+					"5": "100",
+					"6": "100",
+					"7": "100",
+					"8": "100",
+					"9": "100",
+					"15": "100",
+					"16": "100",
+					"17": "100",
+					"18": "100",
+					"19": "100",
+					"20": "100",
+					"21": "100"
+				},
+				"amount_ratio": {				#数量及价格
+					"s": [						#数量区间（最小值）
+						1,
+						6,
+						16
+					],
+					"e": [						#数量区间（最大值）
+						5,
+						15,
+						35
+					],
+					"p": [						#折扣率
+						100,
+						100,
+						100
+					]
+				},
+				"last_time": "1452758018",			#操作时间
+				"amount": 1,					#数量
+				"type": 1,					#商品类型（1=全新，2=二手）
+				"store_name" : "成都中佳电子科技有限公司",		#店铺名称
+				"attrs": [],					#选择的属性
+				"final_price": 210,				#价格
+				"final_stock": -999,				#库存
+				"final_weight": "1.00",				#重量
+				"final_total": 210				#总价格
+			}
+		}
+	}
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,247 @@
+<?php
+/**
+ * 第三方账号
+ * 
+ * @author root
+ *
+ */
+class Passport extends WebModels
+{
+	/**
+	 * 根据CODE获取微博用户基本信息
+	 * 
+	 * @param  string 	$code
+	 * @return mixed
+	 */
+	public function getWeiboInfo($code)
+	{
+		$weibo	= new Weibo;		
+		$token	= $weibo->getAccessTokenToCode($code);
+		
+		if (isset($token['access_token'])) {
+			$info = $this->getWeiboInfoByToken($token['access_token']);
+			$info['access_token'] = $token['access_token'];
+			
+			return $info;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 通过access_token获取用户信息
+	 * 
+	 * @param  string  $access_token
+	 * @return mixed
+	 */
+	public function getWeiboInfoByToken($access_token)
+	{		
+		$weibo	= new Weibo;	
+		$api 	= $weibo->apiObj($access_token);
+		$uid	= $api->get_uid(); 
+		
+		return $api->show_user_by_id($uid['uid']);
+	}
+	
+	/**
+	 * QQ授权后获取用户基本数据
+	 * 
+	 * @param  string $code
+	 * @return array
+	 */
+	public function getQQInfo($code)
+	{
+		$qq = new QQ();
+		$qc = new QC();
+		
+		$access_token			= $qc->qq_callback();
+		$user 					= $qc->get_user_info();
+		$user['access_token'] 	= $access_token;
+		$user['id']				= $qc->get_openid();
+		
+		return $user;
+	}
+	
+	/**
+	 * 获取微信用户基本信息
+	 * 
+	 * @param  string $code
+	 * @return mixed
+	 */
+	public function getWechatInfo($code)
+	{
+		$wechat = new Wechat();
+		$token  = $wechat->getAccessToken($code);
+		
+		if (isset($token['access_token'])) {
+			return $this->getWechatInfoByToken($token['access_token'], $token['openid']);
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 根据accessToken和openid获取微信用户数据
+	 * 
+	 * @param array 	$token
+	 * @return mixed
+	 */
+	public function getWechatInfoByToken($token, $openid)
+	{
+		$wechat = new Wechat();
+		return $wechat->getUser($token, $openid);
+	}
+	
+	/**
+	 * 是否绑定过账号
+	 * 
+	 * @param 	integer 	$ptype	第三方账号类型	1微博2微信3QQ
+	 * @param 	mixed 		$id		第三方账号ID
+	 * @return	mixed
+	 */
+	public function isBind($ptype, $id)
+	{
+		$key = $ptype==1 ? 'weibo_id' : ($ptype==2 ? 'wechat_id' : 'qq_id');
+		$sql = "select `phone` from `user_passport` where {$key}=:id";
+		$res = $this->queryRow($sql, true, array(':id' => $id));
+		
+		return isset($res['phone']) ? $res['phone'] : false;
+	}
+	
+	/**
+	 * 判断手机号是否注册了
+	 * 
+	 * @param  string $phone
+	 * @return bool
+	 */
+	public function isRegister($phone)
+	{
+		$model = ClassLoad::Only('Home');
+		return $model->checkUserPhone($phone, false);
+	}
+	
+	/**
+	 * 更新推荐我的人
+	 * 
+	 * @param string 	$phone
+	 * @param string 	$recode
+	 * @param bool
+	 */
+	public function changeRecode($phone, $recode)
+	{
+		$res = $this->queryRow('select re_code from user where phone=:phone', true, array(':phone' => $phone));
+		
+		if (empty($res) || $res['re_code']) {
+			return false;
+		}
+		
+		$data = array(
+				're_code' => $recode,
+				're_uid'  => GlobalUser::getReUid($recode)
+		);
+
+		return $this->changeUser($phone, $data) ? true : false;		
+	}
+	
+	/**
+	 * 是否重复绑定了同一平台
+	 * 
+	 * @param  stirng 	$phone	
+	 * @param  string 	$ptype	第三方平台标识（1微博2微信3QQ）
+	 * @return bool
+	 */
+	public function isRepeat($phone, $ptype)
+	{
+		$key = $ptype==1 ? 'weibo_id' : ($ptype==2 ? 'wechat_id' : 'qq_id');
+		$sql = "select count(*) as cnt from user_passport where phone=:phone AND {$key}!=''";
+		$res = $this->queryRow($sql, true, array(':phone' => $phone));
+		
+		return isset($res['cnt'])&&$res['cnt'] ? true : false;
+	}
+	
+	/**
+	 * 绑定至第三方账号表
+	 * 
+	 * @param  integer  $user_id		用户ID
+	 * @param  string 	$phone			手机号
+	 * @param  integer 	$ptype			第三方平台标识
+	 * @param  string 	$info			原始数据
+	 * @return bool
+	 */
+	public function createPassport($user_id, $phone, $ptype, $info)
+	{
+		if ($info) {
+			$key  = $ptype==1 ? 'weibo_id' : ($ptype==2 ? 'wechat_id' : 'qq_id');
+			$val  = $ptype==1 ? 'idstr' : ($ptype==2 ? 'openid' : '');
+			$data = array(
+					'user_id'		=> $user_id,
+					'phone'			=> $phone,
+					'info'			=> serialize($info),
+					'wechat_unionid'=> isset($info['unionid']) ? $info['unionid'] : 0,
+					$key			=> $info[$val]
+			);
+			
+			return $this->insert('user_passport', $data) ? true : false;			
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 登录
+	 * 
+	 * @param  String $phone
+	 * @return void
+	 */
+	public function login($phone)
+	{
+		GlobalUser::setReflushUser(array('phone'=> $phone , 'user_type'=>1) , 1);
+	}
+	
+	/**
+	 * 注册账号
+	 * 
+	 * @param  string 	$phone		手机号
+	 * @param  string 	$recode		推荐码
+	 * @param  integer 	$ptype		第三方账号标识
+	 * @param  string 	$avatar		头像
+	 * @param  string 	$nickname	昵称
+	 * @return mixed
+	 */
+	public function register($phone, $recode, $ptype, $avatar = '', $nickname = '')
+	{
+		$user = ClassLoad::Only('Home');
+		$data = array(
+				'phone'  	=> $phone,
+				'reCode'	=> $recode,
+				'password'	=> ''
+		);
+		$user->signMember($data);
+		
+		if ($user->userID) {
+			$data = array(
+					'nickname'	=> $nickname,
+					'face'		=> $avatar,
+					'source'	=> $ptype==1 ? 5 : ($ptype==2 ? 6 : 7)
+			);
+
+			$this->update('user', $data, 'id=:id', array(':id' => $user->userID));
+			return $user->userID;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * 修改用户数据
+	 * 
+	 * @param string 	$phone
+	 * @param array 	$data
+	 */
+	private function changeUser($phone, $data)
+	{
+		unset($data['phone']);
+		return $this->update('user', $data, 'phone=:phone', array(':phone' => $phone));
+	}
+	
+}

@@ -1,0 +1,4 @@
+<?php
+define('WechatLoginAppid', 'wx3e05219fd00f4aa6');
+define('WechatLoginSecret', '5128867f8f25c2504fc90b02e077a098');
+define('WechatLoginCallback', 'http://www.ebangon.com/passport.callback?ptype=2');

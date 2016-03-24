@@ -1,0 +1,107 @@
+<style type="text/css">
+	.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+	table{width:100%;border-collapse:collapse}
+	td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">首页模块 - 办公用品</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">home.commodities</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">袁聪</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>oneid</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>办公用品（2135:办公设备、 办公文具、办公家具、办公耗材）</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "b07576285484e5fc21477a87c7b44003",							            # 随机码 , 在下一次请求中传递回来
+    "message": [],
+    "data": {
+        "sb": [													# 办公设备
+            {
+                "id": "1024",											    # 商品id
+                "title": "联想Z410 I5-4200笔记本 银色",						                    # 商品名称
+                "is_self": "0",											    # 是否自营
+                "cover": "/goods/2016/01-26/69/goodsCover/7039033.e1fb7f8e3f7a409fbd6c6e0813fb3f52.jpg",            # 商品主图
+                "base_price": "4450.00",									    # 商品基础价
+                "min_price": "0.00"										    # 商品最小价
+            },
+            {
+                "id": "513",
+                "title": "芯烨XP-58IIE小票打印机 黑色",
+                "is_self": "0",
+                "cover": "/goods/2016/01-26/94/goodsCover/5135682.e4f6f74b31b848119c11ee6ede8e7530.JPG",
+                "base_price": "160.00",
+                "min_price": "0.00"
+            },
+            {
+                "id": "769",
+                "title": "佳能MG2580喷墨多功能一体机  白色",
+                "is_self": "0",
+                "cover": "/goods/2016/01-26/81/goodsCover/5809825.e619626d8ab34784975394b35880bd0c.jpg",
+                "base_price": "398.00",
+                "min_price": "0.00"
+            }
+        ],
+        "wj": [													# 办公文具
+            {
+                "id": "256",
+                "title": "得力（deli）5623 环保PP材质高级档案盒A4(黑) 单只装",
+                "is_self": "1",
+                "cover": "/goods/2016/01-26/122/goodsCover/5261830.b0f8e08cb07249a982a13d64fbc51e67.png",
+                "base_price": "7.00",
+                "min_price": "0.00"
+            },
+            {
+                "id": "512",
+                "title": "得力(deli)5558 A4/12格飞盘扣式双色风琴包/资料包/文件包",
+                "is_self": "1",
+                "cover": "/goods/2016/01-26/122/goodsCover/6024843.e200286cb6d54982892f08aeda2e6557.jpg",
+                "base_price": "13.00",
+                "min_price": "0.00"
+            }
+        ],
+        "jj": [													# 办公家具
+            {
+                "id": "1026",
+                "title": "征创1002电脑桌",
+                "is_self": "0",
+                "cover": "/goods/2016/01-26/113/goodsCover/7830653.25099e59025044a385ebe4961d51c689.jpg",
+                "base_price": "200.00",
+                "min_price": "0.00"
+            }
+        ],
+        "hc": [													# 办公耗材
+            {
+                "id": "1280",
+                "title": "科思特 兄弟2225/联想2441 碳粉",
+                "is_self": "0",
+                "cover": "/goods/2016/02-15/161/190408220318156586651455525891.1294.JPG",
+                "base_price": "16.00",
+                "min_price": "0.00"
+            }
+        ]
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

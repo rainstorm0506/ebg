@@ -1,0 +1,87 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心 /订单 </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">usercenter.allReason</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>apt</td>
+			<td>int</td>
+			<td>必</td>
+			<td>请求参数</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "1b8dfb047138728a57d5a91e43c0ed7e",
+    "message": [],
+    "data": [
+        {
+            "id": "901",
+            "user_title": "现在不想买了"
+        },
+        {
+            "id": "902",
+            "user_title": "商品价格较贵"
+        },
+        {
+            "id": "903",
+            "user_title": "价格波动"
+        },
+        {
+            "id": "904",
+            "user_title": "商品缺货"
+        },
+        {
+            "id": "905",
+            "user_title": "重复下单"
+        },
+        {
+            "id": "906",
+            "user_title": "添加或删除商品"
+        },
+        {
+            "id": "907",
+            "user_title": "收货信息有误"
+        },
+        {
+            "id": "908",
+            "user_title": "发票信息有误/发票未开"
+        },
+        {
+            "id": "909",
+            "user_title": "送货时间长"
+        },
+        {
+            "id": "910",
+            "user_title": "无法支付订单"
+        },
+        {
+            "id": "911",
+            "user_title": "其他原因"
+        }
+    ]
+}     
+</pre></td>
+		</tr>
+	</table>
+</div>

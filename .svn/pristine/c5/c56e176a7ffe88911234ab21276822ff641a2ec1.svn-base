@@ -1,0 +1,146 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	
+	<!---------- main ---------->
+	<main>
+		<!---- 图片 ---->
+		<section class="goods-detail-pic">
+			<img ng-src="{{data.cover}}">
+			<coll-cart></coll-cart>
+		</section>
+		<!---- 商品信息 ---->
+		<section class="box-wrap-info">
+			<div class="tit-wrap">
+				<h3 ng-bind="data.title"></h3>
+				<a class="rel" href="javascript:;"><i class="ico-share"></i><span>分享</span><label class="ng-label"><input type="checkbox" ng-model="isShare"></label></a></a>
+			</div>
+			<p class="txt-a"><span>零售价：</span><em>￥{{data.retail_price}}</em></p>
+			<p class="txt-b"><span>市场价：</span><em>￥{{data.base_price}}</em></p>
+			<p><span>库存：</span><em ng-bind="data.stock | "></em></p>
+			<ul class="service-list">
+				<li class="first">
+					<h6>服务</h6>
+					<aside>
+						<span><i>正</i>正品保证</span>
+						<span><i class="t-1">急</i>正品保证</span>
+						<span><i class="t-2">七</i>七天退换</span>
+					</aside>
+				</li>
+				<li class="two" ng-class="{current:selected === true}">
+					<h6>促销</h6>
+					<aside><i>减</i>订单满100元立减10元</aside>
+					<s class="tr-r"><i></i><b></b></s>
+					<label class="ng-label"><input type="checkbox" ng-model="selected"></label>
+				</li>
+				<li class="two" ng-show="selected === true">
+					<h6>&nbsp;</h6>
+					<aside><i>减</i>订单满100元立减10元</aside>
+				</li>
+				<li class="two" ng-show="selected === true">
+					<h6>&nbsp;</h6>
+					<aside><i>减</i>订单满100元立减10元</aside>
+				</li>
+				<li><aside>产品规格及数量</aside><s class="tr-r"><i></i><b></b></s><a href="#"></a></li>
+			</ul>
+		</section>
+		<!---- 商品评论 ---->
+		<section class="box-wrap-commit">
+			<header class="box-tit">
+				<div>
+					<h6>用户评价</h6>
+					<p><span>好评度</span><em>96%</em><span>2550人评论</span></p>
+				</div>
+				<s class="tr-r"><i></i><b></b></s>
+				<a href="#"></a>
+			</header>
+			<section>
+				<div class="star-wrap">
+					<i class="current"></i>
+					<i class="current"></i>
+					<i class="current"></i>
+					<i></i>
+					<i></i>
+					<aside>158****6622</aside>
+				</div>
+				<p>超级好用，都在问我在哪里买的超级好用，都在问我在哪里买的超级好用，都在问我在哪里买的超级好用，都在问我在哪里买的</p>
+				<footer><span>尺寸：15寸</span><span>颜色：白色</span></footer>
+			</section>
+			<a class="check-all" ui-sref="goodsCommit">查看全部评价</a>
+		</section>
+		<!---- 商品详情 ---->
+		<section class="box-wrap-detail">
+			<header class="box-tit box-tit-1">
+				<figure><img ng-src="{{imgPath}}/temp/11.png"></figure>
+				<div>
+					<h6>东华数码专营店</h6>
+					<div class="star-wrap">
+						<i class="current"></i>
+						<i class="current"></i>
+						<i class="current"></i>
+						<i></i>
+						<i></i>
+					</div>
+				</div>
+				<s class="tr-r"><i></i><b></b></s>
+				<a href="#"></a>
+			</header>
+			<section class="owner-info">
+				<div>
+					<p>王大锤</p>
+					<h6>店主</h6>
+				</div>
+				<div>
+					<p>20年</p>
+					<h6>经营年限</h6>
+				</div>
+				<div>
+					<p>10000</p>
+					<h6>保证金</h6>
+				</div>
+			</section>
+			<section class="site-wrap">
+				<p>地址：东华电脑城23-4-1</p>
+				<i></i>
+			</section>
+			<div class="drag-txt">
+				<i></i>
+				<p>继续拖动查看图文详情</p>
+				<i></i>
+			</div>
+			<div class="editor-wrap" ng-bind-html="data.content"></div>
+		</section>
+		<!---- 最佳搭配 ---->
+		<!--
+		<h3 class="txt-tit">最佳搭配</h3>
+		<ul class="goods-list">
+			<li>
+				<figure><a href="#"><img ng-src="{{imgPath}}/temp/09.png"></a><i>自营</i></figure>
+				<h6><a href="#">2015 Apple/12 英MacBook</a></h6>
+				<p><span>¥ 2788.00</span><em>30人收藏</em></p>
+			</li>
+			<li>
+				<figure><a href="#"><img ng-src="{{imgPath}}/temp/09.png"></a></figure>
+				<h6><a href="#">2015 Apple/12 英MacBook</a></h6>
+				<p><span>¥ 2788.00</span><em>30人收藏</em></p>
+			</li>
+		</ul>
+		-->
+		<div class="h40px"></div>
+	</main>
+	<buy></buy>
+	<promt></promt>
+	
+	<!---- 分享 ---->
+	<section class="shadow-wrap" ng-class="{current:isShare === true}">
+		<div>
+			<header>分享<a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isShare"></label></a></header>
+			<nav class="share-wrap">
+				<a href="#"><i class="share-ico-1"></i><span>微信好友</span></a>
+				<a href="#"><i class="share-ico-2"></i><span>微信朋友圈</span></a>
+				<a href="#"><i class="share-ico-3"></i><span>新浪微博</span></a>
+				<a href="#"><i class="share-ico-4"></i><span>QQ好友</span></a>
+				<a href="#"><i class="share-ico-5"></i><span>QQ空间</span></a>
+			</nav>
+		</div>
+	</section>
+	

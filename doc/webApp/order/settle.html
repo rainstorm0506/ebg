@@ -1,0 +1,46 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">立即结算</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">order.settle</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>goods</td>
+			<td>array</td>
+			<td>必</td>
+			<td>goods[k]=val(<b style="color:red;font-weight: bold;">k为当前购物车商品加密的key；val:是否选择了当前的产品(1为选中);</b>)</td>
+		</tr>
+		                                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "31b972d07e2cfd5102fabba7af96cb09",
+    "message": [],
+    "data": {
+        "url": "order.closing",                 #结算成功,跳转地址
+        "mes":"验证通过,跳转至url进行结算!"     #提示信息
+    }
+}       
+</pre></td>
+		</tr>
+	</table>
+</div>

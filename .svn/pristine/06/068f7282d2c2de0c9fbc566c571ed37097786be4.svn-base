@@ -1,0 +1,629 @@
+<?php
+
+/**
+ * 商品订单 模型类
+ * @author jeson.Q 
+ * 
+ * @table content
+ */
+class Order extends SModels {
+	
+	/**
+	 * 获得 商品订单信息
+	 * return array|boolean
+	 * @param int $id 
+	 */
+	public function getActiveInfo($order_sn) {
+		$orderInfo = array ();
+		if ($order_sn) {
+			$sql = "SELECT o.*, u.nickname, u.phone, us.phone as mer_phone, opl.pay_port, opl.pay_time, opl.pay_money, s.pre_status, s.back_title, s.merchant_title, oe.delivery_way, oe.user_shoot, oe.cons_name, oe.cons_phone, oe.cons_address, oe.express_name, oe.system_remark, oe.user_remark, oe.express_no, oe.express_name,ex.id as ex_id, ex.firm_name, um.uid, um.is_self, um.store_name, um.store_tel,um.store_address FROM orders o 
+				lEFT JOIN order_pay_log opl ON o.order_sn = opl.order_sn
+				lEFT JOIN orders_extend oe ON o.order_sn = oe.order_sn
+				lEFT JOIN express ex ON oe.express_id = ex.id
+				lEFT JOIN status s ON o.order_status_id = s.id
+				lEFT JOIN user_merchant um ON o.merchant_id = um.uid
+				lEFT JOIN user u ON o.user_id = u.id
+				lEFT JOIN user us ON o.merchant_id = us.id
+				WHERE o.order_sn = '{$order_sn}' ";
+			$orderInfo = $this->queryRow($sql);
+			$orderInfo['goods'] = $this->getGoodsList($orderInfo['order_sn']);
+			$orderInfo['logs'] 	= $this->getLogList($orderInfo['order_sn']);
+			$orderInfo['pay_logs'] 	= $this->getPayLogList($orderInfo['order_sn']);
+			return $orderInfo;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 获得 单个订单信息
+	 * return array|boolean
+	 * @param int $id
+	 */
+	public function getOneOrderInfo($order_sn) {
+		$orderInfo = array ();
+		if ($order_sn) {
+			$sql = "SELECT * FROM orders WHERE order_sn = '{$order_sn}'";
+			return $this->queryRow($sql);;
+		} else {
+			return array();
+		}
+	}
+	
+	/**
+	 * 查询 订单列表
+	 * 
+	 * @param string $keyword
+	 * @param int $offset
+	 * @param int $limit
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getList($searchParam = array(), $offset = 0, $limit = 20) {
+		$allOrder = $orderInfo = array();
+		$sql = $where = $orderBy = $limits ='';
+		// 判断是否条件搜索
+		if($searchParam)
+		{
+			if (!empty($searchParam['status']))
+				$where .= ' AND o.parent_order_sn <> "1" AND o.order_status_id='.(int)$searchParam['status'];
+			
+			if (!empty($searchParam['is_self']))
+				$where .= $searchParam['is_self'] == 2 ? ' AND um.is_self = 0' :' AND um.is_self = '.(int)$searchParam['is_self'];
+			
+			if (!empty($searchParam['starttime']))
+				$where .= ' AND o.create_time > '.strtotime($searchParam['starttime']);
+				
+			if (!empty($searchParam['endtime']))
+				$where .= ' AND o.create_time < '.strtotime($searchParam['endtime']);
+				
+			if (!empty($searchParam['keyword']) && $searchParam['keyword'] != '支持搜索订单号、商家名称、收货人手机号码')
+				$where .= " AND (o.order_sn = '" .$searchParam['keyword'] ."' OR um.store_name like '%" .$searchParam['keyword'] ."%' OR oe.addressee_shoot like '%" .$searchParam['keyword'] ."%' OR oe.addressee_shoot like '%" .json_encode($searchParam['keyword']) ."%') ";
+			if (!empty($searchParam['uid']))
+				$where .= ' AND o.merchant_id = '.$searchParam['uid'].' AND u.status_id = 710';
+		
+		}
+		// 组装sql 语句
+		$orderBy = " ORDER BY o.create_time DESC ";
+		$limits = " limit {$offset},{$limit} ";
+		$sql = "SELECT o.id,o.order_sn,o.parent_order_sn,o.create_time,o.order_money,o.freight_money,o.is_pay,o.pay_type,opl.pay_port, opl.pay_time, opl.pay_money,s.pre_status,s.back_title,s.merchant_title,oe.cons_name,oe.user_shoot,oe.addressee_shoot,um.uid, um.is_self, um.store_name, um.store_address FROM orders o 
+				lEFT JOIN `status` s ON o.order_status_id = s.id
+				lEFT JOIN order_pay_log opl ON o.order_sn = opl.order_sn
+				lEFT JOIN orders_extend oe ON o.order_sn = oe.order_sn
+				lEFT JOIN user_merchant um ON o.merchant_id = um.uid
+				lEFT JOIN user u ON u.id = um.uid
+				WHERE 1=1 {$where} {$orderBy} {$limits}";
+		//echo $sql;
+		$orderInfo = $this->queryAll($sql);
+		if($orderInfo)
+		{
+			if($searchParam && (!empty($searchParam['is_self']) || !empty($searchParam['starttime']) || !empty($searchParam['endtime']) || (!empty($searchParam['keyword']) && $searchParam['keyword'] != '支持搜索订单号、商家名称、收货人手机号码、收货人姓名')))
+			{
+				foreach ($orderInfo as $key => $val)
+				{
+					if($val['parent_order_sn'] != 1){
+						$allOrder[$val['order_sn']]['info'] = $val;
+						$allOrder[$val['order_sn']]['goods'] = $this->getGoodsList($val['order_sn']);
+					}
+				}
+			}else{
+				foreach ($orderInfo as $key => $val)
+				{
+					if($val['parent_order_sn'] && $val['parent_order_sn'] != 1){
+						$allOrder[$val['parent_order_sn']]['info'] =$this->getActiveInfo($val['parent_order_sn']);
+						$allOrder[$val['parent_order_sn']]['childrenOrder'][$val['order_sn']] = $val;
+						$allOrder[$val['parent_order_sn']]['childrenOrder'][$val['order_sn']]['goods'] = $this->getGoodsList($val['order_sn']);
+					}elseif($val['parent_order_sn'] == 1){
+						$allOrder[$val['order_sn']]['info'] = $val;
+					}else{
+						$allOrder[$val['order_sn']]['info'] = $val;
+						$allOrder[$val['order_sn']]['goods'] = $this->getGoodsList($val['order_sn']);
+					}
+				}
+			}
+		}
+
+		return $allOrder;
+	}
+	
+	/**
+	 * 查询  子订单列表
+	 *
+	 * @param string $keyword
+	 * @param int $offset
+	 * @param int $limit
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getChildrenList($order_sn) {
+		$allOrder = $orderInfo = array();
+		$sql = $where ='';
+		if($order_sn)
+		{
+			$where = " WHERE o.parent_order_sn = '{$order_sn}'";
+			// 组装sql 语句
+			$sql = "SELECT o.id,o.order_sn,o.parent_order_sn,o.create_time,o.order_money,o.is_pay,o.freight_money,opl.pay_port, opl.pay_time, opl.pay_money,s.pre_status,s.back_title,s.merchant_title,oe.user_shoot,oe.addressee_shoot,um.uid, um.store_name, um.store_address FROM orders o
+			lEFT JOIN status s ON o.order_status_id = s.id
+			lEFT JOIN order_pay_log opl ON o.order_sn = opl.order_sn
+			lEFT JOIN orders_extend oe ON o.order_sn = oe.order_sn
+			lEFT JOIN user_merchant um ON o.merchant_id = um.uid
+			{$where}";
+			$orderInfo = $this->queryAll($sql);
+			if($orderInfo)
+			{
+				foreach ($orderInfo as $key => $val)
+				{
+					$allOrder[$val['order_sn']] = $val;
+					$allOrder[$val['order_sn']]['goods'] = $this->getGoodsList($val['order_sn']);
+				}
+			}
+		}
+		return $allOrder;
+	}
+	/**
+	 *
+	 * 统计 订单总数
+	 * 
+	 * @param string $keyword
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getTotalNumber($searchParam = array()) {
+		$sql = '';$where = ' WHERE 1=1 ';
+		// 判断是否条件搜索
+		if($searchParam)
+		{
+			if (!empty($searchParam['status']))
+				$where .= ' AND o.order_status_id='.(int)$searchParam['status'];
+			
+			if (!empty($searchParam['is_self']))
+				$where .= ' AND um.is_self = '.(int)$searchParam['is_self'];
+				
+			if (!empty($searchParam['starttime']))
+				$where .= ' AND o.create_time > '.strtotime($searchParam['starttime']);
+			
+			if (!empty($searchParam['endtime']))
+				$where .= ' AND o.create_time > '.strtotime($searchParam['endtime']);
+			
+			if (!empty($searchParam['keyword']) && $searchParam['keyword'] != '支持搜索订单号、商家名称、收货人手机号码')
+				$where .= " AND (o.id = " .(int)$searchParam['keyword'] ." OR o.order_sn like '%" .$searchParam['keyword'] ."%') ";
+			if (!empty($searchParam['uid']))
+				$where .= ' AND o.merchant_id = '.$searchParam['uid'].' AND u.status_id = 710';
+				
+		}
+		// 组装sql 语句
+		$sql = "SELECT count(*) FROM orders o LEFT JOIN user_merchant um ON o.merchant_id = um.uid INNER JOIN `user` u ON um.uid = u.id {$where}";
+		//echo $sql;
+		return (int)$this->queryScalar($sql);
+	}
+	
+	/**
+	 * 查询 订单操作日志 列表
+	 *
+	 * @param string $order_sn
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getLogList($order_sn) {
+		$logInfo = array();$sql = '';
+		if($order_sn)
+		{
+			// 组装sql 语句
+			$sql = "SELECT ol.id, ol.operate_type, ol.logs, ol.time, ol.memo, bg.true_name FROM order_log ol
+					lEFT JOIN back_governor bg ON ol.operate_id = bg.id 
+					WHERE ol.order_sn = '{$order_sn}' ORDER BY time DESC";
+			
+			$logInfo = $this->queryAll($sql);
+		}
+		return $logInfo;
+	}
+	
+	/**
+	 * 查询 订单操作日志 列表
+	 *
+	 * @param string $order_sn
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getPayLogList($order_sn) {
+		$payLogInfo = array();$sql = '';
+		if($order_sn)
+		{
+			// 组装sql 语句
+			$sql = "SELECT oal.id, oal.trade_no, oal.pay_money, oal.pay_time, oal.pay_verify, oal.pay_port FROM order_pay_log oal 
+			WHERE oal.order_sn = '{$order_sn}' ORDER BY pay_time DESC";
+
+			$payLogInfo = $this->queryAll($sql);
+		}
+		return $payLogInfo;
+	}
+	
+	/**
+	 * 查询 订单商品 列表
+	 * @param string $order_sn
+	 * @return array|static[]
+	 * @throws Exception
+	 */
+	public function getGoodsList($order_sn) {
+		$logInfo = array();$sql = $where = '';
+		if($order_sn)
+		{
+			$where = " WHERE og.order_sn = '{$order_sn}'";
+			// 组装sql 语句
+			$sql = "SELECT og.id,og.goods_cover, og.goods_type, og.goods_title as title, og.goods_attrs,og.num,og.unit_price, og.goods_id, og.return_sn, og.is_evaluate, og.is_reply_evaluate FROM order_goods og {$where} ";
+			$orderInfo = $this->queryAll($sql);
+		}
+		return $orderInfo;
+	}
+	
+	/**
+	 * 获得有评论的订单号 列表
+	 * return array
+	 * @param int $id
+	 */
+	public function getOrderList()
+	{
+		return $this->queryRow("SELECT o.* FROM orders o LEFT JOIN goods_comment c ON o.order_sn = c.order_sn WHERE c.id!='' OR c.id is not null");
+	}
+	
+	/**
+	 * 操作后台订单管理 集合
+	 *	return boolean
+	 * @param int $id
+	 */
+	public function setOrderInfo($post)
+	{
+		$logData = $orderExtend = $orderData = $orderPayLogData = $orderInfo = $orderGoods = $orderComment = array ();
+		$memo = $typename = $datastr = $logstr = $now_status_id = $pre_status_id = $payport = $tradeno = $goodsId = $system_memo = '';
+		$currentUser = $this->getUser();
+		//整理提交来的数据集合
+		foreach ($post as $key => $val)
+		{
+			$datastr = $this->safe_replace ( $val );
+			switch ($key){
+				case 'memo':				$memo = $this->remove_xss ( $datastr );break;
+				case 'system_remark':		$system_memo = $this->remove_xss ( $datastr );break;
+				case 'typename':			$typename = $this->remove_xss ( $datastr );break;
+				case 'pay_port':			$payport = $this->remove_xss ( $datastr );break;
+				case 'trade_no':			$tradeno = $this->remove_xss ( $datastr );break;
+				case 'goods_id':			$goodsId = (int)$this->remove_xss ( $datastr );break;
+				case 'express_id':			$expressId = (int)$this->remove_xss ( $datastr );break;
+				case 'OrderForm':			$send_time = strtotime($val['express_send_time']);break;
+				case 'express_no': 			$express_no = (int)$this->remove_xss ( $datastr );break;
+				case 'merchant_money': 		$merchant_money = (int)$this->remove_xss ( $datastr );break;
+				case 'now_status_id': 		$now_status_id = (int)$this->remove_xss ( $datastr );break;
+				default:					$orderData[$key] = $this->remove_xss ( $datastr );break;
+			}
+		}
+		//判断是否存在该订单
+		if($orderData['order_sn'])
+		{
+			$orderInfo = $this->getExpressName($orderData['order_sn']);
+		}
+		//判断用户操作 类型
+		switch ($typename)
+		{
+			case 'system_memo':
+				$pre_status_id = 0;
+				$now_status_id = 0;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过系统后台 [ 系统内部备注 ] 操作添加/修改了 系统备注信息: { {$system_memo} } ";
+				break;
+			case 'prepare_goods':
+				$pre_status_id = 103;
+				$now_status_id = 105;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过系统后台代商家进行了 [ 开始备货 ] 操作, 该订单进入备货阶段";
+				break;
+			case 'finish_prepare':
+				$pre_status_id = 105;
+				$now_status_id = 115;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过系统后台代商家进行了 [ 确认完成备货 ] 操作, 该订单进入待发货阶段";
+				break;
+			case 'send':
+				$pre_status_id = 115;
+				$now_status_id = 106;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过系统后台代商家进行了 [ 发货 ] 操作, 发货单号为：".$orderData['express_no'];
+				break;
+			case 'pay':	
+				$pre_status_id = 101;
+				$now_status_id = $orderInfo['pay_type'] == 2 ? 107 : 103;
+				$logstr = $orderInfo['pay_type'] == 2 ?"系统管理员 [".$currentUser['true_name']."] 通过系统后台代商家进行了 [ 确认用户收货及付款 ] 操作,该订单操作已完成！":"系统管理员[".$currentUser['true_name']."]代商家进行了[手动确认付款]操作";
+				break;
+			case 'pay_cancel':
+				$pre_status_id = 106;
+				$now_status_id = $orderInfo['pay_type'] == 2 ? 102 : 104;
+				$logstr = $orderInfo['pay_type'] == 2 ? "系统管理员 [ ".$currentUser['true_name']." ] 通过后台 [ 确认用户收货及付款 ] 操作确认用户 拒收商品 该订单自动取消,订单操作已完成！" : "系统管理员 [ ".$currentUser['true_name']." ] 通过后台 [ 确认用户收货及付款 ] 操作确认用户拒收商品并且进入取消订单退货流程";
+				break;
+			case 'edit_money':
+				$pre_status_id = 101;
+				$now_status_id = 101;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 代商家进行了 [ 手动修改订单金额 ] 操作,将原订单金额 [".$orderInfo['order_money']."]修改为 [".$orderData['order_money'].".00]元";
+				break;
+			case 'abolish':
+				$pre_status_id = $orderInfo['pay_type'] == 2 ? 101 : 105;
+				$now_status_id = $orderInfo['pay_type'] == 2 || !$orderInfo['is_pay']? 102 : 104;
+				$logstr = "系统管理员[ ".$currentUser['true_name']." ] 通过后台 [ 取消订单 ] 操作提交了取消该订单的申请";
+				break;
+			case 'option_abolish_yes':
+				$pre_status_id = 104;
+				$now_status_id = 108;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过后台 [ 处理取消订单申请 ] 操作审核通过了 用户取消该订单申请";
+				break;
+			case 'option_abolish_no':
+				$pre_status_id = 104;
+				$now_status_id = 103;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过后台 [ 处理取消订单申请 ] 操作拒绝通过 用户取消该订单申请,并进入备货阶段";
+				break;
+			case 'receive_goods':
+				$pre_status_id = 106;
+				//$now_status_id = $orderInfo['pay_type'] == 2 ? 109 : 107;
+				$now_status_id = 107;
+				$logstr = $orderInfo['pay_type'] == 2 ? "系统管理员 [ ".$currentUser['true_name']." ] 通过后台 [ 用户收到商品 ] 操作确认用户收到商品" : "系统管理员 [".$currentUser['true_name']."] 通过 [用户收到商品操作] 确认用户收到商品, 该订单操作已完成！";
+				break;
+			case 'back_goods':
+				$pre_status_id = 107;
+				$now_status_id = 107;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过 [ 退货 ] 操作确认用户商品退货";
+				break;
+			case 'reply_content':
+				$pre_status_id = 107;
+				$now_status_id = 107;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过 [ 回复用户评价 ] 操作回复了用户商品评价";
+				break;
+			case 'back_money':
+				$pre_status_id = 108;
+				$now_status_id = 110;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过 [ 确认财务退款完成 ] 操作确认了财务退款已完成，该订单取消操作已完成！";
+				break;
+			case 'edit_merchant':
+				$pre_status_id = $now_status_id;
+				$now_status_id = $now_status_id;
+				$logstr = "系统管理员 [ ".$currentUser['true_name']." ] 通过 [ 添加物流费用 ] 操作添加了商家的物流费用";
+				break;
+			default:	break;
+		}
+		$logData = array(
+			'order_sn' => $orderData['order_sn'],
+			'operate_type' => 3,
+			'operate_id' => $currentUser['id'],
+			'pre_order_status_id' => $pre_status_id,
+			'now_order_status_id' => $now_status_id,
+			'logs' => $logstr,
+			'memo' => $memo,
+			'time' => time(),
+		);
+		//开始事务操作
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try{
+			if($orderData['order_sn'])
+			{
+				//判断是否为发货操作
+				if($typename == 'send')
+				{
+					$orderExtend['order_status_id'] = $now_status_id;
+					$orderData['system_remark'] = $memo;
+					$orderData['express_id'] = $expressId;
+					$orderData['express_send_time'] = isset($send_time) ? $send_time : 0;
+					$this->update ( 'orders', $orderExtend, "order_sn='".$orderData['order_sn']."'" );	
+					$this->update ( 'orders_extend', $orderData, "order_sn='".$orderData['order_sn']."'" );
+				}//回复用户商品评价操作
+				elseif($typename == 'reply_content')
+				{
+					$orderComment = array(
+						'reply_content' => $orderData['reply_content'],
+						'reply_time' => time()
+					);
+					$orderGoods['is_reply_evaluate'] = 1;
+					$this->update ( 'order_comment', $orderComment, "order_sn='".$orderData['order_sn']."' AND goods_id = {$goodsId} " );
+					$this->update ( 'order_goods', $orderGoods, "order_sn='".$orderData['order_sn']."' AND goods_id = {$goodsId} " );
+
+				}//判断是否为发货操作
+				elseif($typename == 'back_goods')
+				{
+					$orderGoods['return_sn'] = $orderData['return_sn'];	
+					$this->update ( 'order_goods', $orderGoods, "order_sn='".$orderData['order_sn']."' AND goods_id = {$goodsId}" );
+					$goodsArr = $this->queryRow("SELECT * FROM order_goods WHERE order_sn = '".$orderData['order_sn']."' limit 1");
+					//是否该订单已经全部商品退货完成，是则改变订单状态
+					if(!$goodsArr['id'])
+					{
+						$this->update ( 'orders', array('is_back_goods'=>1), "order_sn='".$orderData['order_sn']."'" );
+					}
+				}//判断是否为确认付款  操作
+				elseif($typename == 'pay')
+				{
+					$orderPayLogData = array(
+						'pay_verify'	=>	2,
+						'pay_status'	=>	1,
+						'pay_port'		=>	(int)$payport,
+						'pay_time'		=>	time(),
+						'pay_money'		=>	(double)$orderInfo['order_money'],
+						'trade_no'		=>	$tradeno,
+						'order_sn'		=>	$orderData['order_sn']
+					);
+					$orderData['order_status_id'] = $now_status_id;
+					$orderData['pay_type'] = $payport == 4 ? 2 : 1;
+					$this->update ( 'orders', $orderData, "order_sn='".$orderData['order_sn']."'" );
+					$this->insert ( 'order_pay_log', $orderPayLogData);
+				}//判断是否为修改订单价格  操作
+				elseif($typename == 'edit_money')
+				{
+					$editMoney = $orderInfo['order_money']-$orderData['order_money'];
+					$orderData['edit_money'] = $orderInfo['edit_money'] + $editMoney;
+					$orderData['discount_money'] = $orderInfo['discount_money'] + $orderData['edit_money'];
+					$this->update ( 'orders', $orderData, "order_sn='".$orderData['order_sn']."'" );
+					if($orderInfo['parent_order_sn'] && $orderInfo['parent_order_sn'] != 1){
+						$parentOrder = $this->getOneOrderInfo($orderInfo['parent_order_sn']);
+						$orderParentData['edit_money'] = $parentOrder['edit_money'] + $editMoney;
+						$orderParentData['order_money'] = $parentOrder['order_money'] - $editMoney;
+						$this->update ( 'orders', $orderParentData, "order_sn='".$orderInfo['parent_order_sn']."'" );
+					}
+				}else if($typename == 'edit_merchant')//修改商家运费
+				{
+					$orderData['merchant_money'] = $merchant_money;
+					$orderExtend['express_no']	= $express_no;
+					$orderExtend['express_id']	= $expressId;
+					
+					$this->update ('orders', $orderData, "order_sn='".$orderData['order_sn']."'" );
+					$this->update ('orders_extend', $orderExtend, "order_sn='".$orderData['order_sn']."'" );
+				}
+				else//其他操作
+				{
+					//记录系统内部备注
+					if($system_memo && $typename == 'system_memo'){
+						$orderExtend['system_remark'] = $system_memo;
+						$this->update ( 'orders_extend', $orderExtend, "order_sn='".$orderData['order_sn']."'" );
+					}else{
+						$orderData['order_status_id'] = $now_status_id;
+						$this->update ( 'orders', $orderData, "order_sn='".$orderData['order_sn']."'" );
+					}
+				}
+				$flag = $this->insert('order_log' , $logData);
+				//取消订单---恢复库存
+				if($typename == 'abolish' || $typename == 'option_abolish_yes')
+				{
+					GlobalOrders::setGoodsNum($orderData['order_sn']);
+				}
+			}
+
+			if($typename == 'receive_goods' || ($typename == 'pay' && $orderInfo['pay_type'] == 2)){
+				// 订单 行为处理
+				UserAction::orderAction(
+						$orderInfo['users_id'] ,
+						$orderInfo['merchant_id'] ,
+						empty($orderInfo['re_uid']) ? 0 : $orderInfo['re_uid'],
+						trim(empty($orderData['order_sn']) ? '' : $orderData['order_sn']) ,
+						$orderInfo['order_money']
+				);
+				GlobalOrders::sendOrderPrivilege($orderData['order_sn'], $orderInfo['order_money'], $orderInfo['create_time']);
+				$transaction->commit();
+				return 1;
+			}else{
+				$transaction->commit();
+				return $flag;
+			}
+		}catch(Exception $e){
+			$transaction->rollBack();
+			return 0;
+		}
+	}
+	
+	/**
+	 * 单个订单 快递公司名称信息查询
+	 * @param		array		$post		post
+	 * @param		string		$order_sn	订单号
+	 */
+	public function getExpressName($order_sn)
+	{
+		$expressArr = array();$sql = '';
+		if ($order_sn)
+		{
+			$sql = "SELECT s.user_title, oe.express_id, oe.system_remark,o.order_status_id,oe.express_no, o.order_money, o.create_time,o.merchant_money, o.edit_money, o.parent_order_sn, o.pay_type, o.is_pay, o.discount_money, o.merchant_id, u.id as users_id, u.re_uid FROM orders o 
+					LEFT JOIN orders_extend oe ON o.order_sn = oe.order_sn 
+					LEFT JOIN status s ON o.cancel_status_id = s.id 
+					lEFT JOIN user u ON o.user_id = u.id
+					WHERE o.order_sn = '{$order_sn}'";
+			$expressArr = $this->queryRow($sql);
+			return $expressArr;
+		}
+		return '';
+	}
+
+	/**
+	 * 所有快递公司名称信息列表--查询
+	 * @param		array		$post		post
+	 * @param		string		$order_sn	订单号
+	 */
+	public function getExpressList()
+	{
+		$expressArr = array();$sql = '';
+		$uid = (int)$this->getUid();
+		if($uid)
+		{
+			$sql = "SELECT id,firm_name FROM express WHERE usable = 1 ORDER BY rank asc";
+			$expressArr = $this->queryAll($sql);
+		}
+		return $expressArr;
+	}
+
+	/**
+	 * 获得 商品订单日志 时间
+	 * @param string	$order_sn
+	 * @param int 		$status
+	 */
+	public function getOrderLogTime($status, $order_sn = '') {
+		$status = ( int ) $status;
+		$orderInfo = array ();
+		if ($status) {
+			$sql = "SELECT time FROM order_log WHERE now_order_status_id = {$status} AND order_sn = '{$order_sn}' ORDER BY time desc limit 1";
+			$orderInfo = $this->queryRow($sql);
+			return isset($orderInfo['time']) ? date('Y-m-d H:i:s',$orderInfo['time']) : '';
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 获得 商品订单 评论列表
+	 * @param string $order_sn
+	 * @param int $status
+	 * @param return array|boolean
+	 */
+	public function getOrderComment($goods_id,$order_sn = '') {
+		$commentInfo = array ();
+		$goodId = (int)$goods_id;
+		if ($order_sn) {
+			$sql = "SELECT oc.content, g.title FROM order_comment oc 
+					LEFT JOIN goods g ON oc.goods_id = g.id 
+					WHERE oc.order_sn = '{$order_sn}' AND oc.goods_id = {$goodId}";
+			$commentInfo = $this->queryRow($sql);
+			return $commentInfo;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * 获取通过审核的商家的信息
+	 * 
+	 */
+	public function getMerchantList(){
+		$sql = 'SELECT um.uid,um.store_name FROM user_merchant um INNER JOIN `user` u ON um.uid = u.id WHERE u.status_id = 710';
+		return $this->queryAll($sql);
+	}
+	
+	public function outAllByCondition($searchParam = array(),$fields){
+		$allOrder = $orderInfo = array();
+		$sql = $where = $orderBy = $limits ='';
+		// 判断是否条件搜索
+		if($searchParam)
+		{
+			if (!empty($searchParam['is_self']))
+				$where .= $searchParam['is_self'] == 2 ? ' AND um.is_self = 0' :' AND um.is_self = '.(int)$searchParam['is_self'];
+				
+			if (!empty($searchParam['starttime']))
+				$where .= ' AND o.create_time > '.strtotime($searchParam['starttime']);
+		
+			if (!empty($searchParam['endtime']))
+				$where .= ' AND o.create_time < '.strtotime($searchParam['endtime']);
+		
+			if (!empty($searchParam['keyword']) && $searchParam['keyword'] != '支持搜索订单号、商家名称、收货人手机号码')
+				$where .= " AND (o.order_sn = '" .$searchParam['keyword'] ."' OR um.store_name like '%" .$searchParam['keyword'] ."%' OR oe.addressee_shoot like '%" .$searchParam['keyword'] ."%' OR oe.addressee_shoot like '%" .json_encode($searchParam['keyword']) ."%') ";
+			if (!empty($searchParam['uid']))
+				$where .= ' AND o.merchant_id = '.$searchParam['uid'].' AND u.status_id = 710';
+		
+		}
+		if(!$fields){
+			$fields = 'o.order_sn,o.create_time,s.back_title,o.pay_type,o.is_pay,opl.pay_port,o.order_money,um.store_name,um.mer_name,u.phone,g.goods_num,og.goods_title,og.num,og.goods_weight,og.unit_price,o.freight_money,o.merchant_money,
+			oe.cons_name,oe.cons_phone,oe.cons_address,oe.user_remark,oe.system_remark';
+		}else{
+			$fields .= ',o.pay_type,o.is_pay';
+		}
+		// 组装sql 语句
+		$orderBy = " ORDER BY o.create_time DESC ";
+		$sql = "SELECT {$fields} FROM orders o lEFT JOIN `status` s ON o.order_status_id = s.id lEFT JOIN order_pay_log opl ON o.order_sn = 
+			opl.order_sn lEFT JOIN orders_extend oe ON o.order_sn = oe.order_sn lEFT JOIN user_merchant um ON o.merchant_id = um.uid lEFT JOIN user u ON u.id = um.uid 
+			INNER JOIN order_goods og ON og.order_sn = o.order_sn INNER JOIN goods g on og.goods_id = g.id
+			WHERE 1=1 {$where} {$orderBy}";
+		$orderInfo = $this->queryAll($sql);
+		return $orderInfo;
+	}
+}

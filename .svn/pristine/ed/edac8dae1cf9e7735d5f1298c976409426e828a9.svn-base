@@ -1,0 +1,51 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- 购物车为空 ---------->
+	<main class="shopping-null" ng-if="shoppingAmount <= 0">
+		<i></i>
+		<p>您的购物车还是空的哦！</p>
+		<a href="#">去购买</a>
+	</main>
+	<!---------- 购物车不为空 ---------->
+	<main ng-if="shoppingAmount > 0">
+		<ul class="shopping-list" ng-repeat="(key,val) in data">
+			<li ng-repeat="$p in val">
+				<header>
+					<label class="radio current"><i><b></b></i><input type="radio" name="cart" ng-model="radio.cart"></label>
+					<h3><s></s>{{$p.id}}</h3>
+					<a ng-if="!isCartEditor">完成</a>
+					<a ng-if="isCartEditor" href="#">编辑</a>
+				</header>
+				<section>
+					<div>
+						<section>
+							<label class="radio current"><i><b></b></i><input type="radio" name="cart" ng-model="radio.cart"></label>
+							<figure><img ng-src="{{imgPath}}/temp/09.png"></figure>
+							<article>
+								<div class="calculate" ng-if="!isCartEditor">
+									<a href="javascript:;" class="disabled">-</a>
+									<input type="text" value="2">
+									<a href="javascript:;">+</a>
+								</div>
+								<h6 ng-if="isCartEditor" ng-bind="$p.title">苹果系列 iMac MacBook Pro ipad3 IPhone5</h6>
+								<p ng-bind="$p.attrs"></p>
+								<footer ng-if="isCartEditor"><p>￥{{$p.final_price}}</p><span>x{{$p.amount}}</span></footer>
+							</article>
+						</section>
+					</div>
+					<a ng-if="isDelCart" href="#">删除</a>
+				</section>
+			</li>
+		</ul>
+		<no-data></no-data>
+		<div class="h40px"></div>
+	</main>
+	<!---------- 结算 ---------->
+	<section class="total-wrap">
+		<i class="radio"><b></b></i><span>全选</span>
+		<p><span>合计：</span><em>￥5899</em></p>
+		<a class="b-1" href="#">结算</a>
+	</section>
+	<!---------- nav ---------->
+	<public-nav></public-nav>
+	<promt></promt>

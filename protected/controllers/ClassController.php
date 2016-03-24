@@ -82,7 +82,6 @@ class ClassController extends WebController
 		$chain = array();
 		if ($id && !($chain = GlobalGoodsClass::getClassChainById($id)))
 			$this->error('分类异常!');
-		
 		$this->setPageSeo(GlobalSEO::getSeoInfo('search', 0));
 		
 		$this->viewsKeyword = $keyword;
@@ -101,7 +100,7 @@ class ClassController extends WebController
 			'classThree'	=> 0,
 			'attrs_val'		=> array(),
 		);
-		
+
 		$this->_list_base($chain , $search , array() , 'search');
 	}
 	
