@@ -1,0 +1,351 @@
+<style>
+.images{border:1px solid gray;height:100px;width:100px;float:left;}
+.caseInfo{margin-left:20px;margin-top:40px;float:left;font-weight:bold}
+</style>
+<nav class="current-stie"><span><a href="/">首页</a></span><i>&gt;</i><span><a href="merchant/home">商家中心</a></span><i>&gt;</i><span><a href="merchant/order">订单管理</a></span><i>&gt;</i><span>订单管理详情</span></nav>
+<main>
+	<section class="order-state">
+		<div>
+			<span>订单号：<?php echo $info['order_sn']; ?></span>
+			<span>状态：<b><?php if($info['pay_type'] == 2 && $info['order_status_id'] == 103)echo "已完成";elseif($info['pay_type'] == 2 && $info['order_status_id'] == 101)echo '等待备货'; else echo $info['merchant_title']; ?></b></span>
+			<?php 
+				if($info['order_status_id'] == 1099):
+					echo CHtml::link('同意退货' , 'javascript:;' ,array('onclick'=>"orderOptions('".$info['order_sn']."=2')",'class' => 'btn-1 btn-1-8'))."<br/>";
+					echo CHtml::link('拒绝退货' , 'javascript:;',array('onclick'=>"orderOptions('".$info['order_sn']."=3')",'class' => 'btn-1 btn-1-8'))."<br/>";
+				endif; 
+				if($info['order_status_id'] == 104):
+					echo CHtml::link('同意退款' , 'javascript:;' ,array('onclick'=>"orderOptions('".$info['order_sn']."=2')",'class' => 'btn-1 btn-1-8'));
+					echo CHtml::link('拒绝退款' , 'javascript:;',array('onclick'=>"orderOptions('".$info['order_sn']."=3')",'class' => 'btn-1 btn-1-8'))."<br/>";
+				endif;
+				if(in_array($info['order_status_id'], array(101,103))):
+					echo CHtml::link('开始备货' , 'javascript:;' ,array('onclick'=>"orderOptions('".$info['order_sn']."=6')",'class' => 'btn-1 btn-1-8'))."<br/>";
+				endif;
+				if($info['order_status_id'] == 105):
+					echo CHtml::link('确认备货完成' , 'javascript:;' ,array('onclick'=>"orderOptions('".$info['order_sn']."=7')",'class' => 'btn-1 btn-1-8'))."<br/>";
+				endif;
+				if($info['order_status_id'] == 115 && $info['delivery_way'] == 2):
+					echo CHtml::link('发货' , 'javascript:;',array('onclick'=>"orderOptions('".$info['order_sn']."=12')",'class' => 'btn-1 btn-1-8'))."<br/>";
+				elseif($info['order_status_id'] == 115 && $info['delivery_way'] == 1):	
+					echo CHtml::link('发货' , 'javascript:;',array('onclick'=>"orderOptions('".$info['order_sn']."=1')",'class' => 'btn-1 btn-1-8'))."<br/>";
+				endif;
+				if($info['order_status_id'] == 1066):
+					echo CHtml::link('已收货' , 'javascript:;',array('onclick'=>"orderOptions('".$info['order_sn']."=5')",'class' => 'btn-1 btn-1-8'))."<br/>";
+				endif;
+			?>
+		</div>
+		<p><?php echo $info['merchant_describe']; ?></p>
+	</section>
+	<section class="mer-order-wrap">
+		<!-- txt -->
+		<ul class="order-address-list">
+			<?php $addrArr = json_decode($info['addressee_shoot'],true);?>
+			<li><h6>收货地址：</h6><p><?php echo $addrArr['address'];?></p></li>
+			<li><h6>收货人：</h6><p><?php echo $addrArr['consignee'];?></p><span class="ml20px"><?php echo $addrArr['phone'];?></span></li>
+			<li><h6>支付方式：</h6><p><?php echo $info['pay_type'] == 1 ? '在线支付' : '货到付款';?></p></li>
+			<li><h6>配送方式：</h6><p><?php echo $info['delivery_way'] == 2 ? '上门自提' : '市内配送';?></p></li>
+			<li style="color:red"><h5>用户备注：</h5><p><?php echo $info['user_remark'];?></p></li>
+		</ul>
+		<!-- 订单跟踪 -->
+		<section class="order-tracking">
+			<header>
+				<h6>时间 </h6>
+				<h6>运单跟踪</h6>
+			</header>
+			<?php if(!empty($info['logs']['data'])):foreach($info['logs']['data'] as $key => $val):?>
+			<dl <?php if($key == (count($info['logs'])-1)) echo "class='current'";?>>
+				<dt>
+					<span><?php echo date('Y-m-d H:i:s',$val['time']);?></span>
+					<b><i></i></b>
+				</dt>
+				<dd><?php echo $val['merchant_logs'];?></dd>
+			</dl>
+			<?php endforeach;else:?>
+			<dl>
+				<dt colspan="2" style="width:100%;color:red;text-align:center" >暂无数据</dt>
+			</dl>
+			<?php endif;?>
+		</section>
+		<!-- -->
+		<!-- 添加e配送APP扫描二维码 -->
+		<table class="mer-tab">
+			<tbody>
+				<tr>
+					<td colspan="6"><span class="caseInfo" >下载 e 配送，可实时查看商品位置哦，扫描下载：</span><img src='' class='images' style="margin-left:50px"/><img src='' class='images'/></td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- 订单列表 -->
+		<table class="mer-tab-tit">
+			<colgroup>
+				<col width="80">
+				<col width="auto">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th colspan="2">商品</th>
+					<th>规格</th>
+					<th>单价</th>
+					<th>数量</th>
+					<th>小计</th>
+				</tr>
+			</thead>
+		</table>
+		<!-- 订单列表 -->
+		<table class="mer-tab">
+			<colgroup>
+				<col width="80">
+				<col width="auto">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+				<col width="15%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th colspan="6"><strong>订单号：<?php echo $info['order_sn'];?></strong><span><?php echo $info['store_name'];?></span><time>2015-12-10</time></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach($info['goods'] as $key => $val): $unitPrice = 0;?>
+				<tr>
+					<td><a href="<?php echo $val['goods_type'] ==2 ? '/used/intro?id='.$val['goods_id'] : '/goods?id='.$val['goods_id'];?>" target="_blank" title="<?php echo $val['goods_title'];?>"><img src="<?php echo Views::imgShow($val['goods_cover']); ?>" width="80" height="80"></a></td>
+					<td class="tl"><a href="<?php echo $val['goods_type'] ==2 ? '/used/intro?id='.$val['goods_id'] : '/goods?id='.$val['goods_id'];?>" target="_blank" title="<?php echo $val['goods_title'];?>"><?php echo strlen($val['goods_title'])>78 ? mb_substr($val['goods_title'],0, 26,'utf-8')."..." : $val['goods_title'];?></a></td>
+					<td class="gray">
+						<?php 
+							$goodsAttr = json_decode($val['goods_attrs'],true);
+							foreach ($goodsAttr as $vals){
+								echo $vals[1].' : '.$vals[2]."<br>";
+							}
+						?>
+					</td>
+					<td class="gray">￥<?php echo $val['unit_price'];?></td>
+					<td class="gray"><?php echo $val['num'];?></td>
+					<td class="mc lbor"><b>￥<?php $unitPrice = (int)$val['num']*$val['unit_price']; echo $unitPrice;?></b></td>
+				</tr>
+				<?php endforeach;?>
+			</tbody>
+		</table>
+		<div class="return-order">
+			<div>总商品金额：<b>￥<?php echo strpos($info['goods_money'],'.')>0 ? $info['goods_money'] : $info['goods_money'].".00";?></b></div>
+			<div> 优惠金额：<b>￥<?php echo strpos($info['discount_money'],'.')>0 ? $info['discount_money'] : $info['discount_money'].".00";?></b></div>
+			<div>运费：<b>￥<?php echo strpos($info['freight_money'],'.')>0 ? $info['freight_money'] : $info['freight_money'].".00";?></b></div>
+			<div style="font-size:18px"><b>实付金额</b>：<b class="mc">￥<?php echo strpos($info['order_money'],'.')>0 ? $info['order_money'] : $info['order_money'].".00";?></b></div><br/>
+			
+			<nav><a class="btn-1 btn-1-6" href="merchant/order">返回订单列表</a></nav>
+		</div>
+	</section>
+</main>
+<!-- 是否备货弹窗--开始 -->
+<section class="pop-wrap pop-wrap-1" id="pre_goods" style="display:none">
+	<header><h3>提示</h3><a class="closes" href="javascript:;"></a></header>
+	<section class="promt-agree">
+		<div><i></i>确定开始备货？</div>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('optionOrder'),'id'=>'formBoxg')); ?>
+		<nav>
+			<input type="hidden" name="order_sn" class="order_sn" value=""/>
+			<input type="hidden" name="typename" value="prepare_goods"/>
+			<input type="hidden" name="detail" value="1"/>
+			<a class="btn-1 btn-1-3" href="javascript:;" onclick="$('#formBoxg').submit()">确定</a>
+			<a class="btn-1 btn-1-4 falses" href="javascript:;">取消</a>
+		</nav>
+		<?php $this->endWidget(); ?>	
+		</nav>
+	</section>
+</section>
+<!-- 是否备货弹窗--结束 -->
+
+<!-- 是否已经备货完成弹窗--开始 -->
+<section class="pop-wrap pop-wrap-1" id="pre_finish" style="display:none">
+	<header><h3>提示</h3><a class="closes" href="javascript:;"></a></header>
+	<section class="promt-agree">
+		<div><i></i>确定已经备货完成？</div>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('optionOrder'),'id'=>'formBoxf')); ?>
+		<nav>
+			<input type="hidden" name="order_sn" class="order_sn" value=""/>
+			<input type="hidden" name="detail" value="1"/>
+			<input type="hidden" name="typename" value="finish_prepare"/>
+			<a class="btn-1 btn-1-3" href="javascript:;" onclick="$('#formBoxf').submit()">确定</a>
+			<a class="btn-1 btn-1-4 falses" href="javascript:;">取消</a>
+		</nav>
+		<?php $this->endWidget(); ?>	
+		</nav>
+	</section>
+</section>
+<!-- 是否已经备货完成弹窗--结束 -->
+
+<!-- 发货弹窗开始 -->
+<section class="pop-wrap pop-wrap-2" id="is_send" style="display:none">
+	<header><h3>发货</h3><a class="closes" href="javascript:;"></a></header>
+	<fieldset class="form-list form-list-36">
+		<legend>发货</legend>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('order/optionOrder'),'id'=>'formBox')); ?>
+			<ul>
+				<input type="hidden" name="typename" value="send_goods"/>
+				<input type="hidden" name="order_sn" class="order_sn" value=""/>
+				<li><h6>物流名称：</h6>
+				<select class="sbox36" name="express_id" style="width:auto">
+				<?php foreach($express as $val):?>
+				<option value="<?php echo $val['id']?>"><?php echo $val['firm_name']?></option>
+				<?php endforeach;?>
+				</select>
+				</li><input type="hidden" name="detail" value="1"/>
+				<li><h6>运单号：</h6><input class="tbox34 tbox34-1" type="text" name="express_no" ></li>
+				<li><h6>&nbsp;</h6><input class="btn-1 btn-1-3" type="submit" value="保存"><input id="reset" class="btn-1 btn-1-4 falses" type="reset" value="取消"></li>
+			</ul>
+		<?php $this->endWidget(); ?>
+	</fieldset>
+</section>
+<!-- 发货弹窗end -->
+
+<!-- 上门自提发货弹窗开始 -->
+<section class="pop-wrap pop-wrap-2" id="is_send_self" style="display:none">
+	<header><h3>发货到网点</h3><a class="closes" href="javascript:;"></a></header>
+	<fieldset class="form-list form-list-36">
+		<legend>发货到网点</legend>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('order/optionOrder'),'id'=>'formBox')); ?>
+			<ul>
+				<input type="hidden" name="typename" value="send_goods"/>
+				<input type="hidden" name="order_sn" class="order_sn" value=""/>
+				<li><h6 style="margin-left:150px;margin-bottom:50px;"><b>确定订单商品已经发货到指定接收网点？</b></h6>
+				</li><input type="hidden" name="detail" value="1"/>
+				<li><h6>&nbsp;</h6><input class="btn-1 btn-1-3" type="submit" value="确定"><input id="reset" class="btn-1 btn-1-4 falses" type="reset" value="取消"></li>
+			</ul>
+		<?php $this->endWidget(); ?>
+	</fieldset>
+</section>
+<!-- 上门自提发货弹窗end -->
+
+
+<!-- 是否同意退货弹窗--开始 -->
+<section class="pop-wrap pop-wrap-1" id="floatWraperss" style="display:none">
+	<header><h3>提示</h3><a class="closes" href="javascript:;"></a></header>
+	<section class="promt-agree">
+		<div><i></i>确定同意退货？</div>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('order/optionOrder'),'id'=>'formBoxb')); ?>
+		<nav>
+			<input type="hidden" name="order_sn" class="order_sn" value=""/>
+			<input type="hidden" name="typename" value="agree_reback"/>
+			<input type="hidden" name="detail" value="1"/>
+			<a class="btn-1 btn-1-3" href="javascript:;">确定</a>
+			<a class="btn-1 btn-1-4 falses" href="javascript:;">取消</a>
+		</nav>
+		<?php $this->endWidget(); ?>	
+		</nav>
+	</section>
+</section>
+<!-- 是否同意退货弹窗--结束 -->
+
+<div class="mask"  style="display:none"></div>
+
+<!-- 拒绝退货弹窗--开始 -->
+<section class="pop-wrap pop-wrap-2" id="refusedss" style="display:none">
+	<header><h3>拒绝退货</h3><a class="closes" href="javascript:;"></a></header>
+	<fieldset class="form-list form-list-36">
+		<legend>拒绝退货</legend>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('order/optionOrder'),'id'=>'formBoxr')); ?>
+			<ul>
+				<input type="hidden" name="order_sn" class="order_sn" value=""/>
+				<input type="hidden" name="typename" value="refuse_reback"/>
+				<input type="hidden" name="detail" value="1"/>
+				<li><h6>拒绝原因：</h6><textarea placeholder="请输入拒绝原因" name="reason"></textarea></li>
+				<li><h6>&nbsp;</h6><input class="btn-1 btn-1-3" type="submit" value="保存"><input id="reset" class="btn-1 btn-1-4 falses" type="reset" value="取消"></li>
+			</ul>
+		<?php $this->endWidget(); ?>
+	</fieldset>
+</section>
+<!-- 拒绝退货弹窗--结束 -->
+
+<!-- 确认用户已收货弹窗--开始 -->
+<section class="pop-wrap pop-wrap-1" id="received" style="display:none">
+	<header><h3>提示</h3><a class="closes" href="javascript:;"></a></header>
+	<section class="promt-agree">
+		<div><i></i>确定用户已收货并付款？</div>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('order/optionOrder'),'id'=>'formBoxs')); ?>
+		<nav>
+			<input type="hidden" name="order_sn" class="order_sn" value=""/>
+			<input type="hidden" name="typename" value="received_goods"/>
+			<input type="hidden" name="detail" value="1"/>
+			<a class="btn-1 btn-1-3" href="javascript:;" onclick="$('#formBoxs').submit()">确定</a>
+			<a class="btn-1 btn-1-4 falses" href="javascript:;">取消</a>
+		</nav>
+		<?php $this->endWidget(); ?>
+	</section>
+</section>
+<!-- 确认用户已收货弹窗--结束 -->
+
+<!-- 是否同意取消订单弹窗--开始 -->
+<section class="pop-wrap pop-wrap-1" id="floatWraper" style="display:none">
+	<header><h3>同意用户取消该订单</h3><a class="closes" href="javascript:;"></a></header>
+	<section class="promt-agree">
+		<div><i></i>确定同意进入财务退款阶段？</div>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('optionOrder'),'id'=>'formBoxby')); ?>
+		<nav>
+			<input type="hidden" name="order_sn" class="order_sn" value=""/>
+			<input type="hidden" name="typename" value="option_abolish_yes"/>
+			<input type="hidden" name="detail" value="1"/>
+			<a class="btn-1 btn-1-3" href="javascript:;" onclick="$('#formBoxby').submit();">确定</a>
+			<a class="btn-1 btn-1-4 falses" href="javascript:;">取消</a>
+		</nav>
+		<?php $this->endWidget(); ?>	
+		</nav>
+	</section>
+</section>
+<!-- 是否同意退货弹窗--结束 -->
+
+<!-- 拒绝取消订单弹窗--开始 -->
+<section class="pop-wrap pop-wrap-2" id="refused" style="display:none">
+	<header><h3>拒绝用户取消该订单</h3><a class="closes" href="javascript:;"></a></header>
+	<fieldset class="form-list form-list-36">
+		<legend>确定拒绝用户取消该订单并进入商品备货阶段？</legend>
+		<?php $active = $this->beginWidget('CActiveForm',array('action'=>$this->createUrl('optionOrder'),'id'=>'formBoxr')); ?>
+			<ul>
+				<input type="hidden" name="order_sn" class="order_sn" value=""/>
+				<input type="hidden" name="typename" value="option_abolish_no"/>
+				<input type="hidden" name="detail" value="1"/>
+				<li><h6>拒绝原因：</h6><textarea placeholder="请输入拒绝原因" name="reason"></textarea></li>
+				<li><h6>&nbsp;</h6><input class="btn-1 btn-1-3" type="submit" value="保存"><input id="reset" class="btn-1 btn-1-4 falses" type="reset" value="取消"></li>
+			</ul>
+		<?php $this->endWidget(); ?>
+	</fieldset>
+</section>
+<!-- 拒绝退货弹窗--结束 -->
+
+<script>
+	$('.closes,.falses').click(function(){
+		$(this).parents('.pop-wrap').hide();
+		$('.mask').hide();
+	});
+	function orderOptions(item){
+		var options = item.split('=');
+		if(options[1] == '1'){
+			$('.order_sn').val(options[0]);
+			$('#is_send,.mask').show();
+		}
+		else if(options[1] == '12'){
+			$('.order_sn').val(options[0]);
+			$('#is_send_self,.mask').show();
+		}
+		else if(options[1] == '2'){
+			$('.order_sn').val(options[0]);
+			$('#floatWraper,.mask').show();
+		}
+		else if(options[1] == '3'){
+			$('.order_sn').val(options[0]);
+			$('#refused,.mask').show();
+		}else if(options[1] == '5'){
+			$('.order_sn').val(options[0]);
+			$('#received,.mask').show();
+		}else if(options[1] == '6'){
+			$('.order_sn').val(options[0]);
+			$('#pre_goods,.mask').show();
+		}else if(options[1] == '7'){
+			$('.order_sn').val(options[0]);
+			$('#pre_finish,.mask').show();
+		}
+		return false;
+	}
+</script>

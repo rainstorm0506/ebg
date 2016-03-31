@@ -1,0 +1,140 @@
+<?php
+class Goods extends WebApiModels
+{
+	/**
+	 * 商品列表
+	 */
+	public function getList($search , $pageNow , $pageSize)
+	{
+		$pageNow=($pageNow-1)*$pageSize;
+		$SQL = "WHERE shelf_id=410 AND status_id=401 AND delete_id=0";
+		//商家
+		if($search['merchant_id'])
+			$SQL.=" AND merchant_id={$search['merchant_id']}";
+
+		//分类
+		if($search['classOne'] > 0)
+			$SQL .= " AND class_one_id={$search['classOne']}";
+		if($search['classTwo'] > 0)
+			$SQL .= " AND class_two_id={$search['classTwo']}";
+		if($search['classThree'] > 0)
+			$SQL .= " AND class_three_id={$search['classThree']}";
+
+		// 自营商品
+		if($search['self'] === 1)
+			$SQL .= ' AND is_self=1';
+
+		//品牌
+		if($search['brand_id'] > 0)
+			$SQL .= ' AND brand_id=' . $search['brand_id'];
+
+		// 价格范围
+		if($search['priceStart'] > 0 && $search['priceEnd'] > 0)
+			$SQL .= " AND (min_price<={$search['priceEnd']} AND max_price>={$search['priceStart']} OR (sale_price>={$search['priceStart']} AND sale_price<{$search['priceEnd']}))";
+
+		// 关键字
+		if($search['keyword'])
+			$SQL .= " AND title LIKE {$this->quoteLikeValue($search['keyword'])}";
+
+		// 综合排序
+		$orderBy = "ORDER BY last_time DESC";
+		// 排序
+		if($search['order'] && $search['by'])
+		{
+			$by = $search['by'] == 'asc' ? 'ASC' : 'DESC';
+			switch($search['order'])
+			{
+				// 价格
+				case 'price' :
+					$orderBy = " ORDER BY retail_price {$by}";
+					break;
+				// 销量
+				case 'detail' :
+					$orderBy = " ORDER BY sales {$by}";
+					break;
+				// 上架时间
+				case 'putaway' :
+					$orderBy = " ORDER BY shelf_time {$by}";
+					break;
+			}
+		}
+		if($search['attrs_val'])
+		{
+			foreach($search['attrs_val'] as $v)
+			{
+				$SQL.=empty($v)?'': " AND (attrs_1_unite_code={$v} OR attrs_2_unite_code={$v} OR attrs_3_unite_code={$v})";
+			}
+		}
+		return $this->queryAll("SELECT id,title,is_self,cover,base_price,sales,collect,retail_price,min_price FROM goods {$SQL} {$orderBy} LIMIT {$pageNow},{$pageSize}");
+	}
+	/**
+	 * 获取商品分类详情
+	 */
+	public function getClassInfo($id)
+	{
+		return $this->queryRow("SELECT * FROM goods_class WHERE id={$id}");
+	}
+	/**
+	 * 商品详情
+	 */
+	public function getInfo($id)
+	{
+		$row = $this->queryRow("SELECT * FROM goods WHERE id={$id} AND shelf_id=410 AND status_id=401 AND delete_id=0");
+                if($row){
+                    $row['img'] = $this->queryAll("SELECT src,attrs_unite_code FROM goods_photo WHERE goods_id={$id} ORDER BY rank ASC");
+                    $a = $row['attrs'] = json_decode($row['attrs']);
+                    $a = $this->object_array($a);
+                    foreach ($a as $k=>$v){
+                        $v = $this->object_array($v);
+                        if(is_string($v)){
+                            $sql = "SELECT title FROM goods_attrs WHERE unite_code='{$v}'";
+                            $row['attr_title'] = $this->queryRow($sql);
+                        }
+                    }
+                }
+		return $row;
+	}
+        private function object_array($array)
+        {
+           if(is_object($array))
+           {
+            $array = (array)$array;
+           }
+           if(is_array($array))
+           {
+            foreach($array as $key=>$value)
+            {
+             $array[$key] = $this->object_array($value);
+            }
+           }
+           return $array;
+        }        
+        /**
+	 * 判断是否收藏过此商品
+	 */
+	public function isCollect($id)
+	{
+		if($user_id=$this->getUid())
+			return 0;
+
+		return $this->queryScalar("SELECT COUNT(*) FROM user_collect WHERE type=1 AND user_id={$user_id} AND collect_id={$id}");
+	}
+	/**
+	 * 首页办公商品列表
+	 */
+	public function getHomeList()
+	{
+		$arr = array();
+
+		// 为了前端测试添加了  查询条件  AND is_self = '1'
+		$arr['sb'] = $this->queryAll("SELECT id,title,is_self,cover,base_price,min_price FROM `goods` WHERE class_one_id = '2' AND is_self = '1' AND `shelf_id` = '410' ORDER BY `rank` DESC LIMIT 3");
+
+		$arr['wj'] = $this->queryAll("SELECT id,title,is_self,cover,base_price,min_price FROM `goods` WHERE class_one_id = '1' AND is_self = '1' AND `shelf_id` = '410' ORDER BY `rank` DESC LIMIT 2");
+
+		$arr['jj'] = $this->queryAll("SELECT id,title,is_self,cover,base_price,min_price FROM `goods` WHERE class_one_id = '3' AND is_self = '1' AND `shelf_id` = '410' ORDER BY `rank` DESC LIMIT 1");
+
+		$arr['hc'] = $this->queryAll("SELECT id,title,is_self,cover,base_price,min_price FROM `goods` WHERE class_one_id = '5' AND is_self = '1' AND `shelf_id` = '410' ORDER BY `rank` DESC LIMIT 1");
+
+		return $arr;
+	}
+}

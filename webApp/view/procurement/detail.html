@@ -1,0 +1,17 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	
+	<!---------- main ---------->
+	<main>
+		<ul class="jicai-detail-list">
+			<li><h6 ng-bind="data.title"></h6><time>截止时间：<x ng-bind="data.price_endtime"></x></time></li>
+			<li ng-repeat="$p in data.infos">
+				<h6 ng-bind="$p.name"></h6>
+				<span>{{$p.num_max}}个</span>
+				<a href="#">平台推荐</a>
+				<a href="#">商家报价</a>
+			</li>
+		</ul>
+		<div class="h40px"></div>
+	</main>
+	<promt></promt>

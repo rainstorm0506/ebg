@@ -1,0 +1,312 @@
+<?php
+/**
+ * Description of OrderController
+ * 点击“立即购买==》下订单”
+ * @author Administrator
+ */
+class OrderController extends WebApiController{
+    //const CARTKEY = 'cart_mob';
+    const CARTKEY = 'cart';
+    /**
+     * 商品页 - 立即购买
+     * 
+     * @param	GET		int			amount					数量
+     * @param	GET		int			type					商品类型 , 1=新品 , 2=二手商品
+     * @param	GET		int			gid						商品ID
+     * @param	GET		string		attrs_1_unite_code		商品1属性ID
+     * @param	GET		string		attrs_2_unite_code		商品2属性ID
+     * @param	GET		string		attrs_3_unite_code		商品3属性ID
+     */
+    public function actionPromptly()
+    {
+        $form = ClassLoad::Only("OrderForm");   /* @var $form OrderForm */
+        $form->gid = (int)  $this->getPost("gid",0);
+        $form->type = (int)  $this->getPost("type",0);
+        $form->amount = (int)  $this->getPost("amount",0);
+        $form->attrs_1_unite_code = trim((string)  $this->getPost("attrs_1_unite_code"));
+        $form->attrs_2_unite_code = trim((string)  $this->getPost("attrs_2_unite_code"));
+        $form->attrs_3_unite_code = trim((string)  $this->getPost("attrs_3_unite_code"));
+        
+        if($form->validateInfo()){  //表单验证成功
+            $info = $this->_cartJoin($form,true);
+            if($info>=1){    //必须购买过产品 才允许结算跳转
+                $this->jsonOutput(0,$info);
+            }else{
+                $this->jsonOutput(2,"当前你还未选择购买的商品!");
+            }
+        }else{
+            $this->jsonOutput(1,  $this->getFormError($form));
+        }
+    }    
+    private function _cartJoin($form,$select = true)
+    {
+        if (!$this->getUid())
+                $this->jsonOutput(1 , '请登录后在购买!');
+
+        $ut = $this->getUserType();
+        if ($ut === 3)
+                $this->jsonOutput(2 , '商家会员不能购买商品!');
+        if ($ut < 1 || $ut > 2)
+                $this->jsonOutput(3 , '会员类型不正确!');
+
+        $type = (int)$form->type;
+        if ($type < 1 || $type > 2)
+                $this->jsonOutput(4 , '商品类型错误');
+
+        if ((int)$form->gid <= 0)
+                $this->jsonOutput(5 , '商品ID错误');
+
+        if ($amount =(int)$form->amount < 1)
+                $this->jsonOutput(6 , '商品数量错误');
+        
+        $pars = array(
+                'amount'				=> $form->amount,
+                'type'					=> $form->type,
+                'gid'					=> $form->gid,
+                'attrs_1_unite_code'	=> (string)$form->attrs_1_unite_code,
+                'attrs_2_unite_code'	=> (string)$form->attrs_2_unite_code,
+                'attrs_3_unite_code'	=> (string)$form->attrs_3_unite_code,
+        );
+        $mid = 0;
+        $gid = $form->gid;
+        if ($type == 1)
+        {
+                //全新商品
+                $model = ClassLoad::Only('Order');/* @var $model Order */
+                $goods = $model->getGoodsList(array($gid));
+                if (!$goods)
+                        $this->jsonOutput(7 , '商品不存在,或者商品状态异常');
+
+                if (empty($goods[$gid]['merchant_id']) || ($mid = $goods[$gid]['merchant_id']) < 0)
+                        $this->jsonOutput(8 , '商品数据有误!');
+        }else{
+                //二手商品
+                $model = ClassLoad::Only('Order');/* @var $model Order */
+                if(!$intro = $model->intro($gid , false))
+                        $this->jsonOutput(9 , '商品不存在,或者商品状态异常');
+
+                if (empty($intro['merchant_id']) || ($mid = $intro['merchant_id']) < 0)
+                        $this->jsonOutput(10 , '商品数据有误!');
+        }
+        $seArray = array('cartNum' => 0);
+        $session = Yii::app()->session;
+        if (isset($session[self::CARTKEY]))
+        {
+                $seArray = new ArrayObject($session[self::CARTKEY]);
+                $seArray = $seArray->getArrayCopy();
+                $seArray['cartNum'] = isset($seArray['cartNum']) ? $seArray['cartNum'] : 0;
+        }
+        $key = md5(serialize(array_slice($pars , 1)));
+        //购物车数量
+        $seArray['cartNum'] += isset($seArray['goods'][$mid][$key]) ? 0 : 1;
+        $seArray['goods'][$mid][$key] = $pars;
+        //立即购买
+        if ($select)
+        {
+                $seArray['select'] = array();
+                $seArray['select'][$key] = 1;
+        }
+
+        $session[self::CARTKEY] = $seArray;
+        return $seArray['cartNum'];
+    }   
+    //（列出购物车的所有产品）=》点击 立即结算
+    public function actionSettle()
+    {
+        //选中商品
+        if ($goods = (array)$this->getPost('goods'))
+        {
+            die(var_dump($goods));
+                if (empty(Yii::app()->session[self::CARTKEY]))
+                {
+                    $this->jsonOutput(1,"当前购物车还没有商品!");
+                }else{
+                    $seArray = array();
+                    $seArray = new ArrayObject(Yii::app()->session[self::CARTKEY]);
+                    $seArray = $seArray->getArrayCopy();
+
+                    $seArray['select'] = array();
+                    foreach ($goods as $k => $v)
+                            $seArray['select'][$k] = 1;
+                    Yii::app()->session[self::CARTKEY] = $seArray;
+                    $this->jsonOutput(0,array('url'=>'order.closing','mes'=>'验证通过,跳转至url进行结算!'));
+                }
+        }else{
+            $this->jsonOutput(1,"请选择商品之后再结算!");
+        }
+    }    
+    //结算
+    public function actionClosing()
+    {
+            $form		= ClassLoad::Only('CartForm');/* @var $form CartForm */
+            $cartData	= empty(Yii::app()->session[self::CARTKEY]) ? array() : Yii::app()->session[self::CARTKEY];
+            $select		= empty($cartData['select']) ? array() : $cartData['select'];	# 选中的商品
+            $carts		= empty($cartData['goods']) ? array() : $cartData['goods'];		# 购物车主数据
+            
+            foreach ($carts as $mid => $merVal)
+            {
+                    foreach ($merVal as $k => $v)
+                    {
+                            if (empty($select[$k]))
+                                    unset($cartData['goods'][$mid][$k]);
+
+                            if (empty($cartData['goods'][$mid]))
+                                    unset($cartData['goods'][$mid]);
+                    }
+            }
+            $totals			= 0;
+            $model			= ClassLoad::Only('Order');/* @var $model Order */
+            $goods			= $model->getCartList($cartData , $totals);
+            $changeLock		= md5(serialize($goods));
+            //无商品返回购物车首页
+            if (!$goods)
+                $this->jsonOutput(1,"当前购物车还没有商品!!");
+
+            $temp = array(
+                    'goods'				=> $goods,
+                    'totals'			=> $totals,
+                    'privilege'			=> $model->getUsablePrivilege($totals),
+                    'reduction'			=> $model->getUsableReduction($totals),
+                    //'form'				=> $form,
+                    'changeLock'		=> $changeLock,
+            );
+            if(!empty($temp))
+                $this->jsonOutput (0,$temp);
+            $this->jsonOutput(2,"未找到相应的数据!");
+    } 
+    /*
+     * 验证 商品是否改变
+     */
+    private function verifyChangeLock($changeLock , &$goods)
+    {
+            $cartData	= empty(Yii::app()->session[self::CARTKEY]) ? array() : Yii::app()->session[self::CARTKEY];
+            $select		= empty($cartData['select']) ? array() : $cartData['select'];	# 选中的商品
+            $carts		= empty($cartData['goods']) ? array() : $cartData['goods'];		# 购物车主数据
+            foreach ($carts as $mid => $merVal)
+            {
+                    foreach ($merVal as $k => $v)
+                    {
+                            if (empty($select[$k]))
+                                    unset($cartData['goods'][$mid][$k]);
+
+                            if (empty($cartData['goods'][$mid]))
+                                    unset($cartData['goods'][$mid]);
+                    }
+            }
+            $model = ClassLoad::Only('Order');/* @var $model Order */
+            $goods = $model->getCartList($cartData);
+
+            return md5(serialize($goods)) == $changeLock;
+    }    
+    /*
+     * (确认)提交订单（包括选择银行卡,一并提交）
+     */
+    public function actionSubmitOrder()
+    {
+        $model = ClassLoad::Only('Order');/* @var $model Order */
+        $form = ClassLoad::Only('CartForm');/* @var $form CartForm */
+        $form->attributes = !empty($_POST) ? $_POST : array();
+        $changeLock = $this->getPost('changeLock');
+        
+        $cartData	= empty(Yii::app()->session[self::CARTKEY]) ? array() : Yii::app()->session[self::CARTKEY];
+        $select		= empty($cartData['select']) ? array() : $cartData['select'];	# 选中的商品
+        $carts		= empty($cartData['goods']) ? array() : $cartData['goods'];		# 购物车主数据  
+        $totals		= 0;
+        
+        $goods	= $model->getCartList($cartData , $totals);
+        //商品已改变
+        if (!$this->verifyChangeLock($changeLock, $goods))
+            $this->jsonOutput(1,"商品已改变,返回重新结算");        
+        if($form->validate())
+        {
+                //创建订单
+                if ($orderSN = $model->createOrders($_POST , $goods , $totals))
+                {
+                        $seArray = new ArrayObject(Yii::app()->session[self::CARTKEY]);
+
+                        $seArray = $seArray->getArrayCopy(); 
+                        foreach ($seArray['select'] as $k => $v)
+                        {
+                                foreach ($seArray['goods'] as $mid => $merVal)
+                                {
+                                        if (isset($merVal[$k]))
+                                                unset($seArray['goods'][$mid][$k]);
+
+                                        if (empty($seArray['goods'][$mid]))
+                                                unset($seArray['goods'][$mid]);
+                                }
+                        }
+
+                        $seArray['cartNum'] -= count($seArray['select']);
+                        unset($seArray['select']);
+                        
+                        Yii::app()->session[self::CARTKEY] = $seArray;
+                        if ($form->payType == 1)
+                        {
+                            $this->jsonOutput(0,array('osn'=>$orderSN,'url'=>'pay.checkOsn','pay'=>'跳转过去需要传入的支付方式'));
+                        }else{
+                            $this->jsonOutput(0,array('osn'=>$orderSN,'url'=>'pay.Cashod','pay'=>'跳转过去需要传入的支付方式'));
+                        }
+                }else{
+                    $this->jsonOutput(1,"订单生成失败!");
+                }
+        }
+    }
+    /*
+     * 点击 货到付款 后 提交订单
+     */
+    public function actionCashod()
+    {
+        $osn  = trim((string)$this->getPost('osn'));
+        $model = ClassLoad::Only('Order');/* @var $model Order */
+        if(empty($osn))
+            $this->jsonOutput (1,"订单号不能为空!");
+        if($info = $model->getOrderInfo($osn)){
+            $this->jsonOutput(0,$info);
+        }else{
+            $this->jsonOutput(2,"未找到当前订单的数据!");
+        }
+    }
+    //（异步请求）修改数量
+    public function actionChangeAmount()
+    {
+        if (!$key = (string)$this->getPost('key'))
+                $this->jsonOutput(1 , '异常!');
+
+        if (($amount = (int)$this->getPost('amount')) < 1)
+                $this->jsonOutput(2 , '数量错误');
+
+        if (!empty(Yii::app()->session[self::CARTKEY]['goods']))
+        {
+                $seArray = new ArrayObject(Yii::app()->session[self::CARTKEY]);
+                $seArray = $seArray->getArrayCopy();
+
+                $currentMID = 0;
+                foreach ($seArray['goods'] as $mid => $merVal)
+                {
+                        if (isset($merVal[$key]['amount']))
+                        {
+                                $currentMID = $mid;
+                                $seArray['goods'][$mid][$key]['amount'] = $amount;
+                                break;
+                        }
+                }
+                Yii::app()->session[self::CARTKEY] = $seArray;
+
+                $model = ClassLoad::Only('Order');/* @var $model Order */
+                if ($list = $model->getCartList($seArray))
+                {
+                        if (isset($list[$currentMID][$key]))
+                        {
+                                $this->jsonOutput(0 , array(
+                                        'final_price'	=> $list[$currentMID][$key]['final_price'],
+                                        'final_total'	=> $list[$currentMID][$key]['final_total'],
+                                        'final_stock'	=> $list[$currentMID][$key]['final_stock'],
+                                        'final_weight'	=> $list[$currentMID][$key]['final_weight'],
+                                ));
+                        }
+                }
+        }
+        $this->jsonOutput(3 , '异常!');
+    }    
+}

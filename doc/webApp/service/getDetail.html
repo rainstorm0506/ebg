@@ -1,0 +1,51 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">服务中心==》具体服务内容</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">service.getDetail</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>id</td>
+			<td>int</td>
+			<td>必</td>
+			<td>当前某个具体服务分类下的内容</td>
+		</tr>		                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "ded6b346650c24b329acf808d9f04a55",
+    "message": [],
+    "data": [
+         {
+            "id": "14",                                         #ID编号
+            "title": "关于e办公",                               #标题
+            "content": "这里是当前分类下的某个ID的具体内容",
+            "is_show": "1",                                     #是否显示 ：0-否，1-是
+            "foot_show": "1",                                   #前端脚部显示 , 1=显示
+            "addtime": "1457940557"                             #发布时间
+        },
+    ]
+}      
+</pre></td>
+		</tr>
+	</table>
+</div>

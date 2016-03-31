@@ -1,0 +1,54 @@
+<style type="text/css">
+	#RegisteredForm_keyword{width: 140px; height: 38px;}
+	.btn-14{height: 38px; line-height: 38px;border: 1px solid #ccc;  border-radius: 3px;  display: inline-block;color: #09f;
+		padding:0 12px;float: left;text-decoration: none;font-size: 100%;}
+	.tbox38{ height: 38px;}
+</style>
+<div class="navigation">
+	<ul>
+	<?php $active = $this->beginWidget('CActiveForm', array('id'=>'append-form','enableAjaxValidation'=>true, 'htmlOptions'=>array('class'=>'form-wraper'))); ?>
+	<li style="border: none; margin: 0 10px; padding: 0; float: left;">
+		<span style="line-height: 38px; margin-right: 10px;">时间区间 :</span>
+		<?php
+		$form->type = isset($form->type) ? (int)$form->type : '';
+		echo $active->dropDownList($form , 'type' , CMap::mergeArray(array(''=>' - 请选择 - ') , array(1=>'注册时间',2=>'登录时间')) , array('class'=>'sbox36'));
+		?>
+	</li>
+	<li style="border: none; margin: 0 10px; padding: 0; float: left;">
+		<?php
+		$form->start_time = $form->start_time ? $form->start_time : '';
+		$active->widget ( 'Laydate', array (
+			'form' => $form,
+			'id' => 'start_time',
+			'name' => 'start_time',
+			'class' => "tbox38 tbox38-1",
+			'style' => 'width:200px'
+		));
+		?>
+		<i>-<i>
+				<?php
+				$form->end_time = $form->end_time ? $form->end_time : '';
+				$active->widget ( 'Laydate', array (
+					'form' => $form,
+					'id' => 'end_time',
+					'name' => 'end_time',
+					'class' => "tbox38 tbox38-1",
+					'style' => 'width:200px'
+				) );
+				?>
+	</li>
+	<li style="border: none;height: 38px;;margin:0 10px; padding: 0; float: left;">
+		<?php
+		$form->keyword = $form->keyword ? $form->keyword : '';
+		echo $active->textField ($form, 'keyword', array('placeholder'=>'手机号码、昵称'), array ('class' => 'search-keyword'));
+		?>
+	</li>
+	<li style="border: none; margin: 0 10px; padding: 0; height: 38px; float: left;">
+		<?php echo CHtml::submitButton('查询' , array('class'=>'btn-14')); ?>
+	</li>
+	<?php $this->endWidget(); ?>
+		<li><?php echo CHtml::link('添加个人会员' , $this->createUrl('user/create') , Views::linkClass('user' , 'create')); ?></li>
+		<li><?php echo CHtml::link('全部列表' , $this->createUrl('user/list') , Views::linkClass('user' , 'list')); ?></li>
+	</ul>
+	<i class="clear"></i>
+</div>

@@ -1,0 +1,257 @@
+<?php
+/**
+ * 订单管理 - 控制器
+ * @author jeson.Q
+ */
+class OrderController extends SController
+{
+	
+	// 订单列表
+	public function actionList()
+	{
+		// 设置访问权限
+		$this->checkUserPurview('order:l');
+		$keyword = $this->getParam('keyword');
+		$searchPost = isset($_POST['OrderForm']) ? $_POST['OrderForm'] : (isset($_GET['status']) ? array('status'=>$_GET['status']) : '');
+		$model = ClassLoad::Only('Order'); /* @var $model Order */
+		// 设置分页
+		$pageNow = $this->getParam('pagenum' , 0);
+		$count = $model->getTotalNumber($searchPost);
+		$page = new CPagination();
+		$page->pageSize = 20;
+		$page->pageVar = 'pagenum';
+		$page->setItemCount($count);
+		$offset = $pageNow >1 ? ($pageNow -1) *$page->pageSize : 0;
+		// 查询列表并 渲染试图
+		$order = $model->getList($searchPost , $offset , $page->pageSize);
+		$this->render('order_list' , array(
+			'order' => $order ,
+			'page' => $page ,
+			'button_search' => isset($_GET['status']) ? $_GET['status'] : '',
+			'is_search' => $searchPost && !isset($_GET['status']) ? ($searchPost['is_self'] || $searchPost['starttime'] || $searchPost['endtime'] || ($searchPost['keyword'] && $searchPost['keyword'] != '支持搜索订单号、商家名称、收货人手机号码') ? 1 : 0) : 0,
+			'searchPost' => $searchPost && !isset($_GET['status']) ? $searchPost : array('is_self'=>'','status'=>'','starttime'=>'','endtime'=>'','keyword'=>'','uid'=>'')
+		));
+	}
+	
+	// 订单列表
+	public function actionChildOrderList()
+	{
+		// 设置访问权限
+		$this->checkUserPurview('order:l');
+		$order = $orderInfo = array();
+		$order_sn = $this->getParam('order_sn');
+		$model = ClassLoad::Only('Order'); /* @var $model Order */
+		if($order_sn){
+			// 查询列表并 渲染试图
+			$order = $model->getChildrenList($order_sn);
+		}
+		$orderInfo = $model->getActiveInfo($order_sn);
+		$this->render('order_split' , array(
+			'order' => $order,
+			'order_sn' => $order_sn,
+			'orderInfo' => $orderInfo,
+			'searchPost' => array('is_self'=>'','status'=>'','starttime'=>'','endtime'=>'','keyword'=>'')
+		));
+	}
+	
+	// 编辑 订单
+	public function actionEdit()
+	{
+		// 设置访问权限
+		//$this->checkUserPurview('order:e');
+		// 加载类 、检查数据
+		$form = ClassLoad::Only('OrderForm'); /* @var $form OrderForm */
+		$this->exitAjaxPost($form);
+		
+		if (!$order_sn = (string)$this->getQuery('order_sn'))
+			$this->error('错误的分类ID');
+		
+		$model = ClassLoad::Only('Order'); /* @var $model Order */
+		if (!$info = $model->getActiveInfo($order_sn))
+			$this->error('栏位不存在!');
+		// 查询列表并 渲染试图
+		$this->render('detail' , array(
+			'form' => $form ,
+			'info' => $info,
+			'searchPost' => array('is_self'=>'','status'=>'','starttime'=>'','endtime'=>'','keyword'=>'')
+		));
+	}
+	
+	//跳转到 相关操作订单页面
+	public function actionShowOption()
+	{
+		$logData = $orderData = $local = $commentList = array(); $linkpage = $order_sn = $express_name = '';
+		if($_GET['type'])
+		{
+			switch ($_GET['type'])
+			{
+				case 'merchant_money': 		$linkpage = 'edit_merchant_money';break;
+				case 'system_memo':			$linkpage = 'system_memo';		break;
+				case 'prepare_goods':		$linkpage = 'prepare_goods';	break;
+				case 'finish_prepare':		$linkpage = 'finish_prepare';	break;
+				case 'send':				$linkpage = 'edit_send';		break;
+				case 'pay':					$linkpage = 'edit_pay';			break;
+				case 'edit_money':			$linkpage = 'edit_money';		break;
+				case 'abolish':				$linkpage = 'edit_abolish';		break;
+				case 'option_abolish':		$linkpage = 'option_abolish';	break;
+				case 'show_abolish':		$linkpage = 'show_abolish';		break;
+				case 'user_receive_goods':	$linkpage = 'user_receive_goods';		break;
+				case 'user_goods_comment':	$linkpage = 'user_goods_comment';		break;
+				case 'back_goods':			$linkpage = 'back_goods';		break;
+				case 'back_money':			$linkpage = 'back_money';		break;
+				default:	break;
+			}
+		}
+		$order_sn = isset($_GET['order_sn']) ? $_GET['order_sn'] : '';
+		$goods_id = isset($_GET['goods_id']) ? $_GET['goods_id'] : '';
+		//查询当前配送方式
+		$order = ClassLoad::Only('Order');/* @var $order Order */
+		$express_name = $order->getExpressName($order_sn);
+		$local = array(
+			'express' => $order->getExpressList(),
+			'order_sn'=> $order_sn,
+			'express_id'	=>$express_name['express_id'],
+			'cancel_title' => $express_name['user_title'],
+			'order_money' => $express_name['order_money'],
+			'pay_type' => $express_name['pay_type'],
+			'express_no' =>$express_name['express_no'],
+			'merchant_money' =>$express_name['merchant_money'],
+			'order_status_id'=>	$express_name['order_status_id'],
+			'system_remark' => $express_name['system_remark'],
+			'goods_id' => $goods_id
+		);
+		if($linkpage == 'user_goods_comment'){
+			//查询订单商品评论列表
+			$commentInfo = $order->getOrderComment($goods_id,$order_sn);
+			$local['commentInfo'] = $commentInfo;
+		}
+		// 查询列表并 渲染试图
+		$this->render($linkpage, $local);
+	}
+	
+	//操作订单 ---发货 
+	public function actionOptionOrder()
+	{
+		$info = '';
+		if($_POST)
+		{
+			$order = ClassLoad::Only('Order');/* @var $order Order */
+			$info = $order->setOrderInfo($_POST);
+			echo $info;
+		}else{
+			echo 0;
+		}
+	}
+	
+	//验证密码
+	public function actionCheckPassword()
+	{
+		$currentUser = array(); $password = '';
+		$password = isset($_POST['password']) ? $_POST['password'] : '';
+		if($password){
+			//获取当前登录用户信息
+			$currentUser = $this->getUser();
+			$user = ClassLoad::Only('Governor');/* @var $user Governor */
+			$info = $user->getUserInfo($currentUser['account']);
+			//判断是否是正确的密码
+			if(!GlobalUser::validatePassword($password , $info['password']))
+				echo 0;
+			else
+				echo 1;
+		}else 
+			echo 0;
+	}
+	
+	/**
+	 * 订单导出excel
+	 * */
+	public function actionOutExcel()
+	{
+		$post = array();
+		$model = ClassLoad::Only('Order');/* @var $model Purchase */
+		$fields = $this->getQuery('fields');
+		$post['starttime'] = $this->getQuery('start_time');
+		$post['endtime']   = $this->getQuery('end_time');
+		$post['keyword']    = $this->getQuery('key');
+		$post['is_self'] = $this->getQuery('is_self');
+		$post['uid'] = $this->getQuery('uid');
+		$list  = $model->outAllByCondition($post,$fields);
+		$title = array();
+		if($fields){
+			$array = explode(',',$fields);
+			for ($i = 0;$i < count($array);$i++){
+				switch ($array[$i]){
+					case 'o.order_sn'			:$title[$i] = '订单号';break;
+					case 'o.create_time'		:$title[$i] = '下单时间';break;
+					case 's.back_title'			:$title[$i] = '订单状态';break;
+					case 'opl.pay_port'			:$title[$i] = '订单支付方式';break;
+					case 'o.is_pay'				:$title[$i] = '订单支付状态';break;
+					case 'o.order_money'		:$title[$i] = '订单总金额';break;
+					case 'um.store_name'		:$title[$i] = '商家';break;
+					case 'um.mer_name'			:$title[$i] = '商家联系人';break;
+					case 'u.phone'				:$title[$i] = '商家联系方式';break;
+					case 'g.goods_num'			:$title[$i] = '商品编号';break;
+					case 'og.goods_title'		:$title[$i] = '商品名称';break;
+					case 'og.num'				:$title[$i] = '商品数量';break;
+					case 'og.goods_weight'		:$title[$i] = '商品重量';break;
+					case 'og.unit_price'		:$title[$i] = '商品价格';break;
+					case 'o.freight_money'		:$title[$i] = '客户所付运费';break;
+					case 'o.merchant_money'		:$title[$i] = '商家所付运费';break;
+					case 'oe.cons_name'			:$title[$i] = '收货人';break;
+					case 'oe.cons_phone'		:$title[$i] = '收货人联系方式';break;
+					case 'oe.cons_address'		:$title[$i] = '收货地址';break;
+					case 'oe.user_remark'		:$title[$i] = '用户备注';break;
+					case 'oe.system_remark'		:$title[$i] = '系统备注';break;
+					default: break;
+				}
+				
+			}
+		}else{
+			$title = array('订单号','下单时间','订单状态','订单支付方式','订单支付状态','订单总金额','商家','商家联系人','商家联系方式','商品编号',
+					'商品名称','商品数量','商品重量','商品价格','客户所付运费','商家所付运费','收货人','收货人联系方式','收货地址','用户备注','系统备注');
+		}
+		foreach ($list as $key => $val){
+			if($val['is_pay'] == 1){
+				if(isset($val['pay_port']))
+					switch ($val['pay_port']){
+						case '1'	:$list[$key]['pay_port'] = '支付宝';break;
+						case '2'	:$list[$key]['pay_port'] = '银联';break;
+						case '3'	:$list[$key]['pay_port'] = '财付通 ';break;
+						case '4'	:$list[$key]['pay_port'] = '货到付款 ';break;
+						case '5'	:$list[$key]['pay_port'] = '邮政汇款';break;
+					}
+			}else{
+				if($val['pay_type'] == 2){
+					$list[$key]['pay_port'] = '货到付款';
+				}else{
+					$list[$key]['pay_port'] = '未支付';
+				}
+				
+			}
+			if($val['is_pay'] == 1){
+				$list[$key]['is_pay'] = '已支付';
+			}else{
+				$list[$key]['is_pay'] = '未支付';
+			}
+			if(isset($val['create_time'])){
+				$list[$key]['create_time'] = date('Y-m-d H:i:s',$val['create_time']);
+			}
+			unset($list[$key]['pay_type']);
+		}
+		//导出excel
+		PHPexcelout::OutExcel($title,$list,'订单信息');
+	}
+	
+	/**
+	 * 订单导出excel
+	 * */
+	public function actionShowFields()
+	{
+		$post['start_time'] = $this->getQuery('start_time');
+		$post['end_time']   = $this->getQuery('end_time');
+		$post['key']    = $this->getQuery('key');
+		$post['is_self'] = $this->getQuery('is_self');
+		$post['uid'] = $this->getQuery('uid');
+		$this->render('fields',array('post'=>$post));
+	}
+}

@@ -1,0 +1,168 @@
+<?php
+/**
+ * 活动管理 - 控制器
+ * @author GL
+ */
+class ActiveController extends SController
+{
+	
+	public function actionIndex()
+	{
+		$app = Yii::app()->request;
+
+		$title = $app->getParam('title');
+
+		$actmodel =  ClassLoad::Only("Active");
+		$list	  = $actmodel->getActiveList();
+
+
+	}
+	/**
+	 * 创建活动
+	 * */
+	public function actionAddAct()
+	{
+		$app   = Yii::app()->request;
+		//$type  = $this->getQuery('type');
+		$activeform = ClassLoad::Only('ActiveForm');
+		$activemodel = ClassLoad::Only('Active');
+		if($this->isPost())
+		{
+			$ActiveForm  =  $app->getParam('ActiveForm');
+			$userlimitce = $app->getParam('userlimitce');
+			$userdaylimit = $app->getParam('userdaylimit');
+			//$buynummin = $app->getParam('buynummin');
+			//$buynummax = $app->getParam('buynummax');
+			//$promotiontype = $app->getParam('promotiontype');
+			$remark		= $app->getParam('remark');
+			$isxg		= $app->getParam('isxg');
+			/*echo '<pre>';
+			print_r($_POST);
+			exit;*/
+			if(empty($ActiveForm['name']))
+			{
+				$this->error('名称不能为空');
+			}
+			if(empty($ActiveForm['type']))
+			{
+				$this->error('类型不能为空');
+			}
+			if(empty($userlimitce))
+			{
+				$this->error('总限购次数');
+			}
+			if(empty($userdaylimit))
+			{
+				$this->error('每天限购次数');
+			}
+			//商品信息
+			$gid		= $app->getParam('gids');
+			$price		= $app->getParam('price');
+			$nums		= $app->getParam('nums');
+			$onece		= $app->getParam('onece');
+			//时间信息
+			$start		= $app->getParam('start');
+			$end		= $app->getParam('end');
+			//分值
+			$title		= $ActiveForm['name'];
+			$type 		= $ActiveForm['type'];
+			$userexp 	=  $ActiveForm['userexp'];
+			$companyexp =  $ActiveForm['companyexp'];
+			if($type == 1)
+			{
+				$mgh = $app->getParam('mgh');
+			}
+			if($type == 2)
+			{
+				$zkl = $app->getParam('zkl');
+			}
+			$activedata = array(
+				'title'=>$title,
+				'type'=>$type,
+				'userexp'=>$userexp,
+				'companyexp'=>$companyexp,
+				'userlimitce'=> $userlimitce,
+				'userdaylimit'=> $userdaylimit,
+				'promotion'=>!empty($zkl)&&isset($zkl)?$zkl:'',
+				'isxg'=>$isxg,
+				'remark'=>$remark,
+			);
+			$aid = $activemodel->add($activedata);
+			if($aid)
+			{
+				//处理商品
+				if(!empty($gid))
+				{
+					$activemodel->addactgoods($aid,$gid,$price,$nums,$onece);
+				}
+				//处理属性
+				if(!empty($start) && !empty($end))
+				{
+					$attr = array();
+					if($mgh)
+					{
+						$attr['name'] = 'timepoint';
+						$attr['val']  = $mgh;
+					}
+					$activemodel->addactattr($aid,$start,$end,$attr);
+				}
+			}
+		}
+		else
+		{
+			$userlayer 		= ClassLoad::Only("UserLayerSet");
+			$usertplist 	= $userlayer->getList(1);
+			$companytplist  = $userlayer->getList(2);
+				$usertp = $companytp = array();
+				foreach($usertplist as $key=>$val)
+				{
+					$usertp[$val['id']] = $val['name'];
+				}
+				foreach($companytplist as $key=>$val)
+				{
+					$companytp[$val['id']] = $val['name'];
+				}
+				$data = array(
+						'activeform'=>$activeform,
+						'usertype' => $usertp,
+						'companytype' => $companytp
+				);
+				$this->render('mgadd',$data);
+		}
+
+	}
+	/**
+	 * 能参与活动商品的列表
+	 * */
+	public function actionJoinGoods()
+	{
+		$title = $this->getParam('title');
+		$gid = $this->getParam('gid');
+		$gtype = $this->getParam('gtype');
+		$pmin = $this->getParam('pmin');
+		$pmax = $this->getParam('pmax');
+		$start = $this->getParam('start');
+		$end = $this->getParam('end');
+		$classone = $this->getParam('classone');
+		$classtwo = $this->getParam('classtwo');
+		$classthree = $this->getParam('classthree');
+		$page = $this->getParam('pageNum');
+		$page = !empty($page)?$page:1;
+		$pagesize = !empty($pagesize)?$pagesize:1;
+		$actgoods = ClassLoad::Only('ActGoods');
+
+		$res 	=  $actgoods->getActGoodsList($title,$gid,$gtype,$pmin,$pmax,$start,$end,$classone,$classtwo,$classthree,$page,$pagesize);
+
+		echo json_encode($res);
+	}
+	/**
+	 * 选中的商品信息
+	 * */
+	public function actionCheckedGoods()
+	{
+		$actgoods = ClassLoad::Only('ActGoods');
+		$ids = $this->getParam('ids');
+		$list = $actgoods->getCheckedGoods($ids);
+		echo json_encode($list);
+	}
+}

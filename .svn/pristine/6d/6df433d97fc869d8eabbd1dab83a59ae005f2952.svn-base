@@ -1,0 +1,291 @@
+<?php
+class Goods extends WebApiModels
+{
+	/**
+	 * 商品列表
+	 */
+	public function getList($search , $pageNow , $pageSize)
+	{
+		$pageNow=($pageNow-1)*$pageSize;
+		$SQL = "WHERE shelf_id=410 AND status_id=401 AND delete_id=0";
+		//商家
+		if($search['merchant_id'])
+			$SQL.=" AND merchant_id={$search['merchant_id']}";
+
+		//分类
+		if($search['classOne'] > 0)
+			$SQL .= " AND class_one_id={$search['classOne']}";
+		if($search['classTwo'] > 0)
+			$SQL .= " AND class_two_id={$search['classTwo']}";
+		if($search['classThree'] > 0)
+			$SQL .= " AND class_three_id={$search['classThree']}";
+
+		// 自营商品
+		if($search['self'] === 1)
+			$SQL .= ' AND is_self=1';
+
+		//品牌
+		if($search['brand_id'] > 0)
+			$SQL .= ' AND brand_id=' . $search['brand_id'];
+
+		// 价格范围
+		if($search['priceStart'] > 0 && $search['priceEnd'] > 0)
+			$SQL .= " AND (min_price<={$search['priceEnd']} AND max_price>={$search['priceStart']} OR (sale_price>={$search['priceStart']} AND sale_price<{$search['priceEnd']}))";
+
+		// 关键字
+		if($search['keyword'])
+			$SQL .= " AND title LIKE {$this->quoteLikeValue($search['keyword'])}";
+
+		// 综合排序
+		$orderBy = "ORDER BY last_time DESC";
+		// 排序
+		if($search['order'] && $search['by'])
+		{
+			$by = $search['by'] == 'asc' ? 'ASC' : 'DESC';
+			switch($search['order'])
+			{
+				// 价格
+				case 'price' :
+					$orderBy = " ORDER BY retail_price {$by}";
+					break;
+				// 销量
+				case 'detail' :
+					$orderBy = " ORDER BY sales {$by}";
+					break;
+				// 上架时间
+				case 'putaway' :
+					$orderBy = " ORDER BY shelf_time {$by}";
+					break;
+			}
+		}
+		if($search['attrs_val'])
+		{
+			foreach($search['attrs_val'] as $v)
+			{
+				$SQL.=empty($v)?'': " AND (attrs_1_unite_code={$v} OR attrs_2_unite_code={$v} OR attrs_3_unite_code={$v})";
+			}
+		}
+		return $this->queryAll("SELECT id,title,is_self,cover,base_price,sales,collect,retail_price,min_price FROM goods {$SQL} {$orderBy} LIMIT {$pageNow},{$pageSize}");
+	}
+	/**
+	 * 获取商品分类详情
+	 */
+	public function getClassInfo($id)
+	{
+		return $this->queryRow("SELECT * FROM goods_class WHERE id={$id}");
+	}
+	/**
+	 * 商品详情
+	 */
+	public function getInfo($id)
+	{
+		$row = $this->queryRow("SELECT * FROM goods WHERE id={$id} AND shelf_id=410 AND status_id=401 AND delete_id=0");
+                if($row){
+                    $goodsAttrs = GlobalGoods::getAttrs($id);
+                    $row['img'] = $this->queryAll("SELECT src,attrs_unite_code FROM goods_photo WHERE goods_id={$id} ORDER BY rank ASC");
+                    //当前 商品类型下面的 属性名称
+                    //$sql = "SELECT title FROM goods_args WHERE class_one_id={$row['class_one_id']} AND class_two_id={$row['class_two_id']} AND class_three_id={$row['class_three_id']} AND parent_id=0 LIMIT 1";
+//                    $sql = "SELECT title FROM goods_attrs WHERE class_one_id={$row['class_one_id']} AND class_two_id={$row['class_two_id']} AND class_three_id={$row['class_three_id']} AND parent_unite_code='' LIMIT 1";
+//                    $res = $this->queryRow($sql);
+//                    $a = !empty($res) ? $res['title'] : "暂无属性";                    
+//                    $sql = "SELECT attrs_1_unite_code,attrs_2_unite_code,attrs_3_unite_code,attrs_1_value,attrs_2_value,attrs_3_value FROM `goods_join_attrs` WHERE goods_id={$id} LIMIT 1";
+//                    $row['goods_attrs'][$a] = $this->queryRow($sql);
+                    $row['final_attrs'] = $this->getGoodsAttrs($this->jsonDnCode($row['attrs']), $goodsAttrs, $row['class_one_id'], $row['class_two_id'], $row['class_three_id']);
+                    $row['attrs'] = $this->jsonDnCode($row['attrs']);
+                    foreach ($row['attrs']["attrs"] as $k=>$v) {
+                        $sql = "SELECT title FROM goods_attrs WHERE unite_code='{$k}' AND parent_unite_code=''";
+                        $res = $this->queryRow($sql);
+                        $title = !empty($res) ? $res['title'] : "暂无属性名";
+                        $row['attrs']["attrs"][$title] = $v;
+                        unset($row['attrs']["attrs"][$k]);
+                    }  
+                    unset($row['args']);
+                }
+		return $row;
+	}
+	/**
+	 * 获得商品信息
+	 *
+	 * @param		int		$gid		商品ID
+	 * @param		bool	$attrVal	是否更新 attrs.attrVal中的数据
+	 */
+	public function getGoodsInfo($gid , $attrVal = false)
+	{
+		if ($gid < 1)
+			return array();
+		
+		if ($tmp = $this->queryRow("SELECT * FROM goods WHERE id={$gid}"))
+		{
+			$tmp['amount_ratio']		= $this->jsonDnCode($tmp['amount_ratio']);
+			$tmp['user_layer_ratio']	= $this->jsonDnCode($tmp['user_layer_ratio']);
+			$tmp['join_goods']			= $this->jsonDnCode($tmp['join_goods']);
+			$tmp['attrs']				= $this->jsonDnCode($tmp['attrs']);
+			unset($tmp['args']);
+			
+			$ats = array();
+			if (!empty($tmp['attrs']['attrs']))
+			{
+				foreach ($tmp['attrs']['attrs'] as $k => $v)
+				{
+					if (empty($v))
+						continue;
+					
+					$child = array();
+					foreach ($v as $kb => $vb)
+						$child[] = array('id'=>$kb , 'value'=>$vb);
+					
+					$ats['attrs'][] = array('id'=>$k , 'child'=>$child);
+				}
+			}
+			
+			# 更新 attrs.attrVal中的数据
+			if (!empty($tmp['attrs']['attrVal']) && $attrVal && ($attrs = GlobalGoods::getAttrs($gid , true)))
+			{
+				foreach ($attrs as $asv)
+				{
+					$code1 = $asv['attrs_1_unite_code'];
+					$code2 = $asv['attrs_2_unite_code'];
+					$code3 = $asv['attrs_3_unite_code'];
+						
+					if ($code1 && $code2 && $code3)
+					{
+						if ($asv['stock'] == -999)
+						{
+							$tmp['attrs']['attrVal']['stock'][$code1][$code2][$code3] = -999;
+						}else{
+							$tmp['attrs']['attrVal']['stock'][$code1][$code2][$code3] = $asv['stock'];
+						}
+					}elseif ($code1 && $code2){
+						if ($asv['stock'] == -999)
+						{
+							$tmp['attrs']['attrVal']['stock'][$code1][$code2] = -999;
+						}else{
+							$tmp['attrs']['attrVal']['stock'][$code1][$code2] = $asv['stock'];
+						}
+					}elseif ($code1){
+						if ($asv['stock'] == -999)
+						{
+							$tmp['attrs']['attrVal']['stock'][$code1] = -999;
+						}else{
+							$tmp['attrs']['attrVal']['stock'][$code1] = $asv['stock'];
+						}
+					}
+				}
+				unset($tmp['attrs']['attrVal']['inStock']);
+				
+				if (!empty($tmp['attrs']['attrVal']['price']) && !empty($tmp['attrs']['attrVal']['stock']) && !empty($tmp['attrs']['attrVal']['weight']))
+				{
+					$ai = $bi = $ci = -1;
+					foreach ($tmp['attrs']['attrVal']['price'] as $ak => $av)
+					{
+						$ai++;
+						if (is_array($av))
+						{
+							$bi = -1;
+							foreach ($av as $bk => $bv)
+							{
+								$bi++;
+								if (is_array($bv))
+								{
+									$ci = -1;
+									foreach ($bv as $ck => $cv)
+									{
+										$ci++;
+										$ats['attrVal']['price'][$ai]['id'] = $ak;
+										$ats['attrVal']['price'][$ai]['child'][$bi]['id'] = $bk;
+										$ats['attrVal']['price'][$ai]['child'][$bi]['child'][$ci] = array('id'=>$ck , 'value'=>$cv);
+										
+										$ats['attrVal']['stock'][$ai]['id'] = $ak;
+										$ats['attrVal']['stock'][$ai]['child'][$bi]['id'] = $bk;
+										$ats['attrVal']['stock'][$ai]['child'][$bi]['child'][$ci] = array('id'=>$ck , 'value'=>$tmp['attrs']['attrVal']['stock'][$ak][$bk][$ck]);
+										
+										$ats['attrVal']['weight'][$ai]['id'] = $ak;
+										$ats['attrVal']['weight'][$ai]['child'][$bi]['id'] = $bk;
+										$ats['attrVal']['weight'][$ai]['child'][$bi]['child'][$ci] = array('id'=>$ck , 'value'=>$tmp['attrs']['attrVal']['weight'][$ak][$bk][$ck]);
+									}
+								}else{
+									$ats['attrVal']['price'][$ai]['id'] = $ak;
+									$ats['attrVal']['price'][$ai]['child'][$bi] = array('id'=>$bk , 'value'=>$bv);
+									
+									$ats['attrVal']['stock'][$ai]['id'] = $ak;
+									$ats['attrVal']['stock'][$ai]['child'][$bi] = array('id'=>$bk , 'value'=>$tmp['attrs']['attrVal']['stock'][$ak][$bk]);
+									
+									$ats['attrVal']['weight'][$ai]['id'] = $ak;
+									$ats['attrVal']['weight'][$ai]['child'][$bi] = array('id'=>$bk , 'value'=>$tmp['attrs']['attrVal']['weight'][$ak][$bk]);
+								}
+							}
+						}else{
+							$ats['attrVal']['price'][$ai] = array('id'=>$ak , 'value'=>$av);
+							$ats['attrVal']['stock'][$ai] = array('id'=>$ak , 'value'=>$tmp['attrs']['attrVal']['stock'][$ak]);
+							$ats['attrVal']['weight'][$ai] = array('id'=>$ak , 'value'=>$tmp['attrs']['attrVal']['weight'][$ak]);
+						}
+					}
+				}
+			}
+			
+			$tmp['attrs'] = $ats;
+		}
+		return $tmp;
+	}        
+        /*
+         * 根据产品ID编号得到 具体的属性
+         */
+	public function getGoodsAttrs(array $args , array $goodsAttrs , $one , $two , $three)
+	{
+		if (!$goodsAttrs)
+			return array();
+		
+		if (empty($args['attrs']))
+			return array();
+		
+		if (!$classAttrs = GlobalGoodsAttrs::getClassAttrs($one , $two , $three))
+			return array();
+		
+		$temp = array();
+		foreach ($args['attrs'] as $ak => $av)
+		{
+			if (empty($classAttrs[$ak]))
+				continue;
+			$temp[$ak]['title'] = $classAttrs[$ak]['title'];
+			foreach ($av as $bk => $bv)
+			{
+				if (empty($classAttrs[$ak]['child'][$bk]))
+					continue;
+				$temp[$ak]['child'][$bk] = $classAttrs[$ak]['child'][$bk]['title'];
+			}
+			
+			if (empty($temp[$ak]['child']))
+				unset($temp[$ak]);
+		}
+		#print_r($goodsAttrs);exit;
+		return $temp;
+	}
+	/**
+	 * 判断是否收藏过此商品
+	 */
+	public function isCollect($id)
+	{
+		if($user_id=$this->getUid())
+			return 0;
+
+		return $this->queryScalar("SELECT COUNT(*) FROM user_collect WHERE type=1 AND user_id={$user_id} AND collect_id={$id}");
+	}
+	/**
+	 * 首页办公商品列表
+	 */
+	public function getHomeList()
+	{
+		$arr = array();
+
+		// 为了前端测试添加了  查询条件  AND is_self = '1'
+		$arr['sb'] = $this->queryAll("SELECT id,title,is_self,cover,base_price,min_price FROM `goods` WHERE class_one_id = '2' AND is_self = '1' AND `shelf_id` = '410' ORDER BY `rank` DESC LIMIT 3");
+
+		$arr['wj'] = $this->queryAll("SELECT id,title,is_self,cover,base_price,min_price FROM `goods` WHERE class_one_id = '1' AND is_self = '1' AND `shelf_id` = '410' ORDER BY `rank` DESC LIMIT 2");
+
+		$arr['jj'] = $this->queryAll("SELECT id,title,is_self,cover,base_price,min_price FROM `goods` WHERE class_one_id = '3' AND is_self = '1' AND `shelf_id` = '410' ORDER BY `rank` DESC LIMIT 1");
+
+		$arr['hc'] = $this->queryAll("SELECT id,title,is_self,cover,base_price,min_price FROM `goods` WHERE class_one_id = '5' AND is_self = '1' AND `shelf_id` = '410' ORDER BY `rank` DESC LIMIT 1");
+
+		return $arr;
+	}
+}

@@ -1,0 +1,44 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main>
+		<div class="site-wrap-address"><i></i><p>请确认收货地址</p><s class="tr-r"><i></i><b></b></s><a href="#"></a></div>
+		
+		<div class="site-wrap-address site-wrap-a">
+			<i></i>
+			<div>
+				<header><h6>收货人：刘三姐</h6><span>13565656525</span></header>
+				<p>收货地址：四川省成都市武侯区丰德国际广场B1座16楼</p>
+			</div>
+			<s class="tr-r"><i></i><b></b></s>
+			<a href="#"></a>
+		</div>
+		
+		<section class="order-confirm-wrap">
+			<div class="mer-wrap">
+				<figure><img ng-src="{{imgPath}}/temp/15.png"></figure>
+				<p>东华电脑城</p>
+			</div>
+			<div class="order-goods">
+				<figure><img ng-src="{{data.cover}}"></figure>
+				<section>
+					<h3 ng-bind="data.title">华硕X552MJ2840</h3>
+					<div><span>尺寸：15寸</span><span>颜色：白色</span></div>
+					<p class="txt-1"><em>积分：</em><span ng-bind="data.points"></span></p>
+				</section>
+			</div>
+		</section>
+		
+		<ul class="confirm-list">
+			<li><h6>配送方式</h6>
+				<nav class="choice-nav">
+					<a href="javascript:;" class="current"><i></i><span>上门自提</span></a>
+					<a href="javascript:;"><i></i><span>市内配送</span></a>
+				</nav>
+			</li>
+			<li class="txt-1"><h6>自提地点</h6><div>成都市一环路南二段15号东华电脑城北楼104</div></li></li>
+		</ul>
+		<div class="h40px"></div>
+		
+	</main>
+	<a class="btn-1" href="javascript:;" ng-click="pay.openPay()">确定</a>

@@ -1,0 +1,25 @@
+<?php
+class ActFree extends SModels
+{
+	/**
+	 * 得到列表的总数
+	 */
+	public function getGoodsCount()
+	{
+		return (int)$this->queryScalar("SELECT COUNT(*) FROM act_buy_free");
+	}
+	/**
+	 * 列表
+	 * @param		int			$offset		偏移量
+	 * @param		int			$rows		读取条数
+	 * @param		int			$total		总行数
+	 * @return		array
+	 */
+	public function getList($offset , $rows , $total)
+	{
+		if (!$total || $offset>=$total)
+			return array();
+
+			return $this->queryAll("SELECT * FROM act_buy_free LIMIT {$offset},{$rows}");
+	}
+}

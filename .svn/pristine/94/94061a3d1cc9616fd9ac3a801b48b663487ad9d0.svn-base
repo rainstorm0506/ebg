@@ -1,0 +1,59 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- 购物车为空 ---------->
+	<main class="shopping-null" ng-if="dataLength <= 0">
+		<i></i>
+		<p>您的购物车还是空的哦！</p>
+		<a href="#">去购买</a>
+	</main>
+	<!---------- 购物车不为空 ---------->
+	<main ng-if="dataLength > 0">
+		<ul class="shopping-list" shopping-list>
+			<li ng-repeat="(key,$val) in data" class="current animated" ng-class="{fadeInUp:true}">
+				<header>
+					<label class="radio" ng-class="{current:model.store[key]}">
+						<i><b></b></i>
+						<input type="checkbox" name="cartStore-{{key}}" value="$val.merchant_id" ng-init="model.store[key]=false" ng-model="model.store[key]" ng-change="storeChange(key)">
+					</label>
+					<h3><s></s>{{$val.store_name}}</h3>
+					<a ng-if="isCartEditor[key] && !isCartEditorAll" href="javascript:;" ng-click="editorComplete(key)">完成</a>
+					<a ng-if="!isCartEditor[key] && !isCartEditorAll" href="javascript:;" ng-click="cartEditor(key)">编辑</a>
+				</header>
+				<section ng-repeat="(i,$p) in $val.goods" repeat-finish="finish()">
+					<div>
+						<section>
+							<label class="radio" ng-class="{current:model.goods[key][i]}">
+								<i><b></b></i>
+								<input class="money" type="checkbox" name="cartGoods-{{key}}-{{$index}}" value="{{$p.final_price * $p.amount}}" ng-init="model.goods[key][i] = false" ng-model="model.goods[key][i]" ng-change="goodsChange(key)">
+							</label>
+							<figure><img ng-src="{{$p.cover}}"></figure>
+							<article>
+								<calculate flag="cart" ng-init="calculate.cNumber=$p.amount;calculate.key=i" ng-show="isCartEditor[key] || isCartEditorAll"></calculate>
+								<h6 ng-if="!isCartEditor[key] && !isCartEditorAll" ng-bind="$p.title"></h6>
+								<p ng-bind="$p.attrs"></p>
+								<footer ng-if="!isCartEditor[key] && !isCartEditorAll"><p ng-bind="$p.final_price | currency:'￥'"></p><span>x{{calculate.cNumber}}</span></footer>
+							</article>
+						</section>
+					</div>
+					<a ng-if="isCartEditor[key] && !isCartEditorAll" href="javascript:;" ng-click="delCart(key,i,$p.id)">删除</a>
+				</section>
+			</li>
+		</ul>
+		<div class="h40px"></div>
+	</main>
+	<!---------- 结算 ---------->
+	<section class="total-wrap" ng-if="dataLength > 0 && !isEditor">
+		<label class="radio" ng-class="{current:model.all}"><i><b></b></i><input type="checkbox" name="all" ng-init="model.all = false" ng-model="model.all" ng-change="selectAll()"></label><span>全选</span>
+		<p><span>合计：</span><em ng-bind="totalMoney| currency:'￥'"></em></p>
+		<a class="b-1" href="#">结算</a>
+	</section>
+	<section class="total-wrap total-wrap-1" ng-if="dataLength > 0 && isEditor">
+		<label class="radio" ng-class="{current:model.all}"><i><b></b></i><input type="checkbox" name="all" ng-init="model.all = false" ng-model="model.all" ng-change="selectAll()"></label><span>全选</span>
+		<a class="b-2" href="javascript:;" ng-if="isEditorAll">移到收藏夹</a>
+		<a class="b-1" href="javascript:;" ng-if="isEditorAll" ng-click="delCartAll()">删除</a>
+		<a class="b-1" href="javascript:;" ng-if="isEditorAll" ng-click="editorAllComplete()">完成</a>
+		<a class="b-1" href="javascript:;" ng-if="!isEditorAll" ng-click="editorAll()">编辑全部</a>
+	</section>
+	<!---------- nav ---------->
+	<public-nav></public-nav>
+	<promt></promt>

@@ -1,0 +1,60 @@
+/* ================================ *** 页面中经常出现的部分 *** ================================ */
+// ======================================================================== common.less
+[class^='sm-wrap']{.mlr(3%);}
+.sm-wrap-p{.pb(@20px);}
+
+// ----------------------------------
+.radio:extend(.rel_m,.tc){.m_tr(24/@b*@x,3%);
+	i{.ww(20/@b);.bor(#d2d2d2,2/@b);.db;
+		&,b{.border-radius(100%);}
+	}
+	&.current{
+		i{.bor_c(@mc);}
+		b:extend(.rel_m){.bc_ww(8/@b,@mc);.dk;.mt(8/@b*@x);.vt;}
+	}
+	input{.abs_lt(0,0,-1);.vh;}
+}
+// ----------------------------------
+.order-list:extend(.f22px){
+	li,footer{.tbor_ddd;.bbor_ddd;}
+	li:extend(.bc_fff){.mb(20/@a);
+		>header:extend(.flexbox all){.hh(70/@a);.bbor_ddd;.plr(3%);
+			h3:extend(.flex-1){.h;
+				*{.fl;}
+			}
+			span{.fs(20/@a);}
+			i:extend(.brn_bsc,.rel_m){.bi_ww(24/@a,ico-11);.m_tr(24/@a*@x,2%);}
+			b{.ss;.ml(1%);.lh(74/@a);}
+			>span{.c(#ff7041);}
+			&+section{.tbor0;}
+		}
+	}
+	section:extend(.flexbox,.rel){.ptb(10/@a);.mlr(3%);.tbor_ddd;
+		>div:extend(.flex-1){
+			p{.c_999;.lh;.mt(10/@a);}
+		}
+		>a:extend(.a-click){}
+	}
+	figure{.ww(120/@a);.mr(2.5%);}
+	h4{.lh(150%);.h(80/@a);}
+	aside{.ml(2%);.lh(150%);.tr;
+		p{.ar}
+		div{.c_999;.mt(10/@a);}
+	}
+	footer{.tr;.p(20/@a 3%);
+		&:last-child{.bbor0;}
+		span{.ar;}
+		i:extend(.rel){.fs(20/@a);.ml(1%);.t(-2/@n)}
+	}
+	nav{.p(15/@a 3%);.tr;
+		a:extend(.tc){.dk;}
+	}
+	[class^='box-']:extend(.flexbox){.plr(3%);
+		h6:extend(.flex-1){}
+		p{.ar;}
+	}
+	.box-1{.tbor_ddd;.pt(15/@a);.mb(6/@a);}
+	.box-2{.fs(28/@a);.pb(15/@d);
+		p{.c(@mc);}
+	}
+}

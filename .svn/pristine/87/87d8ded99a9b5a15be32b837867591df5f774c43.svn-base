@@ -1,0 +1,193 @@
+<?php
+
+/**
+ * 活动 模型类
+ * @author GL
+ * 
+ * @table content
+ */
+class Active extends SModels {
+	/**
+	 * 获取活动列表
+	 * */
+	public function getActiveList($data,$page,$pagesize)
+	{
+		$userlayer 		= ClassLoad::Only("UserLayerSet");
+		$sql 			= 'SELECT l.* FROM　`act_list` as l LEFT JOIN `act_attribute` as at ON l.`id` = ar.aid';
+		$where 			= ' WHERE 1=1';
+		if($data)
+		{
+			if($data['title'])
+			{
+				$where .= ' AND l.`title` LIKE "%'. $data['title'] .'%"';
+			}
+			if($data['id'])
+			{
+				$where .= ' AND l.`id`= '.$data['id'];
+			}
+			if($data['type'])
+			{
+				$where .= ' AND l.`type`= '.$data['type'];
+			}
+			if($data['status'])
+			{
+				$where .= ' AND l.`display`= '.$data['status'];
+			}
+			if(!empty($data['start']))
+			{
+				$where .= ' AND (at.`starttime` > '.$data['start'].' or at.`starttime` = '.$data['start'].')';
+			}
+			if(!empty($data['end']))
+			{
+				$where .= ' AND (at.`endtime` < '.$data['end'].' or at.`endtime` = '.$data['end'].')';
+			}
+		}
+		$where .= ' ORDER BY l.id DESC GROUP BY l.id';
+		$count =  $this->queryRow('SELECT count(l.`id`) as num FROM `act_list` as l LEFT JOIN `act_attribute` as at ON l.`id` = ar.aid'.$where);
+		$statrlimit = ($page-1)*$pagesize;
+		$totalPage = $count['num']/$pagesize;
+		$sql  .= $where.' LIMIT '.$statrlimit.','.$pagesize;
+		$list = $this->queryAll($sql);
+
+		foreach($list as $key=>$val)
+		{
+			if($val['type'] == 1)
+			{
+				$list[$key]['type'] = '秒杀';
+			}
+			if($val['type'] == 2)
+			{
+				$list[$key]['type'] = '折购';
+			}
+			if($val['type'] == 3)
+			{
+				$list[$key]['type'] = '特价专区';
+			}
+			if($val['userexp']=='all' && $val['companyexp']=='all')
+			{
+				$list[$key]['exp'] = '所有人可参加';
+			}
+			if($val['userexp']=='all' && $val['companyexp']=='no')
+			{
+				$list[$key]['exp'] = '所有个人会员可参加';
+			}
+			if($val['userexp']=='no' && $val['companyexp']=='all')
+			{
+				$list[$key]['exp'] = '所有企业会员可参加';
+			}
+			if($val['userexp']=='no' && $val['companyexp'] !='all' && $val['companyexp'] !='no')
+			{
+				$info = $userlayer->getInfo($val['companyexp']);
+				$list[$key]['exp'] = $info['name'];
+			}
+			if($val['companyexp']=='no' && $val['userexp'] !='all' && $val['userexp'] !='no')
+			{
+				$info = $userlayer->getInfo($val['userexp']);
+				$list[$key]['exp'] = $info['name'];
+			}
+			if($val['display'] == 1)
+			{
+				$list[$key]['status'] = '未开始';
+			}
+			if($val['display'] == 2)
+			{
+				$list[$key]['status'] = '已开始';
+			}
+			if($val['display'] == 3)
+			{
+				$list[$key]['status'] = '已结束';
+			}
+			$times = $this->queryAll('SELECT starttime,endtime FROM `act_attribute`  WHERE aid = '.$val['id']);
+			$list[$key]['date'] = $times;
+		}
+		$data = array(
+				'totalPage'=>$totalPage,
+				'total' => $count['num'],
+				'list' => $list,
+		);
+
+		return $data;
+	}
+	/**
+	 * 添加活动
+	 * */
+	public function add($data)
+	{
+
+		$this -> insert('act_list',$data);
+
+		return $this->getInsertId();
+	}
+	/**
+	 * 添加活动商品
+	 * */
+	public function addactgoods($aid,$gid,$price,$nums,$onece)
+	{
+		$data = array();
+		$data['aid'] = $aid;
+		$i = 1;
+		foreach($gid as $key=>$val)
+		{
+			$data['gid']      = $val;
+			$data['limitnum'] = $onece[$key];
+			$data['num'] 	  = $nums[$key];
+			$data['price']    = $price[$key];
+			if($this->insert('act_goodsbyactive',$data))
+			{
+				$i++;
+			}
+		}
+		if($i == count($gid))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	/**
+	 * 添加活动属性
+	 * */
+	public function addactattr($aid,$start,$end,$attr='')
+	{
+		$data = array();
+		$data['aid'] = $aid;
+		foreach($start as $key=>$val)
+		{
+			$data['starttime'] = strtotime($val);
+			$data['endtime']  = strtotime($end[$key]);
+			$this->insert('act_attribute',$data);
+		}
+		if(!empty($attr))
+		{
+			$data['attrname'] = $attr['name'];
+			$data['attrval']  = $attr['val'];
+			$this->insert('act_attrname',$data);
+		}
+	}
+	/**
+	 * 获取商品分类
+	 * */
+	public function getGoodsClass($parentid)
+	{
+		$sql = "SELECT id,title FROM `goods_class` ";
+		if(!empty($parentid))
+		{
+			$where  = ' Where parent_id = '.$parentid;
+		}
+		else
+		{
+			$where  = ' Where parent_id = 0';
+		}
+		$sql .= $where;
+		$list =  $this->queryAll($sql);
+		$res = array();
+		foreach($list as $key=>$val)
+		{
+			$res[$val['id']] = $val['title'];
+		}
+
+		return $res;
+	}
+}

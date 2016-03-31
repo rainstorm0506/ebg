@@ -1,0 +1,39 @@
+	<!---------- header ---------->
+	<header-public></header-public>	
+	<!---------- main ---------->
+	<main>
+		<ul class="offer-list">
+			<li>
+				<header>
+					<h3><i></i>星辉数码专卖店</h3>
+					<time>报价时间：2015.11.23</time>
+				</header>
+				<div>
+					<figure><img src="images/temp/14.png"></figure>
+					<section>
+						<h3>华硕X552MJ2840</h3>
+						<div>规格：深灰色 13寸</div>
+					</section>
+					<aside>￥1000.00</aside>
+				</div>
+				<footer><a href="#">查看详情</a></footer>
+			</li>
+			<li>
+				<header>
+					<h3><i></i>星辉数码专卖店</h3>
+					<time>报价时间：2015.11.23</time>
+				</header>
+				<div>
+					<figure><img src="images/temp/14.png"></figure>
+					<section>
+						<h3>华硕X552MJ2840</h3>
+						<div>规格：深灰色 13寸</div>
+					</section>
+					<aside>￥1000.00</aside>
+				</div>
+				<footer><a href="#">查看详情</a></footer>
+			</li>
+		</ul>
+		<div class="h40px"></div>
+	</main>
+	<promt></promt>

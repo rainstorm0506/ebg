@@ -1,0 +1,133 @@
+//  ajax get与post请求
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	
+	angularAMD.service('$ajax',function($http,$timeout,$localStorage,$rootScope,$q){
+		// post 请求
+		// ==================================　未登录设置
+		var noLogin = function(){
+			$rootScope.promt('您还未登录，请先登录');
+			$localStorage.prevPage = window.location.href;
+			$timeout(function(){
+				window.location.href = 'user.html';
+				$localStorage.isLogin = '';		
+				$localStorage.userId ='';
+				$localStorage.userName = '';
+				$localStorage.cartNum = '';
+				$localStorage.cartId = '';
+			},2000)
+		}
+		// ==================================　监听加载项
+		$rootScope.$on('pPromt',function(){
+			$rootScope.loading = true;
+			$timeout(function(){
+				if($rootScope.loading){
+					$rootScope.loading = false;
+					$rootScope.$apply(function(){
+						$rootScope.promt('服务器请求失败，请重试或检查网络!');
+						$rootScope.isSubmit = false;
+					})
+				}
+			},10000);
+		})
+		//$localStorage.$reset();	// 重置本地存储
+		// ==================================　post 请求，主要用于发送数据
+		this.post =  function(api,data,callback){
+			$rootScope.$emit('pPromt');
+			$http({
+				method : 'POST',
+				url : E.path+api,
+				data : data,
+				headers : {'x-token':$localStorage['x-token'] , 'x-time':E.time(), 'x-vers':$localStorage['x-vers'] , 'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+			}).success(function(data,status,headers,config){
+				$localStorage['x-token'] = data['x-token'];
+				console.log(data)
+				callback(data,data.code);
+				$rootScope.loading = false;
+				if(data.code === -1){ // 未登录
+					noLogin()			
+				}
+				//$localStorage.$default({'x-token':data['x-token'],'x-time':data['x-time'],'x-vers':data['x-vers']});
+			}).error(function(data,status,headers,cofig){
+				console.log('请求错误：' + status);
+			})
+		}
+		
+		// ==================================　post 请求，无loading
+		this.posts =  function(api,data,callback){
+			$http({
+				method : 'POST',
+				url : E.path+api,
+				data : data,
+				headers : {'x-token':$localStorage['x-token'] , 'x-time':E.time(), 'x-vers':$localStorage['x-vers'] , 'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+			}).success(function(data,status,headers,config){
+				$localStorage['x-token'] = data['x-token'];
+				console.log(data)
+				callback(data,data.code);
+				//$rootScope.loading = false;
+				if(data.code === -1){ // 未登录
+					noLogin();		
+				}
+				//$localStorage.$default({'x-token':data['x-token'],'x-time':data['x-time'],'x-vers':data['x-vers']});
+			}).error(function(data,status,headers,cofig){
+				console.log('请求错误：' + status);
+			})
+		}
+		
+		// ==================================　post 请求，异步加载
+		this.query = function(api,data,callback){
+			var deferred = $q.defer();  // 声明延后执行，即声明请求异步
+			var promise = deferred.promise;
+			
+			$rootScope.$emit('pPromt');
+			$http({
+				method : 'POST',
+				url : E.path+api,
+				data : data,
+				headers : {'x-token':$localStorage['x-token'] , 'x-time':E.time(), 'x-vers':$localStorage['x-vers'] , 'Content-Type':'application/x-www-form-urlencoded;charset=utf-8'}
+			}).success(function(data,status,headers,config){
+				console.log(data)
+				var code = data.code;
+				if(code === 0){
+					//callback(data.data);
+					deferred.resolve(data);  //声明执行成功，必须放success 里面
+				}else if(code === -1){
+					noLogin()
+				}else if(code === 1){
+					console.log('验证错误');
+				}else if(code === 2){
+					//$rootScope.promt('暂无数据!');
+					callback(data.data);
+				}else{
+					$rootScope.promt('数据请求出错，请重试!');
+				}
+				$localStorage['x-token'] = data['x-token'];
+				$rootScope.loading = false;
+				
+			}).error(function(data,status,headers,config){
+				deferred.reject(data);      //声明执行失败
+				$rootScope.promt('无法请求服务器，请检查网络或重试!');
+			});
+			
+			promise.then(function(data){
+				callback(data.data);
+			},function(error){
+				
+			},function(value){
+				
+			}).catch(function(reason){
+				deferred.reject(reason)
+			})['finally'](function(){
+				
+			})
+						 
+			return promise; //返回承诺，返回获取数据的API
+		}
+		
+		// 获取参数
+		
+		return this;
+	})
+})
+// API说明：http://192.168.0.240/doc/webApp.html
+// 线上测试地址：http://192.168.0.240/webApp/index.html

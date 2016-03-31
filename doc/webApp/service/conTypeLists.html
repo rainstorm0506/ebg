@@ -1,0 +1,50 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">服务中心==》服务类型列表</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">service.conTypeLists</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "ded6b346650c24b329acf808d9f04a55",
+    "message": [],
+    "data": [
+        {
+            "id": "2",                          #服务类型ID编号
+            "name": "配送方式",                 #服务内容 分类标题
+            "child": [
+                {
+                    "id": "2",                  #该分类下面 文章ID 编号
+                    "title": "配送服务说明"     #当前服务分类下的 文章标题
+                },
+                {
+                    "id": "8",
+                    "title": "配送"
+                },
+                {
+                    "id": "9",
+                    "title": "退货换货"
+                }
+            ]
+        },
+        .........
+    ]
+}      
+</pre></td>
+		</tr>
+	</table>
+</div>

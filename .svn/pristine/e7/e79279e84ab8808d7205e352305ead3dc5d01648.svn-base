@@ -1,0 +1,192 @@
+<?php
+class WebApiController extends CController
+{
+	private $Xtoken = '';
+	
+	//过滤器
+	public function filters()
+	{
+		return array('checkLogin');
+	}
+	
+	/**
+	 * 检查是否登录
+	 * @param	CFilterChain	$filterChain
+	 */
+	public function filterCheckLogin(CFilterChain $filterChain)
+	{
+		$route = Yii::app()->getController()->getRoute();
+		$exemption = array(
+			'global/getImgCode'		=> 1,
+			'global/token'			=> 1,
+		);
+		
+		if (empty($exemption[$route]))
+		{
+			$this->Xtoken	= md5(mt_rand() . time());
+			$Xtoken			= empty($_SERVER['HTTP_X_TOKEN'])	? null	: (string)$_SERVER['HTTP_X_TOKEN'];
+			$Xtime			= empty($_SERVER['HTTP_X_TIME'])	? 0		: (int)$_SERVER['HTTP_X_TIME'];
+			$Xvers			= empty($_SERVER['HTTP_X_VERS'])	? ''	: (string)$_SERVER['HTTP_X_VERS'];
+			$session		= Yii::app()->session;
+			
+			if (isset($session['uHeader']['Xtoken']) && $session['uHeader']['Xtoken'] !== $Xtoken)
+				$this->jsonOutput(1 , '数据验证错误!');
+			
+			if (isset($session['uHeader']['Xtime']) && $session['uHeader']['Xtime'] > $Xtime)
+				$this->jsonOutput(2 , '数据验证错误!');
+		}
+		
+		//免检登录的action
+		$exemption = array(
+			'global/token'			=> 1,
+			'global/getImgCode'		=> 1,
+			'global/viferyImgCode'	=> 1,
+			'global/sendSmsCode'	=> 1,
+			'global/viferySmsCode'	=> 1,
+			'global/dict'			=> 1,
+			'global/dictShow'		=> 1,
+			'user/login'			=> 1,
+			'user/sign'				=> 1,
+			'user/find'				=> 1,
+			'user/sVcode'			=> 1,
+			'goods/list'			=> 1,
+			'goods/conditions'		=> 1,
+			'goods/info'			=> 1,
+			'used/list'				=> 1,
+			'used/conditions'		=> 1,
+			'used/info'				=> 1,
+			'credits/list'			=> 1,
+			'credits/info'			=> 1,
+			'home/commodities'		=> 1,
+			'home/recommend'		=> 1,
+			'home/flashSale'		=> 1,
+			'guide/site'			=> 1,
+		);
+		
+		if (empty($exemption[$route]) && !$this->getUid())
+			$this->jsonOutput(-1 , '请登录!');
+		
+		$filterChain->run();
+	}
+	
+	//获得登录用户ID , 这里是登录人ID , 所以 , 商家ID,子账号ID 都有可能
+	public function getUid()
+	{
+		return (int)Yii::app()->getUser()->getId();
+	}
+	
+	//获得登录人信息
+	public function getUser()
+	{
+		return (($user = Yii::app()->getUser()->getName()) && is_array($user)) ? $user : array();
+	}
+
+	//获得用户的类型 , 1=个人 , 2=企业 , 3=商家 , 0=未登录或类型错误
+	public function getUserType()
+	{
+		if (($user = $this->getUser()) && !empty($user['user_type']))
+		{
+			if ($user['user_type'] >=1 || $user['user_type'] <=3)
+				return (int)$user['user_type'];
+		}
+		return 0;
+	}
+	
+	//获取商家ID
+	public function getMerchantID()
+	{
+		if (($user = $this->getUser()) && $user['user_type'] == 3)
+			return empty($user['merchant_id']) ? $user['id'] : $user['merchant_id'];
+		
+		return 0;
+	}
+	
+	/**
+	 * 获取 get或者post . 优先get
+	 * @param	string	$name			名称
+	 * @param	mixed	$defaultValue	默认值
+	 */
+	public function getParam($name , $defaultValue = null)
+	{
+		return Yii::app()->getRequest()->getParam($name , $defaultValue);
+	}
+	
+	/**
+	 * 获取 post
+	 * @param	string	$name			名称
+	 * @param	mixed	$defaultValue	默认值
+	 */
+	public function getPost($name , $defaultValue = null)
+	{
+		return Yii::app()->getRequest()->getPost($name , $defaultValue);
+	}
+	
+	/**
+	 * 获取 get
+	 * @param	string	$name			名称
+	 * @param	mixed	$defaultValue	默认值
+	 */
+	public function getQuery($name , $defaultValue = null)
+	{
+		return Yii::app()->getRequest()->getQuery($name , $defaultValue);
+	}
+	
+	/**
+	 * 请求是否是post
+	 */
+	public function isPost()
+	{
+		return Yii::app()->getRequest()->isPostRequest;
+	}
+	
+	public function getFormError(CFormModel $form)
+	{
+		$formError = array();
+		foreach ($form->getErrors() as $v)
+		{
+			if (is_string($v))
+			{
+				$formError[md5($v)] = $v;
+			}elseif (is_array($v)){
+				foreach ($v as $bv)
+					$formError[md5($bv)] = $bv;
+			}
+		}
+		$form->clearErrors();
+		return array_values($formError);
+	}
+	
+	/**
+	 * 设置API返回值 直接输出
+	 * @param		int				$code			错误码
+	 * @param		string/array	$mixed			错误信息 / 正常情况下输出的数据
+	 * @param		bool			$setSession		重写session
+	 */
+	public function jsonOutput($code , $mixed = array() , $setSession = true)
+	{
+		$token = '';
+		if ($setSession === false)
+			$token = empty(Yii::app()->session['uHeader']['Xtoken']) ? '' : (string)Yii::app()->session['uHeader']['Xtoken'];
+		
+		$return = array();
+		if (!$token)
+		{
+			$this->Xtoken	= md5(mt_rand() . time());
+			//将当前的请求保存到session中 , 在下一次中做验证
+			$Xtime		= empty($_SERVER['HTTP_X_TIME'])	? 0		: (int)$_SERVER['HTTP_X_TIME'];
+			$Xvers		= empty($_SERVER['HTTP_X_VERS'])	? ''	: (string)$_SERVER['HTTP_X_VERS'];
+			Yii::app()->session['uHeader']	= array('Xtoken' => $this->Xtoken , 'Xtime' => $Xtime , 'Xvers' => $Xvers);
+			$return = array('code'=>$code , 'x-token'=>$this->Xtoken , 'message'=>array() , 'data'=>array());
+		}else{
+			$return = array('code'=>$code , 'x-token'=>$token , 'message'=>array() , 'data'=>array());
+		}
+		
+		if ($code === 0)
+		{
+			$return['data'] = is_array($mixed) ? $mixed : array();
+		}else{
+			$return['message'] = is_string($mixed) ? array($mixed) : $mixed;
+		}
+		Yii::app()->end(json_encode($return));
+	}
+}

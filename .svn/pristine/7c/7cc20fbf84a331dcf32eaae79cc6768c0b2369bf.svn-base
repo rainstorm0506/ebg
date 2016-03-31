@@ -1,0 +1,250 @@
+﻿// 注册整个应用程序的各个模块，每个模块中定义各自的路由。
+// 定义应用的模块，加载模块。配置拦截机
+window.title = 'e办公移动平台——';
+window.API = {
+	 // ========================= 登录注册API
+	        login : 'user.login',				// 登录
+         register : 'user.sign',				// 注册
+             find : 'user.find',				// 找回密码
+    userToCompany : 'usercenter.userToCompany'  // 企业注册
+}
+define(['app/module/login/common'],function(angularAMD){
+	'use strict';
+	var cPath = 'app/module/login/controller/';
+	var app = angular.module('ebangong',angular.modules).config(function($stateProvider,$urlRouterProvider){
+		var str = 'e办公移动平台——';
+		$stateProvider.state('login',{ // 嵌套视图
+			templateUrl : 'view/common/header-public.html'
+		}).state('login.login',{
+			url :'/login',
+			templateUrl : 'view/login/login.html',
+			controller : function($scope,$rootScope,$localStorage,$ajax,$timeout){
+				$rootScope.title = title + "登录";
+				if($localStorage.isLogin === true){
+					$timeout(function(){
+						$scope.promt('您已经成功登录，无需再登录!');
+						$timeout(function(){
+							$scope.replace();
+						},1500);
+					},1)
+					return false;
+				}
+				
+				$rootScope.isSubmit = false;
+				$scope.submitForm = function(valid){
+					$rootScope.isSubmit = true;
+					$scope.promt('正在登录中，请稍候!');
+					if(valid){	// 验证成功
+						var data = {
+							'phone' : $scope.username,
+							'password' : $scope.password
+						}
+						console.log(data)
+						$ajax.post(API.login,data,function(data){
+							var code = data.code;
+						
+							if(code === 0){
+								$localStorage.isLogin = true;		// 登录成功
+								$localStorage.userId = data.data.id;
+								$localStorage.userName = data.data.phone;
+								
+								$scope.promt('恭喜登录成功!');
+								
+								$timeout(function(){
+									if($localStorage.prevPage){
+										$scope.replace($localStorage.prevPage);
+										$localStorage.prevPage = '';
+									}else{
+										$scope.replace();
+									}
+								},2000)
+							}
+
+							if(code !== 0){
+								$scope.promt('用户名或密码错误!');
+								$rootScope.isSubmit = false;
+							}
+						})
+					}else{	// 验证失败
+						$scope.promt('用户名或密码格式错误!');
+					}
+				}
+			}
+		}).state('login.findPwd',{
+			url : '/findPwd',
+			templateUrl : 'view/login/find-password.html',
+			controller :function($scope,$rootScope,$timeout,$state,$ajax){
+				$rootScope.title = title + '找回密码';
+				$scope.findPwd = true;
+				$scope.submitForm = function(valid){
+					$rootScope.isSubmit = true;
+					$scope.promt('正在找回密码中，请稍候!');
+					if(valid){	// 验证成功
+						var data = {
+							     'phone' : $scope.tel,
+							    'vxCode' : $scope.telImgCode,
+							   'smsCode' : $scope.telCode,
+							'password_1' : $scope.apassword,
+							'password_2' : $scope.bpassword
+						}
+						$ajax.post(API.find,data,function(data){
+							var code = data.code;
+							if(code === 0){
+								$scope.promt('恭喜找回密码成功!');
+								
+								$timeout(function(){
+									//$state.go('login.login');
+									$scope.go('login');
+									$rootScope.username = $scope.tel;
+								},2000)
+							}else{
+								$rootScope.isSubmit = false;
+								$scope.promt('找回密码失败!');
+							}
+						})
+					}else{	// 验证失败
+						$scope.promt('信息填写有误，请检查!');
+					}
+				}
+			}
+		})
+		// ==================================== 404
+		.state('register',{ // 嵌套视图
+			templateUrl : 'view/common/header-public.html',
+			controller : function($scope,$rootScope){
+				$rootScope.checkInfo = function(param){
+					for(var i in param){
+						if(param[i] === '' || param[i] == '请选择' || param[i] == undefined){
+							$scope.promt('信息不完整，请检查!');
+							return false;
+						}
+					}
+					return true;
+				}
+			}
+		}).state('register.register',{
+			url : '/register',
+			templateUrl : 'view/register/register.html',
+			controller :function($scope,$rootScope,$localStorage,$timeout,$ajax){
+				$rootScope.title = title + '注册';
+				$rootScope.isSubmit = false;
+				var code = $scope.param('code') ? $scope.param('code') : '';
+				$scope.pcode = code;
+				$scope.submitForm = function(valid){
+					$rootScope.isSubmit = true;
+					if(valid){	// 验证成功
+						var check = $scope.check ? 1 : 0;
+						var data = {
+							      type : 1,
+							     phone : $scope.tel,
+							    vxCode : $scope.telImgCode,
+							   smsCode : $scope.telCode,
+							password_1 : $scope.apassword,
+							password_2 : $scope.bpassword,
+							    reCode : $scope.pcode,
+							     agree : check
+						}
+						$ajax.post(API.register,data,function(data){
+							console.log(data);
+							if(data.code === 0){
+								$scope.promt('注册成功!');
+								$localStorage.isLogin = true;
+								$localStorage.userId = data.data.id;
+								$localStorage.userName = data.data.phone;
+								$timeout(function(){
+									if($localStorage.prevPage){
+										$scope.replace($localStorage.prevPage)
+										$scope.go('login');
+										$localStorage.prevPage = '';
+									}else{
+										$scope.replace();
+									}
+								},2000)
+							}else{
+								$scope.promt('注册失败!');
+								$rootScope.isSubmit = false;
+							}
+						})
+					}else{	// 验证失败
+						$scope.promt('用户名或密码格式错误!');
+					}
+				}
+			}
+		}).state('register.comanyRregister',angularAMD.route({
+			url : '/comanyRregister',
+			templateUrl : 'view/register/companyInfo.html',
+			controllerUrl : cPath + 'comanyController'
+		})).state('register.comanyUpload',{
+			url : '/comanyUpload',
+			templateUrl : 'view/register/companyUpload.html',
+			controller :function($scope,$rootScope,$localStorage,$timeout,$ajax){
+				$rootScope.title = title + '企业用户信息填写';
+				
+				var info = $localStorage.companyInfo;
+				
+				$scope.submit = function(){
+					/*
+					if(!$scope.picA || !$scope.picB){
+						$scope.promt('图片没有上传，请上传!');
+						return;
+					}*/
+					if(!$rootScope.checkInfo(info) || $localStorage.companyInfo == undefined){
+						$scope.promt('信息丢失，请重新填写');
+						$timeout(function(){
+							delete $localStorage.companyInfo;
+							$scope.go('comanyRregister');
+						},2000)
+						return;
+					}
+					var param = {
+								   com_name : info.name,
+								dict_one_id : info.province,
+								dict_two_id : info.city,
+							  dict_three_id : info.county,
+									com_num : info.personV,
+							   com_property : info.typeV,
+						com_license_timeout : info.timeV,
+						        com_license : '123',
+								    com_tax : '123',
+									com_org : '123'
+					}
+					console.log(param)
+					$ajax.post(API.userToCompany,param,function(data){
+						if(data.code == 0){
+							$scope.promt('恭喜升级企业用户成功!');
+							delete $localStorage.companyInfo;
+							$timeout(function(){
+								$scope.replace('index.html');
+							},2000)
+						}else{
+							$scope.promt('升级失败，请检查填写数据!');
+						}
+					})
+				}
+				
+			}
+		})
+		// ==================================== 404
+		.state('404',{
+			url : '/404',
+			templateUrl : '404.html',
+			controller : function($rootScope){
+				$rootScope.title = "404";
+			}
+		})
+		$urlRouterProvider.otherwise('/login');
+		
+	}).config(function($httpProvider,publicProvider){
+		publicProvider.$get($httpProvider)
+	}).run(function(ePublic){
+		ePublic.run();
+	}).animation('.ng-animate',function(){	// 视图进出动画控制
+		return {
+			enter : function(elem){
+				elem.addClass('fadeIn animated');
+			}
+		}
+	});
+	
+	return angularAMD.bootstrap(app);	// angularAMD启动 angular
+})

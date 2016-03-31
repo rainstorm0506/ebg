@@ -1,0 +1,43 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心--订单==》订单删除</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="5">usercenter.deleteOrder</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="5">李启源</td>
+		</tr>
+                <tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>osn</td>
+			<td>varchar</td>
+			<td>必</td>
+                        <td>当前要删除的订单编号(<b style="color:red;font-weight: bold;">前端显示“删除”必须是该订单处于取消状态的时候</b>)</td>
+		</tr> 
+		
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="5"><pre>
+{
+    "code": 0,
+    "x-token": "cefaf4908517111d755bb875c4dd260c",
+    "message": [],
+    "data": []
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

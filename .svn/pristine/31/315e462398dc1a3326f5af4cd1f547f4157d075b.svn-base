@@ -1,0 +1,148 @@
+﻿define(['angularAMD'],function(angularAMD){
+	'use strict';
+	
+	angularAMD.directive('selectTime',function($rootScope){
+		return{
+			restrict : 'A',
+			link : function(scope,elem,attr){
+				var year = [];
+				var month = [];
+				var day = [];
+				for(var i=2016;i<=2030;i++){
+					year.push(i);
+				}
+				for(var i=1;i<=12;i++){
+					month.push(i);
+				}
+				for(var i=1;i<=31;i++){
+					day.push(i);
+				}
+				scope.year = year;
+				scope.month = month;
+				scope.day = day;
+				
+				angular.element(document).ready(function(){
+					var id = attr.selectTime;
+					var $btn = angular.element(document.querySelector('#'+ id));
+					var $year = angular.element(document.querySelector('#year'));
+					var $month = angular.element(document.querySelector('#month'));
+					var $day = angular.element(document.querySelector('#day'));
+					var stack = []
+					
+					$rootScope.choiceTime = function(){
+						var $li = $year.find('li');
+						var year = parseInt(getTime($year));
+						var month = parseInt(getTime($month));
+						var day = parseInt(getTime($day));
+						scope.address.timeV = year + '-' + month + '-' + day;
+
+						scope.isTime = false;
+						if(!year || !month || !day){
+							$rootScope.promt('您还未选择');
+							return false;
+						}
+					}
+					function getTime(elem){
+						var $li = elem.find('li');
+						var val = null;
+						angular.forEach($li,function(data,index){
+							var $this = $li.eq(index);
+							if($this.hasClass('current')){
+								val = $this.text()
+								return;
+							}
+						});
+						return val;
+					}
+				})
+			}
+		}
+	})
+
+	// ============================== 滑动选择
+	angularAMD.directive('swipeSelect',function($rootScope,$timeout,$ajax){
+		return{
+			restrict : 'A',
+			link : function(scope,elem,attr){
+				angular.element(document).ready(function(){
+					swipeSelect(scope,elem,attr);
+				})
+			}
+		}
+	})
+	// =========================================== 确定选择省份或市
+	return function($scope,$rootScope,$timeout,$localStorage,$state,$ajax,ePublic){
+		$rootScope.title = title + "企业用户信息填写";
+		
+		$scope.province = {}
+		$scope.city = {}
+		$scope.add　= true;
+		
+		
+		// 公共方法
+		$scope.$on('selectCurrent',function(e,$elem,callback,errorback){
+			var stack = [];
+			angular.forEach($elem,function(data,index){
+				var $this = $elem.eq(index);
+				if($this.hasClass('current')){
+					callback($this,index);
+				}else{
+					stack.push(index);
+				}
+			});
+			
+			if(!errorback) return;
+			
+			if(stack.length == $elem.length){
+				$timeout(function(){
+					errorback();
+				},100)
+			}
+		})
+		
+		// 选择人数
+		$scope.choicePerson = function(){
+			var $li = angular.element(document.querySelector('#choicePerson')).children();
+			$scope.$emit('selectCurrent',$li,function($this){
+				$scope.address.personV = $this.text();
+				$scope.isPerson = false;
+			},function(){
+				$scope.promt('您还未选择人数!');
+			})
+		}
+		// 选择公司类型
+		$scope.choiceType = function(){
+			var $li = angular.element(document.querySelector('#choiceType')).children();
+			
+			$scope.$emit('selectCurrent',$li,function($this){
+				$scope.address.typeV = $this.text();
+				$scope.isType = false;
+			},function(){
+				$scope.promt('您还未选择公司类型!');
+			})
+		}
+		/*
+		$scope.address = {
+			name: '',
+			address: '',
+			province: '',
+			city: '',
+			county: '',
+			personV: '请选择',
+			timeV: '请选择',
+			typeV: '请选择'
+		}*/
+		
+		delete $localStorage.companyInfo;
+		
+		$scope.next = function(){
+			if(!$scope.check) return false;
+			
+			if($rootScope.checkInfo($scope.address)){
+				$localStorage.companyInfo = $scope.address;
+				$state.go('register.comanyUpload');
+			}
+		}
+	}
+})
+

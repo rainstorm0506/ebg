@@ -1,0 +1,48 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">货到付款(订单)==》跳转页面</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">order.cashod</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="7">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>osn</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>订单提交时候生成的订单号</td>
+		</tr>			                                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "91cbcc2d19d450b275b1b9104822cf74",
+    "message": [],
+    "data": {
+        "cons_name": "小明",                #收货人姓名
+        "cons_phone": "15345645645",        #收货人电话
+        "cons_address": "河南商丘市fuck",   #收货人地址
+        "order_money": "1500.00",           #当前订单的金额
+        "order_sn": "N4459-8167-1361"       #当前订单编号
+    }
+}       
+</pre></td>
+		</tr>
+	</table>
+</div>

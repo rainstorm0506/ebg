@@ -1,0 +1,72 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">企业会员 /拆分之后（某一采集订单的报价单） </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">companyUser.getOffer</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="3">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>pg_id</td>
+			<td>int</td>
+			<td>必</td>
+			<td>当前拆分后的产品ID编号</td>
+		</tr>
+		<tr>
+			<td>type</td>
+			<td>int</td>
+			<td>必</td>
+			<td>查看 商家(1)/平台(2) 报价详情</td>
+		</tr>                
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "b93257060e08b1782f888202d7995486",
+    "message": [],
+    "data": {
+         {
+            "id": "177",
+            "pg_id": "19",                          #对应拆分后的集采产品的ID编号
+            "goods_id": "548",                      #报价的产品ID
+            "merchant_id": "149",                   #商家ID
+            "price": "15.00",                       #报价的价格
+            "rem_price": "",
+            "brand": "deli / 得力",                 #报价商品的品牌
+            "create_time": "1456895952",            #发布该集采的时间
+            "des": "",
+            "num": "123",                           #提供的报价商品的数量
+            "type": "1",                            # 1:查看平台推荐；2:商家报价
+            "title": "得力(deli)7910 商务办公皮面本/记事本/日记本 18K/120页",       #对应的报价商品的名称
+            "content": "<p style=\"text-align: center;\"><img alt=\"\" src=\"http://img.58bangong.com/goods/2016/01-26/122/goodsImages/5680884.xq1.jpg\" style=\"width: 750px; height: 1641px;\"/></p><p>&nbsp;</p>",
+            "mer_name": "扈长军",
+            "is_price": "1",                        #是否报价完成(1：报价完成)
+            "addtime": "1456897218",                #完成报价的时间
+            "cover": "/goods/2016/01-26/122/goodsCover/6599619.c4e86303255f44b8abee92753fa0026a.jpg",   #报价商品的图片
+            "attr_str": "黑色  ",                                                                       #商品的属性字符串
+            "store_name": "测试小店"                                                                    #店铺名称
+        }
+        .......
+    }
+}     
+</pre></td>
+		</tr>
+	</table>
+</div>
+

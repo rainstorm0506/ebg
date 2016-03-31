@@ -1,0 +1,31 @@
+	<!---------- 添加收货地址 ---------->
+	<fieldset class="form-list">
+		<legend>添加收货地址</legend>
+		<form name="aForm" ng-submit="submitForm(aForm.$valid)" novalidate>
+			<ul>
+				<li><input type="text" class="tbox" placeholder="请填写收货人姓名" validator ng-model="address.name"></li>
+				<li><input type="number" class="tbox" placeholder="请填写联系电话" validator="phone" ng-model="address.phone"></li>
+				<li>
+					<province></province>
+				</li>
+				<li>
+					<city></city>
+				</li>
+				<li>
+					<county></county>
+				</li>
+				<li><input type="text" name="address" class="tbox" placeholder="请填写详细地址" validator ng-model="address.address"></li>
+			</ul>
+			<div class="bottom-wrap">
+				<div class="checbox-wrap">
+					<label>
+						<b><i ng-show="address.check"></i></b><span>设为默认地址</span>
+						<input type="checkbox" name="check" ng-checked="address.check" ng-init="address.check = false" ng-model="address.check">
+					</label>
+				</div>
+				<div class="flexbox"><input type="submit" class="btn-1 flex-1" value="保存"  ng-disabled="aForm.$invalid || isSubmit || isAddress"></div>
+			</div>
+		</form>
+	</fieldset>
+	<div class="h40px"></div>
+	<promt></promt>

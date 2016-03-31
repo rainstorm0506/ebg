@@ -681,3 +681,539 @@ Stack trace:
 #18 {main}
 REQUEST_URI=/supervise/site.home
 ---
+2016/03/25 14:40:09 [error] [php] Undefined variable: mdoel (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\GovernorController.php:112)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): GovernorController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): GovernorController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): GovernorController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): GovernorController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/governor.handle?id=25&flag=1
+2016/03/25 14:41:07 [error] [php] Undefined variable: mdoel (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\GovernorController.php:112)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): GovernorController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): GovernorController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): GovernorController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): GovernorController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/governor.handle?id=25&flag=1
+2016/03/25 15:48:10 [error] [php] trim() expects parameter 1 to be string, array given (F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\ExtModels.php:127)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\GovernorIdentity.php(15): Governor->getUserInfo()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\form\SLoginForm.php(29): GovernorIdentity->authenticate()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\validators\CInlineValidator.php(42): SLoginForm->checkPassword()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\validators\CValidator.php(201): CInlineValidator->validateAttribute()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModel.php(159): CInlineValidator->validate()
+#5 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\SiteController.php(62): SLoginForm->validate()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): SiteController->actionIndex()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): SiteController->runAction()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SiteController->filterCheckLogin()
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): SiteController->runActionWithFilters()
+#14 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): SiteController->run()
+#15 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#16 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#17 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/
+2016/03/28 18:54:36 [error] [exception.CException] exception 'CException' with message 'DemoController 无法找到请求的视图 "index".' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php:878
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php(10): CController->renderPartial('index')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): DemoController->actionIndex()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('index')
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('demo/index')
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#9 {main}
+REQUEST_URI=/supervise/demo.index
+---
+2016/03/28 18:54:59 [error] [exception.CException] exception 'CException' with message 'DemoController 无法找到请求的视图 "index".' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php:878
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php(10): CController->renderPartial('index')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): DemoController->actionIndex()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(286): CController->runAction(Object(CInlineAction))
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('index')
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('demo/index')
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#8 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#9 {main}
+REQUEST_URI=/supervise/index.php?r=demo/index
+---
+2016/03/28 19:01:50 [error] [exception.CException] exception 'CException' with message 'DemoController 无法找到请求的视图 "index".' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php:878
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php(10): CController->renderPartial('index')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): DemoController->actionIndex()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams(Array)
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#4 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): SController->filterCheckLogin(Object(CFilterChain))
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): CController->run('index')
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('demo/index')
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#12 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#13 {main}
+REQUEST_URI=/supervise/demo.index
+---
+2016/03/28 19:14:01 [error] [php] include(Demo.php): failed to open stream: No such file or directory (F:\phpEnve\Apache\htdocs\ebg\Yii\YiiBase.php:432)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\ClassLoad.php(21): spl_autoload_call()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php(10): Only()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): DemoController->actionIndex()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#5 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#13 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/28 19:14:48 [error] [php] include(Demo.php): failed to open stream: No such file or directory (F:\phpEnve\Apache\htdocs\ebg\Yii\YiiBase.php:432)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\ClassLoad.php(21): spl_autoload_call()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php(10): Only()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): DemoController->actionIndex()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#5 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#13 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/28 19:14:50 [error] [php] include(Demo.php): failed to open stream: No such file or directory (F:\phpEnve\Apache\htdocs\ebg\Yii\YiiBase.php:432)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\ClassLoad.php(21): spl_autoload_call()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php(10): Only()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): DemoController->actionIndex()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#5 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#13 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/28 19:14:51 [error] [php] include(Demo.php): failed to open stream: No such file or directory (F:\phpEnve\Apache\htdocs\ebg\Yii\YiiBase.php:432)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\ClassLoad.php(21): spl_autoload_call()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php(10): Only()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): DemoController->actionIndex()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#5 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#13 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/28 19:14:51 [error] [php] include(Demo.php): failed to open stream: No such file or directory (F:\phpEnve\Apache\htdocs\ebg\Yii\YiiBase.php:432)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\extensions\ebg\ClassLoad.php(21): spl_autoload_call()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php(10): Only()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): DemoController->actionIndex()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#5 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#13 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/28 19:27:20 [error] [php] Undefined index: DemoForm (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:13)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/28 19:27:51 [error] [php] Undefined index: DemoForm (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:13)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/28 19:28:39 [error] [php] Undefined index: DemoForm (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:11)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/28 19:43:24 [error] [php] Undefined index: DemoForm[img] (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:11)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 09:40:04 [error] [php] Undefined index: file (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:15)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 09:42:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload/plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload/pluplo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload/plupload.full.min.js
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 09:43:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload/plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload/pluplo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload/plupload.full.min.js
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 09:43:28 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload/plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload/pluplo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload/plupload.full.min.js
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 09:43:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload/plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload/pluplo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload/plupload.full.min.js
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 09:44:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload/plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload/pluplo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload/plupload.full.min.js
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 09:46:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload/plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload/pluplo...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload/plupload.full.min.js
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 09:52:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload.full.m...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload.full.min.js
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 09:54:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload.full.m...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload.full.min.js
+---
+2016/03/29 09:55:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "plupload.full.min.js"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('plupload.full.m...')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/plupload.full.min.js
+---
+2016/03/29 09:57:43 [error] [php] move_uploaded_file(http://192.168.0.240/assets/images/2016-03-29145921666398871.jpg): failed to open stream: HTTP wrapper does not support writeable connections (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:36)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#10 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 09:59:16 [error] [php] move_uploaded_file(http://192.168.0.240/assets/images/2016-03-29145921675660081.jpg): failed to open stream: HTTP wrapper does not support writeable connections (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:37)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#10 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 10:00:45 [error] [php] move_uploaded_file(http://192.168.0.240/assets/images/2016-03-29/145921684543692.jpg): failed to open stream: HTTP wrapper does not support writeable connections (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:37)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#10 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 10:25:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "undefined"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('undefined')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/undefined
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 10:44:38 [error] [php] mkdir(): No such file or directory (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:15)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#10 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 10:46:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "undefined"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('undefined')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/undefined
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 11:00:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "undefined"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('undefined')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/undefined
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 11:02:30 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "undefined"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('undefined')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/undefined
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 11:02:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "undefined"。' in F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php:286
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController('undefined')
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CApplication->run()
+#3 {main}
+REQUEST_URI=/supervise/undefined
+HTTP_REFERER=http://www.ebg.com/supervise/demo.index
+---
+2016/03/29 11:03:26 [error] [php] move_uploaded_file(/uploads/145922060668463.jpg): failed to open stream: No such file or directory (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:38)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#10 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 11:04:12 [error] [php] move_uploaded_file(F:\phpEnve\Apache\htdocs\ebg\supervise\protected/uploads/145922065240517.jpg): failed to open stream: No such file or directory (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:38)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#10 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 13:12:08 [error] [php] move_uploaded_file(/assets/images/145922832825284.jpg): failed to open stream: No such file or directory (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:37)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#10 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 13:27:40 [error] [php] json_decode() expects parameter 1 to be string, array given (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:40)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#10 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 13:28:50 [error] [php] Array to string conversion (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:40)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/29 20:27:56 [error] [php] Array to string conversion (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:17)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/30 09:31:46 [error] [php] Array to string conversion (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\DemoController.php:17)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): DemoController->runAction()
+#1 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#2 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): DemoController->filterCheckLogin()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): DemoController->runActionWithFilters()
+#6 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): DemoController->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#9 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/demo.index
+2016/03/30 19:06:51 [error] [php] Undefined index: 5d95abba8f87f6e06a80801d3b4860a0 (F:\phpEnve\Apache\htdocs\ebg\supervise\protected\form\GoodsForm.php:301)
+Stack trace:
+#0 F:\phpEnve\Apache\htdocs\ebg\Yii\validators\CValidator.php(201): CInlineValidator->validateAttribute()
+#1 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CModel.php(159): CInlineValidator->validate()
+#2 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\controllers\GoodsController.php(244): GoodsForm->validate()
+#3 F:\phpEnve\Apache\htdocs\ebg\Yii\web\actions\CInlineAction.php(49): GoodsController->actionCreate()
+#4 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(308): CInlineAction->runWithParams()
+#5 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(133): GoodsController->runAction()
+#6 F:\phpEnve\Apache\htdocs\ebg\supervise\protected\components\SController.php(26): CFilterChain->run()
+#7 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CInlineFilter.php(58): GoodsController->filterCheckLogin()
+#8 F:\phpEnve\Apache\htdocs\ebg\Yii\web\filters\CFilterChain.php(130): CInlineFilter->filter()
+#9 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(291): CFilterChain->run()
+#10 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CController.php(265): GoodsController->runActionWithFilters()
+#11 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(282): GoodsController->run()
+#12 F:\phpEnve\Apache\htdocs\ebg\Yii\web\CWebApplication.php(141): CWebApplication->runController()
+#13 F:\phpEnve\Apache\htdocs\ebg\Yii\base\CApplication.php(184): CWebApplication->processRequest()
+#14 F:\phpEnve\Apache\htdocs\ebg\supervise\index.php(11): CWebApplication->run()
+REQUEST_URI=/supervise/goods.create

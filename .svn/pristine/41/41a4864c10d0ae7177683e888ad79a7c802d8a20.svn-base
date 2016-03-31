@@ -1,0 +1,113 @@
+<?php
+	Yii::app()->clientScript->registerCoreScript('layer');
+?>
+<div class="public-wraper" style="margin-top:20px">
+	<?php $active = $this->beginWidget('CActiveForm', array('id'=>'active-form','enableAjaxValidation'=>true,'htmlOptions'=>array('class'=>'form-wraper','style'=>'height:40px;'))); ?>
+	<div class="seacrhlist">
+		活动标题：<?php echo $active->textField($activeform , 'title' , array('class'=>'textbox','maxlength'=>'11'));?>
+		活动编号：<?php echo $active->textField($activeform , 'id' , array('class'=>'textbox','maxlength'=>'11'));?>
+		促销类型：<?php
+		echo $active->dropDownList ( $activeform, 'type', CMap::mergeArray ( array (
+				''=>'--------'
+		), array(
+				'1'=> '秒杀',
+				'2'=> '1折购',
+				'3'=> '特价专区',
+		) ), array (
+				'class' => 'sbox32'
+		) );
+		?>
+		状态：<?php
+		echo $active->dropDownList ( $activeform, 'status', CMap::mergeArray ( array (
+				''=>'--------'
+		), array(
+				'1'=> '未开始',
+				'2'=> '已开始',
+				'3'=> '已结束',
+		) ), array (
+				'class' => 'sbox32'
+		) );
+		?>
+		促销时间：<?php
+		$active->widget ( 'Laydate', array (
+				'id' => 'start',
+				'name' => 'start',
+				'class' => "tbox38 tbox38-1",
+				'style' => 'width:120px;height:30px;',
+				'placeholder'=>'开始时间',
+				'value'=>'',
+		) );
+		?><i>—</i><?php
+		$active->widget ( 'Laydate', array (
+				'id' => 'end',
+				'name' => 'end',
+				'class' => "tbox38 tbox38-1",
+				'style' => 'width:120px;height:30px',
+				'placeholder'=>'结束时间',
+				'value'=>'',
+		) );
+		?>
+	</div>
+	<?php $this->endWidget(); ?>
+	<table class="public-table">
+		<thead>
+			<tr>
+				<th>活动编号</th>
+				<th>促销类型</th>
+				<th>促销名称</th>
+				<th>会员类别</th>
+				<th>促销时间</th>
+				<th>状态</th>
+				<th width="250">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($list as $val): ?>
+			<tr>
+				<td><?php echo $val['id']; ?></td>
+				<td><?php echo $val['type']; ?></td>
+				<td><?php echo $val['title']; ?></td>
+				<td><?php echo $val['exp']; ?></td>
+				<td><?php foreach($val['date'] as $item)
+					{
+						echo date('Y-m-d',$item['starttime']).'-'.date('Y-m-d',$item['endtime']).'<br/>';
+					}
+					?>
+				</td>
+				<td><?php echo $val['status'];?></td>
+				<td class="control-group">
+				<?php
+					echo CHtml::link('<i class="btn-del"></i><span>删除</span>', $this -> createUrl('user/delete', array('id' => $val['id'])));
+				?>
+				</td>
+			</tr>
+			<?php endforeach; if (!$list): ?>
+			<tr><td colspan="9" class="else">当前没有活动数据</td></tr>
+			<?php endif; ?>
+		</tbody>
+	</table>
+</div>
+<div class="page">
+<?php //$pageConfig=Yii::app()->params['pages'];
+	//$this->widget('SuperviseListPager', CMap::mergeArray($pageConfig['CLinkPager'], array('pages'=>$page)));
+	//$this->widget('CListPager', CMap::mergeArray($pageConfig['CListPager'], array('pages'=>$page)));
+?>
+</div>
+<script>
+	$(document).ready(function()
+	{
+		$('.btn-del').parent('a').click(function(){
+			var href=$(this).attr('href');
+			layer.confirm
+			(
+				'你确认删除该个人会员吗？',
+				function()
+				{
+					window.location.href = href;
+					return true;
+				}
+			);
+			return false;
+		})
+	})
+</script>

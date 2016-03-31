@@ -50,7 +50,7 @@ class Governor extends SModels
 	public function getGovernorInfo($id = 0)
 	{
 		if ($row = $this->queryRow("SELECT * FROM back_governor WHERE id=" .(int)$id))
-			$row['roles'] = json_decode($row['roles'] , true);
+			$row['roles'] = $this->jsonDnCode($row['roles']);
 		return $row;
 	}
 
@@ -222,10 +222,10 @@ class Governor extends SModels
 		$res = array('fields'=>array() , 'purviews'=>array());
 		foreach ($dataTemp as $vs)
 		{
-			$temp = json_decode($vs['fields'] , true);
+			$temp = $this->jsonDnCode($vs['fields']);
 			$res['fields'] = CMap::mergeArray($res['fields'] , $temp && is_array($temp) ? $temp : array());
 
-			$temp = json_decode($vs['purviews'] , true);
+			$temp = $this->jsonDnCode($vs['purviews']);
 			$res['purviews'] = array_merge($res['purviews'] , $temp && is_array($temp) ? $temp : array());
 		}
 		return $res;
@@ -243,10 +243,10 @@ class Governor extends SModels
 			{   
 				foreach ($record as $val)
 				{
-					$val['params'] = json_decode($val['params'] , true);
+					$val['params'] = $this->jsonDnCode($val['params']);
 					$val['params'] = is_array($val['params']) ? $val['params'] : array();
 
-					$val['show_css'] = json_decode($val['show_css'] , true);
+					$val['show_css'] = $this->jsonDnCode($val['show_css']);
 					$val['show_css'] = is_array($val['show_css']) ? $val['show_css'] : array();
 
 					if ($val['parent_id'])

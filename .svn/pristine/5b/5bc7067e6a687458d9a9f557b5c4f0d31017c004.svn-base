@@ -1,0 +1,27 @@
+<?php
+class ActFreeController extends SController
+{
+	/**
+	 * 列表
+	 */
+	public function actionList()
+	{
+		$this->checkUserPurview('af.lt');
+		$model = ClassLoad::Only('ActFree');/* @var $model ActFree */
+		$page = ClassLoad::Only('CPagination');/* @var $page CPagination */
+		$page->pageVar = 'p';
+		$page->setItemCount($model->getGoodsCount());
+		$page->pageSize = 20;
+		$this->render('list' , array(
+			'page'			=> $page,
+			'list'			=> $model->getList($page->getOffset() , $page->getLimit() , $page->getItemCount())
+		));
+	}
+	/**
+	 * 添加活动0元购
+	 */
+	public function actionCreate()
+	{
+
+	}
+}

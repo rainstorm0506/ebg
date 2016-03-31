@@ -1,0 +1,60 @@
+// ============================================================ 密码一致性验证
+define(['angularAMD'],function(angularAMD){
+	'use strict';
+	angularAMD.directive('calculate',function(){
+		return function(scope,elem,attr){
+			var ngModel = attr.calculate;
+			var num = scope[ngModel];
+			var $first = elem.children().eq(0);
+			var $input = elem.children().eq(1);
+			var $last = elem.children().eq(2);
+			var max = 1000;
+
+			scope.add = function(){
+				num = parseInt($input.val()) + 1;
+				num > 1 && $first.removeClass("disabled");
+				if(num >= max) {
+					$last.addClass('disabled');
+					return false
+				}else{
+					$last.hasClass('disabled') && $last.removeClass('disabled');
+				}
+				scope[ngModel] = num;
+			}
+			scope.reduction = function(){
+				num = parseInt($input.val()) - 1;
+				if(num <= 1){
+					num = 1;
+					$first.addClass("disabled");
+				}
+				
+				num < max && $last.removeClass("disabled");
+				
+				scope[ngModel] = num;
+			}
+			scope.inputKeyUp = function(){
+				var num = scope[ngModel];
+				num > 1 ? $first.removeClass("disabled") : $first.addClass("disabled");
+				
+				if(num < 0){
+					scope[ngModel] = 1;
+				}
+				
+				if(num >= max){
+					$last.addClass('disabled');
+					scope[ngModel] = max;
+				}else{
+					$last.hasClass('disabled') && $last.removeClass('disabled');
+				}
+			}
+			scope.inputBlur = function(){
+				if(scope[ngModel] <= 0){
+					scope[ngModel] = 1;
+				}
+			}
+			if(scope[ngModel] > 1){
+				$first.removeClass("disabled");
+			}
+		}
+	})
+})

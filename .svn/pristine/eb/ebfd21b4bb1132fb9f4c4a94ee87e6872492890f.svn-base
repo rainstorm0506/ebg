@@ -1,0 +1,95 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">个人中心--升级为企业用户</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="5">usercenter.userToCompany</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="5">李启源</td>
+		</tr>
+                <tr>
+			<td rowspan="11">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>com_name</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>公司名称</td>
+		</tr> 
+		<tr>
+			<td>dict_one_id</td>
+			<td>int</td>
+			<td>必</td>
+			<td>一级城市ID</td>
+		</tr> 
+		<tr>
+			<td>dict_two_id</td>
+			<td>int</td>
+			<td>必</td>
+			<td>二级城市ID</td>
+		</tr> 
+		<tr>
+			<td>dict_three_id</td>
+			<td>int</td>
+			<td>必</td>
+			<td>三级城市ID</td>
+		</tr> 
+		<tr>
+			<td>com_num</td>
+			<td>int</td>
+			<td>必</td>
+			<td>公司人数</td>
+		</tr> 
+		<tr>
+			<td>com_property</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>公司类型</td>
+		</tr>  
+		<tr>
+			<td>com_license_timeout</td>
+			<td>int</td>
+			<td>必</td>
+			<td>营业执照到期时间</td>
+		</tr>                  
+		<tr>
+			<td>com_license</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>营业执照</td>
+		</tr>  
+		<tr>
+			<td>com_tax</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>税务登记</td>
+		</tr>  
+		<tr>
+			<td>com_org</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>组织机构代码</td>
+		</tr>                  
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="5"><pre>
+{
+	"code" : 0,
+	"message":"",
+	"data":""
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

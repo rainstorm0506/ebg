@@ -1,0 +1,31 @@
+<?php
+class ActFreeForm extends SForm
+{
+	public $id , $title , $rank;
+
+	public function attributeLabels()
+	{
+		return array(
+			'title'				=> '活动名称',
+		);
+	}
+	
+	//基本验证
+	public function rules()
+	{
+		return array(
+			array('title' , 'required', 'message'=>'<b>{attribute}</b> 是必填或必选项'),
+			array('title' , 'checkTitle'),
+			array('title' ,'length','min'=>1,'max'=>50),
+			array('rank' ,  'checkNull'),
+		);
+	}
+	
+	//检查商品名称
+	public function checkTitle()
+	{
+		$model = ClassLoad::Only('ActGoods');/* @var $model ActGoods */
+		if ($model->checkTitle($this->title , (int)$this->getQuery('id')))
+			$this->addError('title' , '你填写的 [商品名称] 已存在.');
+	}
+}

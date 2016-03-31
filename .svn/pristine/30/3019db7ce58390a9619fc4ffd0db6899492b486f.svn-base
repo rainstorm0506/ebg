@@ -1,0 +1,49 @@
+	<nav class="bot-nav">
+		<a class="owner-btn" href="#"><i></i><span>店主</span></a>
+		<a class="buy-btn-1 flex-1 rel" href="javascript:;">立即购买<label class="ng-label"><input type="checkbox" ng-model="isBuy"></label></a>
+		<a class="buy-btn-2 flex-1 rel" href="javascript:;">加入购物车<label class="ng-label"><input type="checkbox" ng-model="isBuy"></label></a>
+	</nav>
+	<!---- 回到顶部 ---->
+	<go-top></go-top>
+	<!---- 立即购买 ---->
+	<section class="shadow-wrap shadow-wrap-second" ng-class="{current:isBuy === true}">
+		<div class="buy-wrap">
+			<section>
+				<div class="buy-goods">
+					<figure><img ng-src="{{data.cover}}"></figure>
+					<section>
+						<h3 ng-bind="data.title"></h3>
+						<p>￥{{data.min_price}}-￥{{data.max_price}}</p>
+						<div>库存{{data.stock | filterStock}}台</div>
+					</section>
+				</div>
+				<h3 class="buy-tit">数量及价格</h3>
+				<menu class="choice-menu">
+					<li><p>1-10</p><div>￥6800</div></li>
+					<li><p>20-50</p><div>￥6800</div></li>
+					<li><p>50-100</p><div>￥6800</div></li>
+				</menu>
+				<h3 class="buy-tit">尺寸</h3>
+				<menu class="choice-menu choice-menu-size" select-only>
+					<li class="current"><label>不限<input type="radio" name="size" value="" ng-model="sizeNgModel.size"></label></li>
+					<li><label>13<input type="radio" name="size" value="" ng-model="sizeNgModel.size"></label></li>
+					<li><label>13.5<input type="radio" name="size" value="" ng-model="sizeNgModel.size"></label></li>
+					<li><label>14<input type="radio" name="size" value="" ng-model="sizeNgModel.size"></label></li>
+					<li><label>15.5<input type="radio" name="size" value="" ng-model="sizeNgModel.size"></label></li>
+					<li><label>21<input type="radio" name="size" value="" ng-model="sizeNgModel.size"></label></li>
+					<li><label>24<input type="radio" name="size" value="" ng-model="sizeNgModel.size"></label></li>
+					<li><label>27.5<input type="radio" name="size" value="" ng-model="sizeNgModel.size"></label></li>
+				</menu>
+				<div class="calculate-wrap">
+					<h3 class="buy-tit">购买数量</h3>
+					<calculate ng-init="calculate.cNumber=1"></calculate>
+				</div>
+			</section>
+			<div class="h40px"></div>
+			<nav class="bot-nav">
+				<a class="buy-btn-1 flex-1" href="javascript:;" ng-click="rightBuy()">立即购买</a>
+				<a class="buy-btn-2 flex-1" href="javascript:;" ng-click="addToCart()">加入购物车</a>
+			</nav>
+			<a class="ico-close" href="javascript:;"><label class="ng-label"><input type="checkbox" ng-model="isBuy"></label></a>
+		</div>
+	</section>

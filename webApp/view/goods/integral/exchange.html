@@ -1,0 +1,30 @@
+	<!---------- header ---------->
+	<header-public></header-public>
+	<!---------- main ---------->
+	<main>
+		<ul class="order-list exchange-list">
+			<li ng-repeat="$p in data">
+				<header>
+					<h3>兑换时间：{{$p.time | date:'yyyy-MM-dd'}}</h3>
+					<span ng-if="$p.status == 1">已收货</span>
+					<span ng-if="$p.status == 2">未收货</span>
+					<span ng-if="$p.status == 3">待配送</span>
+				</header>
+				<section>
+					<figure><img ng-src="{{$p.cover}}"></figure>
+					<div>
+						<h4 ng-bind="$p.title"></h4>
+						<p>规格：{{$p.describe}}</p>
+					</div>
+					<aside>
+						<p>{{$p.points}}积分</p>
+						<div>X1</div>
+					</aside>
+				</section>
+				<footer>配送方式：<x ng-if="$p.delivery == 1">市内配送</x><x ng-if="$p.delivery == 2">上门自取</x></footer>
+			</li>
+		</ul>
+		<no-data></no-data>
+		<div class="h40px"></div>
+	</main>
+	<promt></promt>

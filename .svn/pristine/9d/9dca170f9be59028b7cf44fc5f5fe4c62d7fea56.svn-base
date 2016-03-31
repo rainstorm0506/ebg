@@ -1,0 +1,100 @@
+<style type="text/css">
+	.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+	table{width:100%;border-collapse:collapse}
+	td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">商品模块 - 详情</div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">goods.info</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">谭甜</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>
+		<tr>
+			<td>id</td>
+			<td>int</td>
+			<td>必填</td>
+			<td>商品id</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "2319594324004b25f29ac0e74f9cf57a",	# 随机码 , 在下一次请求中传递回来
+    "message": [],
+	"data": {
+        "id": "10",																	#商品id
+        "is_self": "0",																	#自营状态
+        "merchant_id": "16",																#商家id
+        "class_one_id": "4",																#一级分类id
+        "class_two_id": "7",																#二级分类id
+        "class_three_id": "16",																#三级分类id
+        "brand_id": "11",																#品牌id
+        "tag_id": "0",																	#标签
+        "retail_price": "100.00",															#零售价
+        "base_price": "100.00",																#基础价
+        "min_price": "0.00",																#最小价
+        "max_price": "0.00",																#最大价
+        "stock": "-999",																#库存（-999表示无限库存）
+        "weight": "1.00",																#重量
+        "jd_id": "0",																	#京东id
+        "jd_price": "0.00",																#京东价格
+        "title": "铉视达XS-802（A款 黑色）数字插卡摄录一体机",												#标题
+        "cover": "/goods/2016/01-13/16/29948206428806247291452674656.3456.jpg",										#主图
+        "vice_title": "数字插卡摄录一体机",														#副标题
+        "content": "覆盖到更大的单位违反规范",														#商品详情
+        "amount_ratio": "{\"s\":[1,6,16],\"e\":[5,15,35],\"p\":[100,100,100]}",										#数量及价格
+        "user_layer_ratio": "{\"4\":\"100\",\"5\":\"100\",\"3\":\"100\",\"6\":\"100\",\"7\":\"100\",\"8\":\"100\",\"9\":\"100\"}",			#会员等级价格
+        "args": "{\"title\":{\"0\":\"\\u57fa\\u672c\\u53c2\\u6570\"},\"name\":{\"0\":[\"\\u54c1\\u724c\",\"\\u578b\\u53f7\",\"\\u989c\\u8272\"]}}",	#商品参数
+        "attrs": "{\"attrs\":[],\"attrVal\":[]}",													#商品属性
+        "praise": "5",																	#赞的次数
+        "sales": "0",																	#销量
+        "collect": "0",																	#收藏次数
+        "join_goods": "",																#推荐商品
+        "img": [																	#商品图片
+            {
+                "src": "/goods/2016/01-13/16/335970438620460615161452674651.929.jpg",										#图片地址
+                "attrs_unite_code": "main"															#图片类型（main表示基本图片，其它表示对应属性图片）
+            },
+            {
+                "src": "/goods/2016/01-13/16/24139201465593159641452674653.6575.jpg",
+                "attrs_unite_code": "main"
+            },
+            {
+                "src": "/goods/2016/01-13/16/29948206428806247291452674656.3456.jpg",
+                "attrs_unite_code": "main"
+            },
+            {
+                "src": "/goods/2016/01-13/16/1058667420908841781452674658.0857.jpg",
+                "attrs_unite_code": "main"
+            }
+        ],
+        "goods_attrs": {                                                    #商品属性--开始
+            "attrs_1_unite_code": "1d7e3f7b89ae6d54ce4cee74ab94bea8",       #传递
+            "attrs_2_unite_code": "dea9d91cc2ea6cef900256641270c372",
+            "attrs_3_unite_code": "",
+            "attrs_1_value": "A3幅面",                                      #页面展示
+            "attrs_2_value": "复印/打印",
+            "attrs_3_value": ""
+        },                                                                  #商品属性--结束
+        "attr_title": {
+            "title": "视频输入"                                             #当前 属性分类的属性标题
+        },
+    }
+}
+</pre></td>
+		</tr>
+	</table>
+</div>

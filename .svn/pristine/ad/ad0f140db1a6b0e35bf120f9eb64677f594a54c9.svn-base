@@ -1,0 +1,78 @@
+<?php
+/**
+ * 第三方账号验证
+ * 
+ * @author root
+ *
+ */
+class PassportForm extends WebForm
+{
+	/**
+	 * @var		string		来源 , wb=新浪微博 , wx=微信 , qq=腾讯QQ
+	 */
+	public $source;
+	
+	/**
+	 * @var		int			请求位置 , 1=个人/企业 , 2=商家
+	 */
+	public $seat;
+	
+	/**
+	 * @var		string		第三方请求CODE
+	 */
+	public $code;
+	
+	public function viferyCallback()
+	{
+		if (!in_array($this->source , array('wb' , 'wx' , 'qq')))
+			return '访问来源错误 , 这是一个非法请求!';
+		
+		if (!in_array($this->seat , array(1 , 2)))
+			return '请求位置错误 , 这是一个非法请求!';
+		
+		$this->code = trim($this->code);
+		if ($this->code == '')
+			return '第三方回调错误!';
+		
+		return true;
+	}
+	
+// 	public $utype;			// 用户类型（1个人、2企业）
+// 	public $ptype;			// 第三方账号类型（1微博、2微信、3QQ）
+// 	public $code;			// 第三方平台返回的凭证
+// 	public $access_token;	// 调用用户资料的凭证	
+// 	public $id;				// 第三方账号ID
+// 	public $phone;
+// 	public $vxcode;
+// 	public $smscode;
+// 	public $agree = 1;
+// 	public $recode;
+// 	public $ruleType;
+// 	/**
+// 	 * 数据验证
+// 	 * 
+// 	 * @see CModel::rules()
+// 	 */
+// 	public function rules()
+// 	{
+// 		$base = array(
+// 			array('utype, ptype, code', 'required'),
+// 			array('utype', 'in', 'range' => array(1, 2)),
+// 			array('ptype', 'in', 'range' => array(1, 2, 3)),
+// 		);
+
+// 		switch ($this->ruleType)
+// 		{
+// 			case 'callback':
+// 				$ext = array();
+// 				break;
+// 			case 'register':
+// 				$ext = array(
+// 					array('phone, vxcode, smscode, agree, access_token, id', 'required'),
+// 				);
+// 				break;
+// 		}
+		
+// 		return array_merge($base, $ext);
+// 	}
+}

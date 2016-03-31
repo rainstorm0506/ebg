@@ -1,0 +1,299 @@
+﻿// ====================================== 重置搜索
+define(['angularAMD'],function(angularAMD){
+	angularAMD.directive('searchReset',function(){
+		return {
+			restrict : 'A',
+			link : function(scope,elem,attr){
+				var $reset = angular.element(document.querySelectorAll('.sc-nav'));
+				elem.on('touchstart mousedown',function(){
+					$reset.children().removeClass('current');
+					angular.forEach($reset,function(data,index){
+						$reset.eq(index).children().eq(0).addClass('current');
+						$reset.find('input').val('')
+					})
+				})
+			}
+		}
+	});
+	
+	// ====================================== 加入收藏
+	angularAMD.directive('collCart',function($ajax,$stateParams){
+		return {
+			restrict : 'E',
+			replace : true,
+			template : '<nav>' +
+							'<a href="javascript:;" ng-click="collection()" ng-class="{current:hasCollection}"><i class="ico-4"></i></a>' +
+							'<a ui-sref="cart"><i class="ico-3"></i><b ng-bind="addTotal" ng-if="addTotal > 0"></b></a>' +
+						'</nav>',
+			link : function(scope,elem,attr){
+				var id = $stateParams.id ? $stateParams.id : scope.param();
+				scope.collection = function(){
+					$ajax.post(API.goodsInfo,{id:id,type:scope.cType},function(data){
+						if(data.code == 0){
+							scope.promt('恭喜商品收藏成功');
+						}else{
+							scope.promt('对不起，收藏商品失败');
+						}
+					})
+				}
+			}
+		}
+	});
+	// ====================================== 购买及加入购物车
+	angularAMD.directive('buy',function(){
+		return {
+			restrict : 'E',
+			replace : false,
+			templateUrl : 'view/goods/common/buy.html',
+			controller : function($scope,$ajax,$stateParams,$timeout,$localStorage){
+				var id = $stateParams.id ? $stateParams.id : $scope.param();
+				$scope.addTotal = $localStorage.cartNum ? $localStorage.cartNum : 0;
+				if(!angular.isArray($localStorage.cartId)){
+					$localStorage.cartId = []
+				}
+				$scope.addToCart = function(){
+					if($scope.data.stock != -999){
+						if($scope.data.stock <= 0){
+							$scope.promt('库存为0，不能加入购物车');
+							return;
+						}
+					}
+					
+					var cartId = $localStorage.cartId;
+					for(var i in cartId){
+						if(cartId[i] === $scope.data.id){
+							$scope.promt('该商品，您已经加入购物车');
+							return;
+						}
+					}
+					
+					var data = {
+						gid:id,
+						type:$scope.cType,
+						amount:$scope.calculate.cNumber
+					}
+					
+					$ajax.post(API.cartJoin,data,function(data){
+						if(data.code == 0){
+							$scope.promt('恭喜加入购物车成功');
+							$scope.addTotal = data.data.total;
+							$localStorage.cartNum = data.data.total;
+							$localStorage.cartId.push($scope.data.id);	 // 将商器 ID 存储在本地
+						
+							$timeout(function(){
+								$scope.isBuy = false;
+							},1500)
+						}else{
+							$scope.promt('对不起，加入购物车失败');
+						}
+					})
+				}
+				$scope.rightBuy = function(){
+					if($scope.data.stock != -999){
+						if($scope.data.stock <= 0 || $scope.addTotal <=0){
+							$scope.promt('库存为0，不能购买');
+							return;
+						}
+					}
+					$scope.promt('恭喜购买成功');
+				}
+			}
+		}
+	});
+	// ================================================== 购物车列表单选/全选操作
+	angularAMD.directive('shoppingList',function($rootScope){
+		return {
+			link : function(scope,elem,attr){
+				scope.isCartEditor = {}
+				// 编辑局部
+				scope.cartEditor = function(key){
+					scope.isCartEditor[key] = true;
+					$rootScope.isEditor = true;
+					//$rootScope.model.all = false; // 清空所有选择
+					$rootScope.escModel();
+				}
+				scope.editorComplete = function(key){
+					scope.isCartEditor[key] = false;
+					$rootScope.isEditor = false;
+					$rootScope.escModel();
+				}
+				// 编辑全部
+				$rootScope.editorAll = function(){
+					$rootScope.isEditorAll = true;
+					$rootScope.isCartEditorAll = true;
+					//$rootScope.model.all = false;
+					$rootScope.escModel();
+				}
+				$rootScope.editorAllComplete = function(){
+					$rootScope.isCartEditorAll = false;
+					$rootScope.isEditorAll = false;
+					//$rootScope.model.all = false;
+					$rootScope.escModel();
+					$rootScope.isEditor = false;
+					angular.forEach(scope.isCartEditor,function(data,key){
+						scope.isCartEditor[key] = false;
+					});
+				}
+				
+				
+			},
+			controller : function($scope,$rootScope,ePublic){
+				$rootScope.model = {
+					all : {}
+				}
+				$scope.model = {
+					store :{},
+					goods : {}
+				}
+				$rootScope.checkboxModel = $scope.model;
+				var store = $scope.model.store;
+				var goods = $scope.model.goods;
+				// 全选局部
+				$scope.storeChange = function(key){
+					var store = $scope.model.store[key];
+					var goods = $scope.model.goods[key];
+					angular.forEach(goods,function(data,key){
+						goods[key] = store;
+					});
+					judgeAll()
+				}
+				// 单选判断是否全选
+				$scope.goodsChange = function(key){
+					var index = 0;
+					var goods = $scope.model.goods[key];
+					var len = ePublic.dataSize(goods)
+					angular.forEach(goods,function(data,key){
+						if(data){
+							index ++
+						}
+					})
+					$scope.model.store[key] = index === len ? true : false;
+					judgeAll();
+				}
+				
+				var judgeAll = function(){
+					var isStore = true;
+					var store = $scope.model.store;
+					angular.forEach(store,function(data,key){
+						if(!store[key]){
+							isStore = false;
+							return false;
+						}
+					});
+					$rootScope.model.all = isStore ? true : false;
+				}
+				// 全选所有
+				$rootScope.$watch('model.all',function(all){
+					angular.forEach(store,function(data,key){
+						store[key] = all;
+						angular.forEach(goods[key],function(data,index){
+							goods[key][index] = all;
+						})
+					})
+				})
+				
+				// 取消所有
+				
+				$rootScope.escModel = function(){
+					$rootScope.model.all = false;
+					angular.forEach(store,function(data,key){
+						store[key] = false;
+						angular.forEach(goods[key],function(data,index){
+							goods[key][index] = false;
+						})
+					})
+				}
+				
+				// 全选所有,与上级相同
+				/*
+				$rootScope.selectAll = function(){
+					var all = $rootScope.model.all
+					angular.forEach(store,function(data,key){
+						store[key] = all;
+						angular.forEach(goods[key],function(data,index){
+							goods[key][index] = all;
+						})
+					})
+				}*/
+				
+				$scope.finish = function(){
+					var goods = $scope.model.goods;
+					var $money = angular.element(document.querySelectorAll('.money'));
+					
+					// 监听所有
+					angular.forEach(goods,function(data,index){
+						angular.forEach(data,function(m,i){
+							$scope.$watch('model.goods['+ index +']["'+ i +'"]',function(newVal){
+								var price = 0
+								angular.forEach($money,function(data,key){
+									
+									if($money.eq(key).prop('checked')){
+										price += $money.eq(key).val()*1;
+									}
+									$rootScope.totalMoney = price;
+								})
+								
+							})
+						})
+					})
+				}
+			}
+		}
+	});
+	// ====================================== 计算器
+	angularAMD.directive('calculate',function($timeout,$ajax){
+		return {
+			restrict : 'E',
+			replace : true,
+			template : '<div class="calculate">\
+							<a href="javascript:;" ng-click="reduction()" ng-class="{disabled:calculate.cNumber<=1 || aFlag}">-</a>\
+							<input type="number" ng-bind="calculate.cNumber" ng-model="calculate.cNumber" ng-change="numChange()" ng-blur="inputBlur()">\
+							<a href="javascript:;" ng-click="add()" ng-class="{disabled:calculate.cNumber>1000 || bFlag}">+</a>\
+						</div>',
+			link : function(scope,elem,attr){
+				scope.add = function(){
+					scope.calculate.cNumber++
+				}
+				scope.reduction = function(){
+					scope.calculate.cNumber --
+				}
+				
+				
+				scope.$watch('calculate.cNumber',function(newVal,oldVal){
+					if(newVal < 1){
+						scope.calculate.cNumber = 1;
+					}
+					if(newVal > 1000){
+						scope.calculate.cNumber = 1000;
+					}
+					if(attr.flag == 'cart'){
+						if(newVal !== oldVal && scope.calculate.key !== undefined && newVal >0 && newVal < 1000){
+							$timeout(function(){
+								var param = {
+									   key : scope.calculate.key,
+									amount : scope.calculate.cNumber
+								}
+								console.log(param)
+								$ajax.posts(API.changeAmount,param,function(data){
+									scope.price = data;
+								})
+							},500)
+						}
+					}
+				});
+			}
+		}
+	});
+	// ================================================== 过滤器
+	// =================================== 过滤库存
+	angularAMD.filter('filterStock',function(){
+		return function(name){
+			if(name == -999){
+				return '>100';
+			}else{
+				return name;
+			}
+		}
+	});
+	
+});

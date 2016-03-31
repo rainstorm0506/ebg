@@ -1,0 +1,673 @@
+<?php
+class Cart extends WebModels
+{
+	private function getOrderSN()
+	{
+		$range = array(0=>2 , 1=>4 , 2=>6 , 3=>1 , 4=>5 , 5=>9 , 6=>7 , 7=>3 , 8=>0 , 9=>8);
+		
+		$time = mt_rand(0,9).time().mt_rand(0,9);
+		$code = '';
+		foreach (str_split($time) as $k => $v)
+		{
+			$code .= ($k && $k % 4==0 ? '-' : '').$range[$v];
+		}
+		return chr(mt_rand(65,90)).$code;
+	}
+	
+	private function getOrderPrivilege($privilege , $uid , &$privilegeID)
+	{
+		if ($privilege && ($pList = GlobalActivities::getUserPrivilege($uid)))
+		{
+			$px =explode('|' , $privilege);
+			$p0 = empty($px[0]) ? 0 : (int)$px[0];
+			$p1 = empty($px[1]) ? 0 : (float)$px[1];
+			foreach ($pList as $v)
+			{
+				if ($v['id'] == $p0 && $p1 == $v['privilege_money'])
+				{
+					$privilegeID = $p0;
+					return $p1;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	private function getOrderReduction($reduction)
+	{
+		if ($reduction && ($pList = GlobalActivities::getReduction()))
+		{
+			$px =explode('|' , $reduction);
+			$p0 = empty($px[0]) ? 0 : (int)$px[0];
+			$p1 = empty($px[1]) ? 0 : (float)$px[1];
+			$p2 = empty($px[2]) ? 0 : (float)$px[2];
+			if (!empty($pList[$p0]['child']))
+			{
+				foreach ($pList[$p0]['child'] as $v)
+				{
+					if ($v['expire'] == $p1 && $p2 == $v['minus'])
+						return $p2;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	private function getOrderFreight(array $goods ,array $userAddress , $totals , $deliveryWay , &$freight = array())
+	{
+		//满减 & 自提
+		if ($totals >= $this->getFreeFreight() || $deliveryWay == 2)
+			return 0;
+		
+		$money = $this->getDictFreight($goods , array(
+			$userAddress['dict_one_id'],
+			$userAddress['dict_two_id'],
+			$userAddress['dict_three_id'],
+			$userAddress['dict_four_id'],
+		) , $freight);
+		return $money;
+	}
+	
+	//满 x 元减运费
+	private function getFreeFreight()
+	{
+		$free = $this->getUser();
+		$free = GlobalUser::getUserLayer($free['exp'] , $free['user_type']);
+		return isset($free['free_freight']) ? $free['free_freight'] : 0;
+	}
+	
+	
+	/**
+	 * 创建订单
+	 * @param		array		$goods			商品
+	 * @param		double		$totals			商品总价
+	 */
+	public function createOrders(array $post , array $goods , $totals)
+	{
+		if (!$goods || !$totals || !$post)
+			return false;
+		
+		#print_r($post);exit;
+		$uid = $this->getUid();
+		$time = time();
+		
+		//子订单数量
+		$childOrderNum = count($goods);
+		$parentOrderSn = $childOrderNum > 1 ? $this->getOrderSN() : '';
+		$osn = '';
+		
+		//用户地址
+		$userAddress		= $this->getUserAddressByID((int)$post['userAddressID'] , $uid);
+		$deliveryWay		= (int)$post['deliveryWay'];
+		$payType			= (int)$post['payType'];
+		$wholeAddress		= $this->getWholeAddress($userAddress);
+		
+		//优惠金额
+		$privilegeID		= 0;
+		$discountMoney		= $this->getOrderPrivilege(empty($post['privilege'])?'':$post['privilege'] , $uid , $privilegeID);
+		$discountMoney		+= $this->getOrderReduction(empty($post['reduction'])?'':$post['reduction']);
+		
+		//运费
+		$freightDetail = array();
+		$freightMoney = $this->getOrderFreight($goods , $userAddress , $totals , $deliveryWay , $freightDetail);
+		
+		$totalTitle = array();
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			#print_r($goods);exit;
+			foreach ($goods as $mid => $merGoods)
+			{
+				$osn			= $this->getOrderSN();
+				$cover			= array();
+				$goodsMoney		= 0;
+				$freight_money	= empty($freightDetail[$mid]) ? 0 : (double)$freightDetail[$mid];
+				
+				foreach ($merGoods as $k => $gs)
+				{
+					//改变库存和销量
+					if (!$this->changeStock($gs))
+					{
+						$transaction->rollBack();
+						return false;
+					}
+					
+					$cover[] = $gs['cover'];
+					
+					$goodsMoney += $gs['final_total'];
+					$orderGoods = array(
+						'order_sn'			=> $osn,
+						'goods_type'		=> $gs['type'],
+						'goods_id'			=> $gs['id'],
+						'goods_vers_num'	=> $gs['last_time'],
+						'num'				=> $gs['amount'],
+						'unit_price'		=> $gs['final_price'],
+						'goods_attrs'		=> json_encode(empty($gs['goods_attrs'])?array():$gs['goods_attrs']),
+						'goods_cover'		=> $gs['cover'],
+						'goods_title'		=> $gs['title'],
+						'goods_weight'		=> $gs['final_weight'],
+					);
+					$totalTitle[md5($gs['title'])] = $gs['title'];
+					$this->insert('order_goods', $orderGoods);
+				}
+				
+				$discount_money = $discountMoney / $childOrderNum;
+				$orders = array(
+					'order_sn'			=> $osn,
+					'parent_order_sn'	=> $parentOrderSn,
+					'user_id'			=> $uid,
+					'merchant_id'		=> $mid,
+					'order_status_id'	=> 101,
+					'goods_money'		=> $goodsMoney,
+					'freight_money'		=> $freight_money,
+					'discount_money'	=> $discount_money,
+					'order_money'		=> ($goodsMoney + $freight_money - $discount_money),
+					'pay_type'			=> $payType,
+					'create_time'		=> $time,
+				);
+				$this->insert('orders', $orders);
+				
+				$remark = empty($post['remark'][$mid]) ? '' : trim($post['remark'][$mid]);
+				$extend = array(
+					'order_sn'			=> $osn,
+					'user_shoot'		=> json_encode($this->getUser()),
+					'addressee_shoot'	=> json_encode($userAddress),
+					'cons_name'			=> empty($userAddress['consignee'])?'':$userAddress['consignee'],
+					'cons_phone'		=> empty($userAddress['phone'])?'':$userAddress['phone'],
+					'cons_address'		=> $wholeAddress,
+					'order_cover'		=> json_encode($cover),
+					'user_remark'		=> $remark,
+					'delivery_way'		=> $deliveryWay
+				);
+				$this->insert('orders_extend', $extend);
+				
+				$olog = array(
+					'order_sn'				=> $osn,
+					'operate_type'			=> 1,
+					'operate_id'			=> $uid,
+					'pre_order_status_id'	=> 0,
+					'now_order_status_id'	=> 101,
+					'logs'					=> '您提交了订单，请等待系统确认',
+					'memo'					=> $remark,
+					'time'					=> $time
+				);
+				$this->insert('order_log', $olog);
+			}
+			
+			//如果使用优惠券
+			if ($privilegeID > 0)
+			{
+				$this->update('activities_privilege_user' , array(
+					'use_time'	=> $time,
+					'order_sn'	=> $parentOrderSn ? $parentOrderSn : $osn,
+				) , "id={$privilegeID} AND user_id={$uid}");
+				GlobalActivities::getUserPrivilege($uid , true);
+			}
+			
+			//写总订单
+			if ($childOrderNum > 1)
+			{
+				$orders = array(
+					'order_sn'			=> $parentOrderSn,
+					'parent_order_sn'	=> '1',
+					'user_id'			=> $uid,
+					'merchant_id'		=> 0,
+					'order_status_id'	=> 101,
+					'goods_money'		=> $totals,
+					'freight_money'		=> $freightMoney,
+					'discount_money'	=> $discountMoney,
+					'order_money'		=> ($totals + $freightMoney - $discountMoney),
+					'pay_type'			=> $payType,
+					'create_time'		=> $time,
+				);
+				$this->insert('orders', $orders);
+				
+				$extend = array(
+					'order_sn'			=> $parentOrderSn,
+					'user_shoot'		=> json_encode($this->getUser()),
+					'addressee_shoot'	=> json_encode($userAddress),
+					'cons_name'			=> empty($userAddress['consignee'])?'':$userAddress['consignee'],
+					'cons_phone'		=> empty($userAddress['phone'])?'':$userAddress['phone'],
+					'cons_address'		=> $wholeAddress,
+					'order_cover'		=> json_encode(array_values($totalTitle)),
+					'user_remark'		=> $remark,
+					'delivery_way'		=> $deliveryWay
+				);
+				$this->insert('orders_extend', $extend);
+				
+				$olog = array(
+					'order_sn'				=> $parentOrderSn,
+					'operate_type'			=> 3,
+					'operate_id'			=> 0,
+					'pre_order_status_id'	=> 0,
+					'now_order_status_id'	=> 101,
+					'logs'					=> '商品属于不同商家，订单被拆分为多个子订单分开配送',
+					'memo'					=> '',
+					'time'					=> $time
+				);
+				$this->insert('order_log', $olog);
+			}
+			
+			$transaction->commit();
+			return $parentOrderSn ? $parentOrderSn : $osn;
+			#return true;
+		}catch(Exception $e){
+			$transaction->rollBack();
+		}
+		return false;
+	}
+	
+	/**
+	 * 改变库存和销量
+	 * @param	array		$gs		商品信息
+	 */
+	private function changeStock(array $gs)
+	{
+		$amount		= (int)$gs['amount'];
+		$gid		= (int)$gs['id'];
+		
+		if ($amount < 1)
+			return false;
+		
+		if ((int)$gs['type'] == 1)
+		{
+			if (empty($gs['attrs']))
+			{
+				$this->execute("UPDATE goods SET stock=stock-{$amount} WHERE id={$gid} AND stock>={$amount} AND shelf_id=410 AND status_id=401 AND delete_id=0");
+				$this->execute("UPDATE goods SET sales=sales+{$amount} WHERE id={$gid}");
+			}else{
+				$SQL = '';
+				$SQL .= " AND attrs_1_unite_code=" . (empty($gs['attrs']['attrs_1_unite_code']) ? "''" : $this->quoteValue($gs['attrs']['attrs_1_unite_code']));
+				$SQL .= " AND attrs_2_unite_code=" . (empty($gs['attrs']['attrs_2_unite_code']) ? "''" : $this->quoteValue($gs['attrs']['attrs_2_unite_code']));
+				$SQL .= " AND attrs_3_unite_code=" . (empty($gs['attrs']['attrs_3_unite_code']) ? "''" : $this->quoteValue($gs['attrs']['attrs_3_unite_code']));
+				
+				$this->execute("UPDATE goods_join_attrs SET stock=stock-{$amount} WHERE goods_id={$gid} AND stock>={$amount} {$SQL}");
+				$this->execute("UPDATE goods SET sales=sales+{$amount} WHERE id={$gid}");
+			}
+		}else{
+			$this->execute("UPDATE used_goods SET stock=stock-{$amount} WHERE id={$gid} AND stock>={$amount} AND shelf_id=1001 AND status_id=1013 AND delete_id=0");
+			$this->execute("UPDATE used_goods SET detail=detail+{$amount} WHERE id={$gid}");
+		}
+		return true;
+	}
+	
+	public function getDictFreight(array $goods , array $dict , &$freight = array())
+	{
+		$dict0 = empty($dict[0]) ? 'AND dict_one_id=0' : ('AND (dict_one_id=0 OR dict_one_id='.intval($dict[0]).')');
+		$dict1 = empty($dict[1]) ? 'AND dict_two_id=0' : ('AND (dict_two_id=0 OR dict_two_id='.intval($dict[1]).')');
+		$dict2 = empty($dict[2]) ? 'AND dict_three_id=0' : ('AND (dict_three_id=0 OR dict_three_id='.intval($dict[2]).')');
+		$dict3 = empty($dict[3]) ? 'AND dict_four_id=0' : ('AND (dict_four_id=0 OR dict_four_id='.intval($dict[3]).')');
+		$SQL = "SELECT default_weight,default_price,interval_weight,interval_price
+				FROM express_freight WHERE 1 {$dict0} {$dict1} {$dict2} {$dict3}
+				ORDER BY dict_four_id DESC , dict_three_id DESC , dict_two_id DESC";
+		
+		$orderMoney = $total = 0;
+		if ($goods && ($rows = $this->queryRow($SQL)))
+		{
+			$weight = array();
+			foreach ($goods as $mid => $merVal)
+			{
+				$weight[$mid] = 0;
+				foreach ($merVal as $vs)
+				{
+					$weight[$mid] += $vs['final_weight'] * $vs['amount'];
+					$orderMoney += $vs['final_total'];
+				}
+				
+				if ($weight[$mid] <= $rows['default_weight'])
+				{
+					$total += ($freight[$mid] = $rows['default_price']);
+				}else{
+					if ($rows['interval_weight']>0)
+						$total += ($freight[$mid] = (ceil(($weight[$mid] - $rows['default_weight']) / $rows['interval_weight']) * $rows['interval_price'] + $rows['default_price']));
+				}
+			}
+			//免运费
+			if ($orderMoney >= $this->getFreeFreight())
+			{
+				$freight = array();
+				$total = 0;
+			}
+		}
+		
+		return $total;
+	}
+	
+	/**
+	 * 获得可用并且适合的满减
+	 * @param		int		$totals		商品总价
+	 */
+	public function getUsableReduction($totals)
+	{
+		$tmp = array();
+		if ($data = GlobalActivities::getReduction())
+		{
+			$time = time();
+			foreach ($data as $k => $v)
+			{
+				if (empty($v['child']) || $v['active_endtime'] < $time || $v['active_starttime'] > $time)
+					continue;
+				
+				foreach ($v['child'] as $cv)
+				{
+					if ($cv['expire'] > $totals || $cv['minus'] > $totals)
+						continue;
+					
+					$key = join('|' , array($k , $cv['expire'] , $cv['minus']));
+					$tmp[$key] = $v['title'] . " (满{$cv['expire']}元立减{$cv['minus']}元)";
+				}
+			}
+		}
+		return $tmp;
+	}
+	
+	/**
+	 * 获得可用并且适合的优惠券
+	 * @param		int		$totals		商品总价
+	 */
+	public function getUsablePrivilege($totals)
+	{
+		$tmp = array();
+		if ($privilege = GlobalActivities::getUserPrivilege($this->getUid()))
+		{
+			$time = time();
+			foreach ($privilege as $k => $v)
+			{
+				if ($v['order_min_money'] > $totals || $v['privilege_money'] > $totals || $v['use_endtime'] < $time || $v['use_starttime'] > $time)
+					continue;
+				$tmp[$v['id'].'|'.$v['privilege_money']] = $v['title'] . " ({$v['privilege_money']}元)";
+			}
+		}
+		return $tmp;
+	}
+	
+	public function userSetDeftAddrs($aid , $uid)
+	{
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			$this->update('user_address' , array('is_default'=>0) , "user_id={$uid}");
+			$this->update('user_address' , array('is_default'=>1) , "id={$aid} AND user_id={$uid}");
+			
+			$transaction->commit();
+			return true;
+		}catch(Exception $e){
+			$transaction->rollBack();
+			return false;
+		}
+	}
+	
+	public function setUserAddress(array $post , $aid)
+	{
+		$uid = $this->getUid();
+		$isDefault = (int)$post['is_default'];
+		$columns = array(
+			'user_id'		=> $uid,
+			'consignee'		=> trim($post['consignee']),
+			'dict_one_id'	=> (int)$post['dictOneId'],
+			'dict_two_id'	=> (int)$post['dictTwoId'],
+			'dict_three_id'	=> (int)$post['dictThreeId'],
+			'dict_four_id'	=> (int)$post['dictFourId'],
+			'address'		=> trim($post['address']),
+			'phone'			=> trim($post['phone']),
+			'is_default'	=> $isDefault,
+		);
+		
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			if ($isDefault)
+				$this->update('user_address' , array('is_default'=>0) , "user_id={$uid}");
+			
+			if ($aid>0)
+				$this->update('user_address' , $columns , "id={$aid}");
+			else
+				$this->insert('user_address' , $columns);
+			
+			$transaction->commit();
+			return true;
+		}catch(Exception $e){
+			$transaction->rollBack();
+			return false;
+		}
+	}
+	
+	/**
+	 * 得到购物车中商品的列表
+	 * @param		array		$cartData		商品 id
+	 * @param		double		$totals			商品总价
+	 */
+	public function getCartList(array &$cartData , &$totals = 0)
+	{
+		#print_r($cartData);exit;
+		$carts = empty($cartData['goods']) ? array() : $cartData['goods'];		# 购物车主数据
+		
+		$ginfos = $uginfos = $redx = array();
+		foreach ($carts as $mid => $merVal)
+		{
+			foreach ($merVal as $k => $vs)
+			{
+				if ($vs['type'] == 1)
+					$ginfos[$vs['gid']] = $vs['gid'];
+				else
+					$uginfos[$vs['gid']] = $vs['gid'];
+			}
+		}
+		
+		if (empty($ginfos) && empty($uginfos))
+			return array();
+		
+		$ginfos			= $this->getGoodsList($ginfos);
+		$uginfos		= $this->getUsedGoodsList($uginfos);
+		$userLayerID	= $this->getUserLayerID();
+		foreach ($carts as $mid => $merVal)
+		{
+			foreach ($merVal as $k => $vs)
+			{
+				$finalTotal = 0;
+				if ($vs['type'] == 1)
+				{
+					if (!empty($ginfos[$vs['gid']]))
+					{
+						$vm				= $ginfos[$vs['gid']];
+						$vm['amount']	= $vs['amount'];
+						$vm['type']		= 1;//商品
+						$vm['attrs']	= GlobalGoods::getAttrsRows($vs['gid'] , $vs['attrs_1_unite_code'], $vs['attrs_2_unite_code'], $vs['attrs_3_unite_code'] , true);
+							
+						$core = $this->getGoodsCore($vm , $userLayerID);
+						//商品没有库存,跳过
+						if ($core['stock'] <=0 && $core['stock'] != -999)
+						{
+							unset($cartData['goods'][$mid][$k]);
+							if (empty($cartData['goods'][$mid]))
+								unset($cartData['goods'][$mid]);
+							
+							$cartData['cartNum'] -= 1;
+							continue;
+						}
+						
+						$vm['final_price']		= $core['price'];
+						$vm['final_stock']		= $core['stock'];
+						$vm['final_weight']		= $core['weight'];
+						$vm['final_total']		= $finalTotal = $core['total'];
+						
+						$_attrs = $this->get_goods_attrs_html(array_merge($vm , $vs));
+						$vm['html_attrs']		= $_attrs['html'];
+						$vm['goods_attrs']		= $_attrs['putes'];
+							
+						$redx[$mid][$k] = $vm;
+					}
+				}else{
+					#print_r($uginfos);print_r($vs);exit;
+					if (empty($uginfos[$vs['gid']]))
+						continue;
+					
+					$vm				= $uginfos[$vs['gid']];
+					$vm['amount']	= $vs['amount'];
+					$vm['type']		= 2;//商品
+						
+					//商品没有库存,跳过
+					if ($vm['stock'] <=0 && $vm['stock'] != -999)
+					{
+						unset($cartData['goods'][$mid][$k]);
+						if (empty($cartData['goods'][$mid]))
+							unset($cartData['goods'][$mid]);
+							
+						$cartData['cartNum'] -= 1;
+						continue;
+					}
+					
+					$vm['final_price']		= $vm['sale_price'];
+					$vm['final_stock']		= $vm['stock'];
+					$vm['final_weight']		= $vm['weight'];
+					$vm['final_total']		= $finalTotal = ($vm['sale_price'] * $vs['amount']);
+					$vm['html_attrs']		= '';
+					$redx[$mid][$k] = $vm;
+				}
+				
+				$totals += $finalTotal;
+			}
+		}
+		return $redx;
+	}
+	
+	private function get_goods_attrs_html(array $goods)
+	{
+		$reArr = array('putes'=>array() , 'html'=>array());
+		$_html = '';
+		if ($classAttrs = GlobalGoodsAttrs::getClassAttrs($goods['class_one_id'] , $goods['class_two_id'] , $goods['class_three_id']))
+		{
+			foreach ($classAttrs as $k => $v)
+			{
+				if (!empty($v['child'][$goods['attrs_1_unite_code']]['title']))
+				{
+					$_html .= "<p>{$v['title']}：{$v['child'][$goods['attrs_1_unite_code']]['title']}</p>";
+					$reArr['putes'][$k] = array($goods['attrs_1_unite_code'] , $v['title'] , $v['child'][$goods['attrs_1_unite_code']]['title']);
+				}elseif (!empty($v['child'][$goods['attrs_2_unite_code']]['title'])){
+					$_html .= "<p>{$v['title']}：{$v['child'][$goods['attrs_2_unite_code']]['title']}</p>";
+					$reArr['putes'][$k] = array($goods['attrs_2_unite_code'] , $v['title'] , $v['child'][$goods['attrs_2_unite_code']]['title']);
+				}elseif (!empty($v['child'][$goods['attrs_3_unite_code']]['title'])){
+					$_html .= "<p>{$v['title']}：{$v['child'][$goods['attrs_3_unite_code']]['title']}</p>";
+					$reArr['putes'][$k] = array($goods['attrs_3_unite_code'] , $v['title'] , $v['child'][$goods['attrs_3_unite_code']]['title']);
+				}
+			}
+		}
+		
+		$reArr['html'] = $_html;
+		return $reArr;
+	}
+	
+	/**
+	 * 获得用户的等级ID
+	 */
+	private function getUserLayerID()
+	{
+		if ($user = $this->getUser())
+			return GlobalUser::getUserLayerID($user['exp'] , $user['user_type']);
+		
+		return 0;
+	}
+	
+	private function getUserRatio($userLayerID , array $userRatio)
+	{
+		if ($userLayerID && isset($userRatio[$userLayerID]))
+		{
+			if (is_numeric($userRatio[$userLayerID]) && $userRatio[$userLayerID]<=100 && $userRatio[$userLayerID] >0)
+				return $userRatio[$userLayerID];
+		}
+		return 100;
+	}
+	
+	private function getAmountRatio($amount , array $amountRatio)
+	{
+		if (empty($amountRatio['s']) || empty($amountRatio['e']) || empty($amountRatio['p']))
+			return 100;
+		
+		$lastRatio = 100;
+		foreach ($amountRatio['s'] as $k => $v)
+		{
+			$lastRatio = min($lastRatio , (empty($amountRatio['p'][$k]) ? 100 : $amountRatio['p'][$k]));
+			if ($amount>= $v && !empty($amountRatio['e'][$k]) && $amount < $amountRatio['e'][$k] && isset($amountRatio['p'][$k]))
+				return floatval($amountRatio['p'][$k]);
+		}
+		return $lastRatio;
+	}
+	
+	private function getGoodsCore(array $goods , $userLayerID)
+	{
+		$basePrice	= floatval(empty($goods['attrs']['base_price']) ? $goods['base_price'] : $goods['attrs']['base_price']);
+		$stock		= intval(empty($goods['attrs']['stock']) ? $goods['stock'] : $goods['attrs']['stock']);
+		$weight		= (empty($goods['attrs']['weight']) ? $goods['weight'] : $goods['attrs']['weight']);
+		$amount		= intval($goods['amount']);
+		$uRatio		= $this->getUserRatio($userLayerID , $goods['user_layer_ratio']);
+		$aRatio		= $this->getAmountRatio($amount , $goods['amount_ratio']);
+		
+		$basePrice = $basePrice * min($uRatio , $aRatio);
+		$basePrice = $basePrice ? $basePrice / 100 : 0;
+		
+		return array(
+			'price'		=> $basePrice,
+			'total'		=> $basePrice * $amount,
+			'stock'		=> $stock,
+			'weight'	=> $weight,
+		);
+	}
+	
+	public function getUsedGoodsList(array $ugs)
+	{
+		if (!$ugs)
+			return array();
+		
+		$temp = array();
+		foreach ($this->queryAll("SELECT * FROM used_goods WHERE id IN (".join(',',$ugs).") AND shelf_id=1001 AND status_id=1013 AND delete_id=0") as $vs)
+			$temp[$vs['id']] = $vs;
+		return $temp;
+	}
+	
+	public function getGoodsList(array $goods)
+	{
+		if (!$goods)
+			return array();
+		
+		$temp = array();
+		foreach ($this->queryAll("
+			SELECT
+				id,class_one_id,class_two_id,class_three_id,merchant_id,title,cover,base_price,stock,
+				weight,min_price,max_price,user_layer_ratio,amount_ratio,last_time
+			FROM `goods` WHERE id IN (".join(',', $goods).") AND shelf_id=410 AND status_id=401 AND delete_id=0 ORDER BY merchant_id ASC") as $val)
+		{
+			$val['user_layer_ratio'] = $this->jsonDnCode($val['user_layer_ratio']);
+			$val['amount_ratio'] = $this->jsonDnCode($val['amount_ratio']);
+			$temp[$val['id']] = $val;
+		}
+		
+		return $temp;
+	}
+	
+	public function getWholeAddress(array $address , $space = '')
+	{
+		return (string)join($space , array(
+			GlobalDict::getAreaName($address['dict_one_id']) ,
+			GlobalDict::getAreaName($address['dict_two_id'] , $address['dict_one_id']) ,
+			GlobalDict::getAreaName($address['dict_three_id'] , $address['dict_two_id'] , $address['dict_one_id']) ,
+			GlobalDict::getAreaName($address['dict_four_id'] , $address['dict_three_id'] , $address['dict_two_id'] , $address['dict_one_id']) ,
+			$address['address']
+		));
+	}
+	
+	public function getUserAddressByID($id , $uid)
+	{
+		if ($id < 1)
+			return array();
+		
+		$uid = $uid>0 ? "AND user_id={$uid}" : '';
+		return $this->queryRow("SELECT * FROM user_address WHERE id={$id} {$uid}");
+	}
+
+	public function getUserAddressList($uid)
+	{
+		if ($uid < 1)
+			return array();
+		return $this->queryAll("SELECT * FROM user_address WHERE user_id={$uid} ORDER BY is_default DESC,id DESC");
+	}
+}

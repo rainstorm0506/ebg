@@ -1,0 +1,20 @@
+﻿// ================================== 刷新
+.refresh:extend(.db,.tc){.fix_lb(0,0,100);.fs(@20px);.hh(40/@n);.c(#f2f2f2);.w;.rgba(0,0,0,0.2);
+	*{.dk}
+	i:extend(.brn_bsc,.rel){.bi_ww(22/@n,ico-refresh);.ml(10/@n);.t(4/@n)}
+	&.css3{
+		i{.animation(refresh 1s linear infinite both)}
+	}
+}
+@-webkit-keyframes refresh{
+	from{-webkit-transform:rotate(0)}
+	to{-webkit-transform:rotate(360deg)}
+}
+@-moz-keyframes refresh{
+	from{-moz-transform:rotate(0)}
+	to{-moz-transform:rotate(360deg)}
+}
+@keyframes refresh{
+	from{transform:rotate(0)}
+	to{transform:rotate(360deg)}
+}

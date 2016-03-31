@@ -1,0 +1,61 @@
+<style type="text/css">
+.a{background-color:#FC9;margin:10px 0;padding:6px 5px}
+table{width:100%;border-collapse:collapse}
+td{ border:#ccc solid 1px;padding:5px;height:25px}
+</style>
+<div>
+	<div class="title">企业会员 /集采拆分之后的详情 </div>
+	<table>
+		<tr>
+			<td style="width:200px;padding:10px 5px">请求位置</td>
+			<td colspan="4">companyUser.getSplit</td>
+		</tr>
+		<tr>
+			<td>实现人</td>
+			<td colspan="4">李启源</td>
+		</tr>
+		<tr>
+			<td rowspan="2">请求参数</td>
+			<td>参数</td>
+			<td>类型</td>
+			<td>必填项</td>
+			<td>说明</td>
+		</tr>	
+		<tr>
+			<td>purchase_sn</td>
+			<td>varchar</td>
+			<td>必</td>
+			<td>某一集采需求的订单号</td>
+		</tr>
+		<tr>
+			<td>正常的返回值 </td>
+			<td colspan="4"><pre>
+{
+    "code": 0,
+    "x-token": "b93257060e08b1782f888202d7995486",
+    "message": [],
+    "data": {
+        "infos": [                                      #拆分后得 集采订单详情数据 ==开始
+            {
+                "id": "26",                             #拆分之后的产品ID号
+                "name": "国产003",                      #名称
+                "num_min": "1",                         #需求的 最小数量
+                "num_max": "10",                        #需求的 最大数量
+                "price_endtime": "2016-01-29 08:00:00"
+            },
+            {
+                "name": "国产004",
+                "num_min": "10",
+                "num_max": "100",
+                "price_endtime": "2016-01-29 08:00:00"
+            }
+        ],                                              #拆分后得 集采订单详情数据 ==结束
+        "title": "测试贾2采购单2",
+        "price_endtime": "2016-01-29 08:00:00",          #报价结束时间
+    }
+}     
+</pre></td>
+		</tr>
+	</table>
+</div>
+

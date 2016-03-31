@@ -1,0 +1,75 @@
+<?php
+class ActFree extends SModels
+{
+	/**
+	 * 得到列表的总数
+	 */
+	public function getGoodsCount()
+	{
+		return (int)$this->queryScalar("SELECT COUNT(*) FROM act_buy_free");
+	}
+	/**
+	 * 列表
+	 * @param		int			$offset		偏移量
+	 * @param		int			$rows		读取条数
+	 * @param		int			$total		总行数
+	 * @return		array
+	 */
+	public function getList($offset , $rows , $total)
+	{
+		if (!$total || $offset>=$total)
+			return array();
+
+			return $this->queryAll("SELECT * FROM act_buy_free LIMIT {$offset},{$rows}");
+	}
+	/**
+	 * 检查标题
+	 */
+	public function checkTitle($title , $id)
+	{
+		$SQL = $id>0 ? " AND id!={$id}" : '';
+		return $title && (boolean)$this->queryRow("SELECT id FROM act_buy_free WHERE `title`={$this->quoteValue($title)} {$SQL}");
+	}
+	/**
+	 * 添加零元购
+	 */
+	public function create($post=array())
+	{
+		$data=array(
+			'title'		=> $post['title'] ,
+			'userexp'	=> $post['userexp'],
+			'companyexp'=> $post['companyexp'],
+			'purlimit'	=> $post['userlimitce'] ,
+			'remark'	=> $post['remark']
+		);
+		$transaction = Yii::app()->getDb()->beginTransaction();
+		try
+		{
+			$this->insert('act_buy_free' , $data);
+			$aid=$this->getInsertId();
+			foreach($post['gids'] as $k=>$v)
+			{
+				$row=array(
+					'aid'		=>	$aid ,
+					'gid'		=>	$v ,
+					'condition'	=>	$post['price'][$k],
+					'stock'		=> $post['nums'][$k]
+				);
+				$this->insert('act_free_extend' , $row);
+			}
+			foreach($post['start'] as $k=>$v)
+			{
+				$arr=array(
+					'aid'		=>	$aid ,
+					'start_time'=>	$v,
+					'end_time'	=>	$post['end'][$k]
+				);
+				$this->insert('act_free_time' , $arr);
+			}
+			$transaction->commit();
+			return true;
+		}catch(Exception $e){
+			$transaction->rollBack();
+		}
+	}
+}

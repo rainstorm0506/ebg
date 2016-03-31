@@ -1,0 +1,269 @@
+<?php
+/**
+ * 第三方账号登录
+ * 
+ * @author 严成林 , 涂先锋
+ */
+class PassportController extends WebController
+{
+	//QQ授权登录
+	public function actionTencent()
+	{
+		$this->_loginJump();
+		ClassLoad::Only('ThirdLoginQQ')->login((int)$this->getQuery('u') == 2 ? 2 : 1);
+	}
+	
+	//新浪微博授权登录
+	public function actionWeibo()
+	{
+		$this->_loginJump();
+		ClassLoad::Only('ThirdLoginWB')->login((int)$this->getQuery('u') == 2 ? 2 : 1);
+	}
+	
+	//微信授权登录
+	public function actionWechat()
+	{
+		$this->_loginJump();
+		ClassLoad::Only('ThirdLoginWechat')->login((int)$this->getQuery('u') == 2 ? 2 : 1);
+	}
+	
+	//授权统一回调页
+	public function actionCallback()
+	{
+		$this->_loginJump();
+		
+		$form			= ClassLoad::Only('PassportForm');/* @var $form PassportForm */
+		$args			= explode('.' , (string)$this->getQuery('x'));
+		$form->source	= empty($args[0]) ? '' : $args[0];
+		$form->seat		= empty($args[1]) ? 0 : (int)$args[1];
+		$form->code		= (string)$this->getQuery('code');
+		
+		if (($errString = $form->viferyCallback()) !== true)
+			$this->error($errString);
+		
+		if (!$third = $this->getThirdUserInfo($form))
+			$this->error('第三方回调错误 !');
+
+		if (!$this->bindUser($form , $third['id']))
+		{
+			$this->render('callback', array(
+				'third'	=> $third,
+				'form'	=> $form
+			));
+		}
+	}
+	
+	//绑定过的非正常用户视图
+	public function actionImproper()
+	{
+		$session = Yii::app()->session;
+		$session->open();
+		if (isset($session['ThirdImproper']))
+		{
+			$user			= $session['ThirdImproper'];
+			$user['code']	= GlobalStatus::getStatusName((int)$user['status_id'] , (int)$user['user_type']);
+			$this->render('improper' , $user);
+		}else{
+			$this->error('未知错误!');
+		}
+	}
+	
+	//隐藏表单域提交
+	public function actionThirdFORM()
+	{
+		if (!$xcode = $this->getPost('xcode'))
+			$this->error('未知错误!');
+		
+		$session = Yii::app()->session;
+		$session->open();
+		
+		$xcode = isset($session['ThirdFORM'][$xcode]) ? $session['ThirdFORM'][$xcode] : array();
+		
+		$form = ClassLoad::Only('LoginForm');/* @var $form LoginForm */
+		$form->attributes = $xcode;
+		
+		if($form->validate() && $form->login(false))
+			$this->_loginJump();
+	}
+	
+	//如果绑定过平台账号，直接登录
+	private function bindUser(PassportForm $form , $openid)
+	{
+		$model = ClassLoad::Only('Passport');/* @var $model Passport */
+		if ($user = $model->getBindUser($form , $openid))
+		{
+			$status = false;
+			switch ($user['user_type'])
+			{
+				case 1 : $status = (int)$user['status_id'] === 510; break;
+				case 2 : $status = (int)$user['status_id'] === 610; break;
+				case 3 : $status = (int)$user['status_id'] === 710; break;
+			}
+			
+			$session = Yii::app()->session;
+			$session->open();
+			if ($status === false)
+			{
+				$session['ThirdImproper'] = $user;
+				$session->close();
+				$this->redirect(array('improper'));
+			}else{
+				$xcode = mt_rand();
+				$session['ThirdFORM'] = array($xcode => array(
+					'userPhone'	=> $user['phone'],
+					'type'		=> $user['user_type']==3 ? 1 : 0,
+					'password'	=> 'no password',
+				));
+				$this->renderPartial('ThirdFORM' , array('xcode'=>$xcode) , false , true);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	//获取最靠近的非空值
+	private function getClosestVal()
+	{
+		foreach (array_unique(array_filter(func_get_args())) as $val)
+		{
+			if (($val = trim($val)) != '')
+				return $val;
+		}
+		
+		return '';
+	}
+	
+	/**
+	 * 获取第三方用户数据
+	 * @param		PassportForm		$form		第三方数据对象
+	 */
+	private function getThirdUserInfo(PassportForm $form)
+	{
+		$model = ClassLoad::Only('Passport');/* @var $model Passport */
+		switch ($form->source)
+		{
+			case 'wb':
+				if ($info = $model->getWeiboInfo($form->code))
+				{
+					return array
+					(
+						'nickname'		=> $info['screen_name'],
+						'access_token'	=> $info['access_token'],
+						'id'			=> $info['id'],
+						'face'			=> $this->getClosestVal($info['avatar_hd'] , $info['avatar_hd'] , $info['profile_image_url']),
+					);
+				}else{
+					$this->error('微博接口请求出错 !');
+				}
+			break;
+			
+			case 'wx':
+				if ($info = $model->getWechatInfo($form->code))
+				{
+					return array
+					(
+						'nickname'		=> $info['nickname'],
+						'access_token'	=> $info['access_token'],
+						'id'			=> $info['openid'],
+						'face'			=> $info['headimgurl'],
+					);
+				}else{
+					$this->error('微信接口请求出错 !');
+				}
+			break;
+			
+			case 'qq':
+				if ($info = $model->getQQInfo($form->code))
+				{
+					return array
+					(
+						'nickname'		=> $info['nickname'],
+						'access_token'	=> $info['access_token'],
+						'id'			=> $info['openid'],
+						'face'			=> $this->getClosestVal($info['figureurl_qq_2'] , $info['figureurl_qq_1'] , $info['figureurl_2'] , $info['figureurl_1'] , $info['figureurl']),
+					);
+				}else{
+					$this->error('QQ接口请求出错 !');
+				}
+			break;
+		}
+	}
+	
+	/**
+	 * 注册或绑定用户
+	 * 
+	 * @return json
+	 */
+	public function actionRegister()
+	{
+		// 判断登录
+			
+		$form		= ClassLoad::Only('PassportForm');
+		$post		= $this->getPost('PassportForm');
+		$passport	= ClassLoad::Only('Passport');
+		
+		if($this->isPost() && isset($_POST['PassportForm']))
+		{
+			$form->ruleType		= 'register';
+			$form->attributes	= $_POST['PassportForm'];
+			
+			// 加强验证..
+			if (!$form->validate()) {
+				$this->jsonOutput(1, '参数错误');
+			}
+			
+			// 第三方账号数据
+			switch ($form->ptype) {
+				case 1:
+					$pinfo  = $passport->getWeiboInfoByToken($form->access_token);
+					$common = array(
+							'nickname'	=> $pinfo['screen_name'],
+							'avatar'	=> $pinfo['avatar_large']
+					);
+					break;
+				case 2:
+					$pinfo  = $passport->getWechatInfoByToken($form->access_token, $form->id);
+					$common = array(
+							'nickname'	=> $pinfo['nickname'],
+							'avatar'	=> $pinfo['headimgurl']
+					);
+					break;
+				default:
+					$pinfo = array();
+			}
+			
+			if (empty($pinfo)) {
+				$this->jsonOutput(1, '无法获取账号数据');
+			}
+			
+			// 会员绑定操作
+			if ($passport->isRegister($form->phone)) {
+				if ($passport->isRepeat($form->phone, $form->ptype)) {
+					$this->jsonOutput(1, '一个手机号不能绑定同一种第三方账号');
+				}
+				// 更新推荐码
+				if ($form->recode) {
+					$passport->changeRecode($form->phone, $form->recode);
+				}
+				// 用户数据
+				$uinfo = ClassLoad::Only('Home')->getUserInfo($form->phone, false);
+				$uid   = $uinfo['id'];
+			} else {
+				// 会员新增操作
+				$uid = $passport->register($form->phone, $form->recode, $form->ptype, $common['avatar'], $common['nickname']);				
+				if (empty($uid)) {
+					$this->jsonOutput(1, '账号注册失败');
+				}
+			}
+		
+			// 关联第三方账号
+			if ($passport->createPassport($uid, $form->phone, $form->ptype, $pinfo)) {
+				if ($form->utype == 1) {
+					$passport->login($form->phone);
+					$this->jsonOutput(0, array('url' => $this->createUrl('/member')));
+				}
+			}
+			$this->jsonOutput(2, '绑定失败，请返回重试');
+		}
+	}
+}

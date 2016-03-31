@@ -1,0 +1,202 @@
+<?php
+Views::css(array('register'));
+Views::js(array('jquery.validate' , 'jquery.sendVerification' , 'jquery.isAgreed'));
+Yii::app()->getClientScript()->registerCss('code-verify' , ".form-list .code-verify img{cursor:pointer;width:120px;height:40px;margin:0 0 0 10px}");
+?>
+<main class="register-wraper">
+	<aside><img src="images/banner/register-ad.png"></aside>
+	<section id="registerWrap">
+		<fieldset class="form-list">
+			<legend>快速注册</legend>
+			<figure class="reg-fast-head">
+				<img src="<?php echo $third['face'];?>" width="80" height="80">
+				<figcaption><?php echo $third['nickname'];?></figcaption>
+			</figure>				
+			<div class="reg-fast-txt">
+				<h6>只差一步，即可完成登录设置</h6>
+				<p>非注册用户：快速完成账号创建，在个人中心设置密码后，可用手机号直接登录；</p>
+				<p>已注册用户：关联手机号后，可用社交账号登录</p>
+			</div>
+			<?php $active = $this->beginWidget('CActiveForm',array('id' => 'personRegister', 'action'=>$this->createUrl('passport/register'))); ?>
+				<ul>
+					<li><?php echo $active->textField($form,'phone',array('id'=>'phone','class'=>'tbox38 tbox38-1','placeholder'=>'请输入手机号','autocomplete'=>'off')); ?></li>
+					<li class="code-verify">
+					<?php
+						echo $active->textField($form , 'vxcode' , array('ags'=>'member','placeholder'=>'请输入图形验证码','class'=>'tbox38 tbox38-2','maxlength'=>6,'style'=>'height:40px'));
+						echo '<img ags="member" class="svcode">';
+					?>
+					</li>
+					<li>
+						<?php
+							echo $active->textField($form,'smscode',array('id'=>'smscode','class'=>'verCode tbox38 tbox38-2','placeholder'=>'短信验证码','autocomplete'=>'off'));
+						?>
+						<div id="msgerr"></div>
+						<a class="btn-2 sms-send">获取短信验证码</a>
+					</li>
+					<li>
+					<?php
+						echo $active->textField($form,'recode',array('class'=>'tbox38 tbox38-1','placeholder'=>'请输入推荐码（非必填）','autocomplete'=>'off'));
+					?>
+					</li>						
+					<li>
+						<label>
+							<?php
+								echo $active->checkBox($form,'agree',array('id'=>'agree'));
+							?>
+							<i>我已阅读并同意</i>
+							<?php if ($utype==1){?>
+								<?php echo CHtml::link('《e办公个人用户注册协议》',$this->createUrl('service/index',array('id'=>11)),array('target'=>'_blank')); ?>
+							<?php }else{?>
+								<?php echo CHtml::link('《e办公企业用户注册协议》',$this->createUrl('service/index',array('id'=>12)),array('target'=>'_blank')); ?>
+							<?php }?>
+						</label>
+					</li>
+					<li>
+					<?php echo $active->hiddenField($form, 'code');?>
+					<?php echo $active->hiddenField($form, 'utype');?>
+					<?php echo $active->hiddenField($form, 'ptype');?>
+					<?php echo $active->hiddenField($form, 'access_token', array('value'=>$third['access_token']));?>
+					<?php echo $active->hiddenField($form, 'id', array('value'=>$third['id']));?>
+					<?php echo CHtml::submitButton($utype==1?'注册并登录':'下一步' , array('class'=>'btn-1 btn-1-1','id'=>'memberSubmit')); ?></li>
+				</ul>
+			<?php $this->endWidget(); ?>
+		</fieldset>	
+	</section>
+</main>
+<script>
+var _send_permission = {'member':true , 'enterprise':true} , _code_permission = {'member':null , 'enterprise':null};
+var utype = '<?php echo $utype;?>';
+
+$(document).ready(function(){
+	$('#personRegister').validate({	
+		rule : {
+			phone : {
+				required : '手机号码不能为空',
+				mobile : '手机号码不合法',
+				promt : '请输入手机号，验证后，您可以用该手机号登录',
+				callback : function(e){}
+			},
+			smscode : {
+				required : '验证码不能为空',
+				promt : '请输入您收到的验证码',
+				callback: function(e){
+				}
+			}
+		},
+		submit:function(form)
+		{
+			$.ajax({
+				type: 'POST',
+				url : form.attr('action'),
+				data: form.serialize(),
+				success: function(res){
+					if (res.code == 0) {
+						location.href = res.data.url;
+					}
+				},
+				dataType:'json'
+			});
+			return false;
+		}
+	});
+	
+	//图形验证码
+	$('.svcode').click(function(){
+		$(this).attr('src' , '<?php echo $this->createUrl('asyn/getVcdoe'); ?>?type='+$(this).attr('ags')+'&_x='+Math.random());
+	}).click();
+
+	//验证码
+	$('.code-verify>:text[ags]')
+	.keydown(function(){
+		var ags = $(this).attr('ags');
+		if (!_send_permission[ags])
+		{
+			$(this).val('').attr('disabled' , true);
+			$('#'+ags+'_tel').change();
+		}else{
+			$(this).removeAttr('disabled');
+		}
+	})
+	.change(function(){
+		var ex = this , _v = $(ex).val() , _ags = $(ex).attr('ags');
+		$(ex).nextAll('span,q').remove();
+		if ($.trim(_v) == '')
+		{
+			$(ex).next().after('<q class="promt error msg no-sms">请输入验证码</q>');
+		}else{
+			$.getJSON('<?php echo $this->createUrl('asyn/verifyVcode'); ?>' , {'code':_v,'ags':_ags} , function(json){
+				if (json.code !== 0)
+				{
+					_code_permission[_ags] = false;
+					$(ex).next().after('<q class="promt error msg no-sms">'+json.message+'</q>');
+				}else{
+					_code_permission[_ags] = true;
+					$(ex).next().after('<q class="success"></q>');
+				}
+			});
+		}
+	});
+	
+	//同意协议
+	$('#agree').isAgreed({btn : '#memberSubmit , .sms-send'});
+
+	//验证短信 - 个人
+	$('.sms-send').sendVerification({tel:'#phone' , 'stype':utype==1?'member':'enterprise' , 'callback':function(self){
+		var phone = $('#phone').val()||'';
+		$(self).nextAll('span,q').remove();
+		if (!(/^(13\d|18\d|14[57]|15[012356789]|17[0678])\d{8}$/.test(phone)))
+		{
+			$(self).after('<q class="promt error msg no-sms">手机号码不合法</q>');
+			return false;
+		}
+		//send sms
+		$.getJSON('<?php echo $this->createUrl('asyn/sendSmsCode'); ?>' , {'phone':phone , 'type':utype==1?'member':'enterprise'} , function(json){
+			
+			if (json.code !== 0)
+			{
+				$(self).after('<q class="promt error msg no-sms">'+json.message+'</q>');
+			}else{
+				$(self).after('<span class="promt promt-tag">短信已发送成功!</span>');
+			}
+		});
+	}});
+
+	$('#registerWrap')
+	//切换
+	.on('click' , '#controllBtn>a' , function()
+	{
+		$(this).addClass('current').siblings('a').removeClass('current');
+		$('fieldset.form-list').hide().eq($(this).index()).fadeIn(1000);
+	})
+	//验证码改变
+	.on('change' , '.verCode' , function(){
+		var val = $(this).val() ,
+			_id = $(this).attr('id') ,
+			phone = $(this).closest('ul').find('input:text[name$="[phone]"]').val()||'' ,
+			e = this;
+
+		if (val == '' || phone == '')
+			return false;
+
+		//$(e).nextAll('span,q').remove();
+
+		_id = utype==1 ? 'member' : 'enterprise';
+		//verify code
+		$.getJSON('<?php echo $this->createUrl('asyn/verifySmsCode'); ?>' , {'phone':phone,'code':val,'type':_id} , function(json){
+			if (json.code !== 0)
+			{
+				$(e).next('a').after('<q class="promt error msg no-sms">'+json.message+'</q>');
+
+			}else{
+				$(e).next('a').after('<q class="success"></q>');
+			}
+		});
+	})	
+			
+// 		$('#personRegister').click(function(){
+// 			alert(1);
+// 			return false;
+// 		});
+	
+});
+</script>
